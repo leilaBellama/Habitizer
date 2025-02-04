@@ -28,7 +28,8 @@ public class PlainMutableSubject<T> implements MutableSubject<T> {
     private final AtomicReference<Optional<T>> value = new AtomicReference<>(Optional.empty());
     private final ConcurrentLinkedQueue<Observer<? super T>> observers = new ConcurrentLinkedQueue<>();
 
-    public PlainMutableSubject() {}
+    public PlainMutableSubject() {
+    }
 
     public PlainMutableSubject(T initialValue) {
         this.value.getAndSet(Optional.of(initialValue));
@@ -40,15 +41,15 @@ public class PlainMutableSubject<T> implements MutableSubject<T> {
     }
 
     @Override
-    public void setValue(T newValue) {
-        value.set(Optional.of(newValue));
-        notifyObservers();
-    }
-
-    @Override
     @Nullable
     public T getValue() {
         return value.get().orElse(null);
+    }
+
+    @Override
+    public void setValue(T newValue) {
+        value.set(Optional.of(newValue));
+        notifyObservers();
     }
 
     @Override

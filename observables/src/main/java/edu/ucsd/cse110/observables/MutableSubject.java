@@ -11,6 +11,7 @@ package edu.ucsd.cse110.observables;
 public interface MutableSubject<T> extends Subject<T> {
     /**
      * Sets the value of the subject.
+     *
      * @param newValue The new value.
      */
     void setValue(T newValue);

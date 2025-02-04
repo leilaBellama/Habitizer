@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.observables;
 
 import androidx.annotation.Nullable;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 

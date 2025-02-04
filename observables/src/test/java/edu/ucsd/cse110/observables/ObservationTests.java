@@ -9,7 +9,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @DisplayName("Subject Observation")
@@ -27,7 +28,8 @@ public class ObservationTests {
             @Test
             @DisplayName("Then it has observers")
             void ThenHasObservers() {
-                subject.observe(value -> {});
+                subject.observe(value -> {
+                });
                 assertThat(subject.hasObservers(), is(true));
             }
 
@@ -82,7 +84,8 @@ public class ObservationTests {
             @Test
             @DisplayName("Then registering it again does not register it twice")
             void ThenRegisteringAgainDoesNothing() {
-                var observer = subject.observe(value -> {});
+                var observer = subject.observe(value -> {
+                });
                 subject.observe(observer);
 
                 assertThat(subject.hasObservers(), is(true));
@@ -107,7 +110,8 @@ public class ObservationTests {
             @Test
             @DisplayName("Then it has no observers")
             void ThenHasNoObservers() {
-                var observer = subject.observe(value -> {});
+                var observer = subject.observe(value -> {
+                });
                 subject.removeObserver(observer);
 
                 assertThat(subject.hasObservers(), is(false));
@@ -121,9 +125,12 @@ public class ObservationTests {
             @Test
             @DisplayName("Then it has no observers")
             void ThenHasNoObservers() {
-                subject.observe(value -> {});
-                subject.observe(value -> {});
-                subject.observe(value -> {});
+                subject.observe(value -> {
+                });
+                subject.observe(value -> {
+                });
+                subject.observe(value -> {
+                });
                 subject.removeObservers();
 
                 assertThat(subject.hasObservers(), is(false));

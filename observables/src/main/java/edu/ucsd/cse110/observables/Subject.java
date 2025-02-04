@@ -2,9 +2,8 @@ package edu.ucsd.cse110.observables;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 import androidx.annotation.Nullable;
-
+import androidx.annotation.VisibleForTesting;
 
 import java.util.List;
 

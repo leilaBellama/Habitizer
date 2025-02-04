@@ -8,7 +8,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -20,6 +21,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @DisplayName("Transformations")
 public class TransformationsTests {
+    @AfterAll
+    static void cleanup() {
+        // For finalizer coverage. Don't worry about this.
+        System.gc();
+    }
+
     @Test
     @DisplayName("mapping (map)")
     void testMap() {
@@ -99,11 +106,5 @@ public class TransformationsTests {
             assertThat(rightLatch.getCount(), is(0L));
             assertThat(outputLatch.getCount(), is(0L));
         });
-    }
-
-    @AfterAll
-    static void cleanup() {
-        // For finalizer coverage. Don't worry about this.
-        System.gc();
     }
 }
