@@ -25,4 +25,3 @@ rootProject.name = "Habitizer"
 include(":app")
 include(":lib")
 include(":observables")
-include(":observables-android")

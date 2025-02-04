@@ -2,6 +2,7 @@ package edu.ucsd.cse110.observables;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @param <T> The type of the value that the subject holds.
  */
 public class PlainMutableSubject<T> implements MutableSubject<T> {
-    private AtomicReference<Optional<T>> value = new AtomicReference<>(Optional.empty());
+    private final AtomicReference<Optional<T>> value = new AtomicReference<>(Optional.empty());
     private final ConcurrentLinkedQueue<Observer<? super T>> observers = new ConcurrentLinkedQueue<>();
 
     public PlainMutableSubject() {}
@@ -44,8 +45,8 @@ public class PlainMutableSubject<T> implements MutableSubject<T> {
         notifyObservers();
     }
 
-    @Nullable
     @Override
+    @Nullable
     public T getValue() {
         return value.get().orElse(null);
     }
@@ -79,6 +80,7 @@ public class PlainMutableSubject<T> implements MutableSubject<T> {
     }
 
     @Override
+    @VisibleForTesting
     public List<Observer<? super T>> getObservers() {
         return List.copyOf(observers);
     }

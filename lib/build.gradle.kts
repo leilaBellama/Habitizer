@@ -12,6 +12,6 @@ dependencies {
     // safe to use even in a non-Android library module.
     implementation(libs.androidx.annotations)
 
-    testImplementation(libs.junit)
+    testImplementation(libs.junit4)
     testImplementation(libs.hamcrest)
 }

@@ -14,15 +14,15 @@ import java.util.List;
  */
 public interface MediatorSubject<T> extends MutableSubject<T> {
     /**
-     * Register a subject subject to be observed.
+     * Register a source subject to be observed.
      * <p>
+     *
      * @param subject  The source subject to observe.
      * @param observer The observer to notify when the source subject changes.
      * @param <S>      The type of the subject subject.
-     * @return The observer that was registered, so that it can be unregistered later.
      */
     @MainThread
-    <S> Observer<? super S> addSource(Subject<S> subject, Observer<? super S> observer);
+    <S> void addSource(Subject<S> subject, Observer<? super S> observer);
 
 
     /**
@@ -35,10 +35,10 @@ public interface MediatorSubject<T> extends MutableSubject<T> {
     <S> void removeSource(Subject<S> source);
 
     /**
-     * Get the list of sources. This method is for testing purposes only.
+     * Get a list of source subjects (with repetitions!). This method is for testing purposes only.
      *
      * @return The list of sources.
      */
     @VisibleForTesting
-    List<? extends Observer<?>> getSources();
+    List<? extends Subject<?>> getSourceSubjects();
 }
