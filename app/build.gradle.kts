@@ -6,6 +6,10 @@ android {
     namespace = "edu.ucsd.cse110.habitizer.app"
     compileSdk = 35
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "edu.ucsd.cse110.habitizer.app"
         minSdk = 34
