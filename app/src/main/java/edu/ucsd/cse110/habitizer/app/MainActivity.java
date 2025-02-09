@@ -7,22 +7,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
     private boolean isShowingStudy = true;
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.app_name);
         this.view = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(view.getRoot());
 
+        var ld = new MutableLiveData<String>();
+        ld.observe(this, (s) -> {
+            System.out.println(s);
+        });
     }
 
     @Override
