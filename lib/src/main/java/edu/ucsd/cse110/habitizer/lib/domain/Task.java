@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 
 public class Task {
     //Added Id here, might not be useful now, but good for later when we need to insert our task
-    private final @Nullable Integer id;
+    private @Nullable Integer id;
     private @NonNull String taskName;
     private boolean checkedOff;
 
