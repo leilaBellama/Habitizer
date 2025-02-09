@@ -1,21 +1,38 @@
 package edu.ucsd.cse110.habitizer.app;
 
 import android.os.Bundle;
+import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
+
+import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
+import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 public class MainActivity extends AppCompatActivity {
-
+    private ActivityMainBinding view;
+    private boolean isShowingStudy = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setTitle(R.string.app_name);
+        this.view = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(view.getRoot());
 
         var ld = new MutableLiveData<String>();
         ld.observe(this, (s) -> {
             System.out.println(s);
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar, menu);
+        return true;
     }
 }

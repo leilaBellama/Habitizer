@@ -1,0 +1,45 @@
+package edu.ucsd.cse110.habitizer.lib.domain;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+public class Task {
+    //Added Id here, might not be useful now, but good for later when we need to insert our task
+    private final @Nullable Integer id;
+    private final @NonNull String taskName;
+    private boolean checkedOff;
+
+
+    public Task(@Nullable Integer id, @NonNull String taskName){
+        this.id = id;
+        this.taskName = taskName;
+        this.checkedOff = false;
+    }
+
+    public Integer getId(){
+        return id;
+    }
+    public String getTaskName(){
+        return taskName;
+    }
+
+    public boolean getCheckedOffStatus() {
+        return checkedOff;
+    }
+
+    public Task setName(String taskName){
+        return new Task(this.id, taskName);
+    }
+
+    // Does not support unchecking
+    public void setCheckedOff(){
+        this.checkedOff = true;
+    }
+
+    //for testing purpose
+    public Task withId(int id){
+        return new Task(id, this.taskName);
+    }
+
+
+}

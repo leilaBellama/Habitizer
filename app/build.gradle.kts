@@ -6,6 +6,10 @@ android {
     namespace = "edu.ucsd.cse110.habitizer.app"
     compileSdk = 35
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "edu.ucsd.cse110.habitizer.app"
         minSdk = 34
@@ -32,6 +36,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":lib"))
 
     implementation(libs.android.material)
     implementation(libs.androidx.appcompat)
