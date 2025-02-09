@@ -14,4 +14,6 @@ dependencies {
 
     testImplementation(libs.junit4)
     testImplementation(libs.hamcrest)
+    testImplementation("junit:junit:4.13.2")
+
 }
