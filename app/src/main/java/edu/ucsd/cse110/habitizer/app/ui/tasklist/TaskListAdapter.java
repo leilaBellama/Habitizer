@@ -23,7 +23,7 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, @NonNull ViewGroup parent){
         var task = getItem(position);
         assert task != null;
 
@@ -38,9 +38,16 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
 
         binding.taskName.setText(task.getTaskName());
         binding.checkBox.setChecked(task.getCheckedOffStatus());
+        binding.checkBox.setEnabled(!task.getCheckedOffStatus());   //enable checkbox after set
+
         binding.checkBox.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             Log.d("TaskListAdapter", "Task: " + task.getTaskName() + " Before: " + task.getCheckedOffStatus());
-            task.setCheckedOff(isChecked);
+
+            if (isChecked) {
+                task.setCheckedOff(true);
+                binding.checkBox.setEnabled(false); //disable it so we cannot check it off
+            }
+
             Log.d("TaskListAdapter", "Task: " + task.getTaskName() + " After: " + task.getCheckedOffStatus());
         });
         return binding.getRoot();
@@ -61,5 +68,4 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
 
         return id;
     }
-
 }

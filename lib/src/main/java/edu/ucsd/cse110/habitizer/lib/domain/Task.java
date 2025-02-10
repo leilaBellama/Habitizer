@@ -31,15 +31,19 @@ public class Task {
         this.taskName = taskName;
     }
 
-    // Does not support unchecking
+    // Does not support unchecking, adds another if statement
+    // to prevent checkoff
     public void setCheckedOff(boolean isChecked){
-        this.checkedOff = isChecked;
+        if (!this.checkedOff) {
+            this.checkedOff = isChecked;
+        }
     }
 
+    // Use this function for resetting after end routine
+    public void reset() { this.checkedOff = false; }
+
     //for testing purpose
-    public Task withId(int id){
-        return new Task(id, this.taskName);
-    }
+    public Task withId(int id){ return new Task(id, this.taskName); }
 
 
 }
