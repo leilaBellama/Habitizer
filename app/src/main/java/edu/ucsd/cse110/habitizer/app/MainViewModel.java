@@ -1,18 +1,20 @@
 package edu.ucsd.cse110.habitizer.app;
 
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
+
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
+import android.util.Log;
 
 public class MainViewModel extends ViewModel{
     private static final String LOG_TAG = "MainViewModel";
@@ -22,6 +24,11 @@ public class MainViewModel extends ViewModel{
     private final Subject<List<Integer>> taskOrdering;
     private final Subject<List<Task>> orderedTasks;
     private final Subject<String> displayedText;
+    private final Subject<Boolean> hasStarted;
+    private final Subject<Integer> elapsedTime;
+    private Timer timer;
+
+
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -31,12 +38,17 @@ public class MainViewModel extends ViewModel{
                         assert app != null;
                         return new MainViewModel(app.getTaskRepository());
                     });
+
     public MainViewModel(TaskRepository taskRepository){
         this.taskRepository = taskRepository;
 
         this.taskOrdering = new Subject<>();
         this.orderedTasks = new Subject<>();
         this.displayedText = new Subject<>();
+        this.hasStarted = new Subject<>();
+        this.elapsedTime = new Subject<>();
+
+        hasStarted.setValue(false);
 
         taskRepository.findAll().observe(tasks -> {
             if(tasks == null)   return;
@@ -71,6 +83,27 @@ public class MainViewModel extends ViewModel{
 //            this.topTask.setValue(task);
 //        });
 
+        hasStarted.observe(hasStarted -> {
+            if (hasStarted == null || !hasStarted) return;
+
+            if (timer != null) {
+                timer.cancel();
+                timer.purge();
+            }
+
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    Log.d("timer", "time " + elapsedTime.getValue());
+                    var time = elapsedTime.getValue();
+                    if(time == null) return;
+                    elapsedTime.setValue((int) (time + 1.0));
+                }
+            };
+            timer.schedule(task,0,60000);//60000 milliseconds = 1 minute
+
+        });
 
 
     }
@@ -81,6 +114,18 @@ public class MainViewModel extends ViewModel{
 
     public Subject<List<Task>> getOrderedTasks() {
         return orderedTasks;
+    }
+    public Subject<Integer> getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public void startRoutine(){
+        var started = this.hasStarted.getValue();
+        if (started == null || started) return;
+        this.hasStarted.setValue(true);
+
+        this.elapsedTime.setValue(0);
+
     }
 
 
