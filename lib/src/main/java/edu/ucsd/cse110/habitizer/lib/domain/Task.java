@@ -32,8 +32,8 @@ public class Task {
     }
 
     // Does not support unchecking
-    public void setCheckedOff(){
-        this.checkedOff = true;
+    public void setCheckedOff(boolean isChecked){
+        this.checkedOff = isChecked;
     }
 
     //for testing purpose
