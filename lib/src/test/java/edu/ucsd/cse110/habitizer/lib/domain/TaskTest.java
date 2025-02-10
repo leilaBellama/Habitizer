@@ -5,7 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import org.junit.Test;
 public class TaskTest {
-
+    // Test for getter
     @Test
     public void testGetter(){
         var task1 = new Task(1, "Task1");
@@ -14,10 +14,11 @@ public class TaskTest {
         assertEquals(false, task1.getCheckedOffStatus());
     }
 
+    // Test for setter
     @Test
     public void testSetter(){
         var task1 = new Task(1, "Task1");
-        task1.setCheckedOff();
+        task1.setCheckedOff(true);
         task1.setName("Task2");
         assertEquals(true, task1.getCheckedOffStatus());
         assertEquals("Task2", task1.getTaskName());
