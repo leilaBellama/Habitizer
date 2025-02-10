@@ -27,7 +27,11 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.model = modelProvider.get(MainViewModel.class);
 
-        //model.getElapsedTime().observe(time -> view.timer.setText(time));
+        model.getElapsedTime().observe(time -> {
+            if (time != null) {
+                view.timer.setText(time + " min");
+            }
+        });
 
         view.startButton.setOnClickListener(v -> model.startRoutine());
 
