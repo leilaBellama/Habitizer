@@ -121,7 +121,7 @@ public class MainViewModel extends ViewModel{
 
     public void startRoutine(){
         var started = this.hasStarted.getValue();
-        if (started == null) return;
+        if (started == null | started) return;
         this.hasStarted.setValue(true);
 
         this.elapsedTime.setValue(0);
