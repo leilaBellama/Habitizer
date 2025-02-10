@@ -5,8 +5,8 @@ import androidx.annotation.Nullable;
 
 public class Task {
     //Added Id here, might not be useful now, but good for later when we need to insert our task
-    private final @Nullable Integer id;
-    private final @NonNull String taskName;
+    private @Nullable Integer id;
+    private @NonNull String taskName;
     private boolean checkedOff;
 
 
@@ -27,19 +27,23 @@ public class Task {
         return checkedOff;
     }
 
-    public Task setName(String taskName){
-        return new Task(this.id, taskName);
+    public void setName(String taskName){
+        this.taskName = taskName;
     }
 
-    // Does not support unchecking
-    public void setCheckedOff(){
-        this.checkedOff = true;
+    // Does not support unchecking, adds another if statement
+    // to prevent checkoff
+    public void setCheckedOff(boolean isChecked){
+        if (!this.checkedOff) {
+            this.checkedOff = isChecked;
+        }
     }
+
+    // Use this function for resetting after end routine
+    public void reset() { this.checkedOff = false; }
 
     //for testing purpose
-    public Task withId(int id){
-        return new Task(id, this.taskName);
-    }
+    public Task withId(int id){ return new Task(id, this.taskName); }
 
 
 }
