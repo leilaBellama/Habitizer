@@ -1,13 +1,14 @@
 package edu.ucsd.cse110.habitizer.app;
 
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
+
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
@@ -22,6 +23,10 @@ public class MainViewModel extends ViewModel{
     private final Subject<List<Integer>> taskOrdering;
     private final Subject<List<Task>> orderedTasks;
     private final Subject<String> displayedText;
+    private final Subject<Object> hasStarted;
+    private final Subject<Object> elapsedTime;
+
+
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -31,12 +36,17 @@ public class MainViewModel extends ViewModel{
                         assert app != null;
                         return new MainViewModel(app.getTaskRepository());
                     });
+
     public MainViewModel(TaskRepository taskRepository){
         this.taskRepository = taskRepository;
 
         this.taskOrdering = new Subject<>();
         this.orderedTasks = new Subject<>();
         this.displayedText = new Subject<>();
+        this.hasStarted = new Subject<>();
+        this.elapsedTime = new Subject<>();
+
+        hasStarted.setValue(false);
 
         taskRepository.findAll().observe(tasks -> {
             if(tasks == null)   return;
@@ -71,6 +81,7 @@ public class MainViewModel extends ViewModel{
 //            this.topTask.setValue(task);
 //        });
 
+        //hasStarted.observe()
 
 
     }
@@ -81,6 +92,19 @@ public class MainViewModel extends ViewModel{
 
     public Subject<List<Task>> getOrderedTasks() {
         return orderedTasks;
+    }
+
+    public void startRoutine(){
+        hasStarted.setValue(true);
+        elapsedTime.setValue(0);
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                elapsedTime.setValue((int)elapsedTime.getValue() + 1);
+            }
+        };
+        timer.schedule(task,0,60000);//60000 milliseconds = 1 minute
     }
 
 
