@@ -8,9 +8,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
+    private MainViewModel model;
     private boolean isShowingStudy = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,13 +22,21 @@ public class MainActivity extends AppCompatActivity {
 
         this.view = ActivityMainBinding.inflate(getLayoutInflater());
 
+        var modelOwner = this;
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        this.model = modelProvider.get(MainViewModel.class);
+
+        //model.getElapsedTime().observe(time -> view.timer.setText(time));
+
+        view.startButton.setOnClickListener(v -> model.startRoutine());
+
         setContentView(view.getRoot());
 
         var ld = new MutableLiveData<String>();
         ld.observe(this, (s) -> {
             System.out.println(s);
         });
-
 
     }
 

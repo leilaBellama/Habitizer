@@ -14,6 +14,7 @@ import java.util.TimerTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
+import android.util.Log;
 
 public class MainViewModel extends ViewModel{
     private static final String LOG_TAG = "MainViewModel";
@@ -23,8 +24,8 @@ public class MainViewModel extends ViewModel{
     private final Subject<List<Integer>> taskOrdering;
     private final Subject<List<Task>> orderedTasks;
     private final Subject<String> displayedText;
-    private final Subject<Object> hasStarted;
-    private final Subject<Object> elapsedTime;
+    private final Subject<Boolean> hasStarted;
+    private final Subject<Integer> elapsedTime;
 
 
 
@@ -81,7 +82,21 @@ public class MainViewModel extends ViewModel{
 //            this.topTask.setValue(task);
 //        });
 
-        //hasStarted.observe()
+        hasStarted.observe(hasStarted -> {
+            if (hasStarted == null) return;
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    Log.d("timer", "time " + elapsedTime.getValue());
+                    var time = elapsedTime.getValue();
+                    if(time == null) return;
+                    elapsedTime.setValue((int)time + 1);
+                }
+            };
+            timer.schedule(task,0,60000);//60000 milliseconds = 1 minute
+
+        });
 
 
     }
@@ -93,18 +108,17 @@ public class MainViewModel extends ViewModel{
     public Subject<List<Task>> getOrderedTasks() {
         return orderedTasks;
     }
+    public Subject<Integer> getElapsedTime() {
+        return elapsedTime;
+    }
 
     public void startRoutine(){
-        hasStarted.setValue(true);
-        elapsedTime.setValue(0);
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                elapsedTime.setValue((int)elapsedTime.getValue() + 1);
-            }
-        };
-        timer.schedule(task,0,60000);//60000 milliseconds = 1 minute
+        var started = this.hasStarted.getValue();
+        if (started == null) return;
+        this.hasStarted.setValue(true);
+
+        this.elapsedTime.setValue(0);
+
     }
 
 
