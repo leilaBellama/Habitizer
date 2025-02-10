@@ -26,6 +26,7 @@ public class MainViewModel extends ViewModel{
     private final Subject<String> displayedText;
     private final Subject<Boolean> hasStarted;
     private final Subject<Integer> elapsedTime;
+    private Timer timer;
 
 
 
@@ -83,7 +84,13 @@ public class MainViewModel extends ViewModel{
 //        });
 
         hasStarted.observe(hasStarted -> {
-            if (hasStarted == null) return;
+            if (hasStarted == null || !hasStarted) return;
+
+            if (timer != null) {
+                timer.cancel();
+                timer.purge();
+            }
+
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 @Override
@@ -91,7 +98,7 @@ public class MainViewModel extends ViewModel{
                     Log.d("timer", "time " + elapsedTime.getValue());
                     var time = elapsedTime.getValue();
                     if(time == null) return;
-                    elapsedTime.setValue((int)time + 1);
+                    elapsedTime.setValue((int) (time + 1.0));
                 }
             };
             timer.schedule(task,0,60000);//60000 milliseconds = 1 minute
