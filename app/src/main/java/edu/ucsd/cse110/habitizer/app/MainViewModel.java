@@ -59,6 +59,7 @@ public class MainViewModel extends ViewModel{
 
         inMorning.setValue(true);
         hasStarted.setValue(false);
+        elapsedTime.setValue(0);
 
         //when morning list changes (or is first loaded), reset ordering of both lists
         taskRepository.getBoth().observe(tasks -> {
@@ -167,7 +168,8 @@ public class MainViewModel extends ViewModel{
     public void startRoutine(){
         var started = this.hasStarted.getValue();
         if (started == null || started) return;
-        hasStarted.setValue(true);
+        this.hasStarted.setValue(true);
+
         this.elapsedTime.setValue(0);
     }
 
@@ -177,5 +179,12 @@ public class MainViewModel extends ViewModel{
         this.inMorning.setValue(!isMorning);
     }
 
+    //TODO let it receive custom tasks
+    public void addTask(){
+
+        Task newTask = new Task(4, "new test task");
+        taskRepository.append(newTask);
+        Log.d("Add Task", "Task added");
+    }
 
 }

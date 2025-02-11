@@ -3,13 +3,18 @@ package edu.ucsd.cse110.habitizer.app;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
         model.getElapsedTime().observe(time -> {
             if (time != null) {
-                view.timer.setText(time);
+                view.timer.setText(time + " min");
             }
         });
 
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
             started = true;
             invalidateOptionsMenu();
         });
+        view.addTaskButton.setOnClickListener(v -> model.addTask());
 
         setContentView(view.getRoot());
 

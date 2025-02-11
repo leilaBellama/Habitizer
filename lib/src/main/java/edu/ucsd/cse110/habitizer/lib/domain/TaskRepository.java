@@ -56,4 +56,11 @@ public class TaskRepository {
     public void saveEvening(Task task) {
         dataSource.putTaskEvening(task);
     }
+    
+    public void append(Task task){
+        int lastId = dataSource.getTasks().size();
+        task.setId(lastId);
+        System.out.println("New Id" + task.getId());
+        dataSource.putTask(task);
+    }
 }
