@@ -12,18 +12,35 @@ public class TaskRepository {
     }
 
     public Integer count() {
-        return dataSource.getTasks().size();
+        return dataSource.getTasksMorning().size();
     }
 
     public Subject<Task> find(int id){
-        return dataSource.getTaskSubject(id);
+        return dataSource.getTaskSubjectMorning(id);
     }
 
     public Subject<List<Task>> findAll(){
-        return dataSource.getAllTasksSubject();
+        return dataSource.getAllTasksSubjectMorning();
     }
 
     public void save(Task task) {
-        dataSource.putTask(task);
+        dataSource.putTaskMorning(task);
+    }
+
+    //
+    public Integer countEvening() {
+        return dataSource.getTasksEvening().size();
+    }
+
+    public Subject<Task> findEvening(int id){
+        return dataSource.getTaskSubjectEvening(id);
+    }
+
+    public Subject<List<Task>> findAllEvening(){
+        return dataSource.getAllTasksSubjectEvening();
+    }
+
+    public void saveEvening(Task task) {
+        dataSource.putTaskEvening(task);
     }
 }
