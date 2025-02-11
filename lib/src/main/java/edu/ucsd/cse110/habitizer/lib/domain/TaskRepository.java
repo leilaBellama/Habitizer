@@ -28,6 +28,9 @@ public class TaskRepository {
     }
     
     public void append(Task task){
+        int lastId = dataSource.getTasks().size();
+        task.setId(lastId);
+        System.out.println("New Id" + task.getId());
         dataSource.putTask(task);
     }
 }

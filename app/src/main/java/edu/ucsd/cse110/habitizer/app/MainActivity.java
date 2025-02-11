@@ -18,19 +18,11 @@ import androidx.lifecycle.ViewModelProvider;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
     private MainViewModel model;
-    ImageButton addTaskButton;
     private boolean isShowingStudy = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.app_name);
-        addTaskButton = (ImageButton) findViewById(R.id.add_task_button);
-        addTaskButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         this.view = ActivityMainBinding.inflate(getLayoutInflater());
 
@@ -46,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         view.startButton.setOnClickListener(v -> model.startRoutine());
+        view.addTaskButton.setOnClickListener(v -> model.addTask());
+
 
         setContentView(view.getRoot());
 

@@ -131,9 +131,11 @@ public class MainViewModel extends ViewModel{
     }
 
     //TODO let it receive custom tasks
-    private void addTask(){
-        Task newTask = new Task(10, "new test task");
+    public void addTask(){
+
+        Task newTask = new Task(4, "new test task");
         taskRepository.append(newTask);
+        Log.d("Add Task", "Task added");
     }
 
 }
