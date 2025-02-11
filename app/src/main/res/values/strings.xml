@@ -6,4 +6,5 @@
     <string name="start">Start</string>
     <string name="end_routine">End Routine</string>
     <string name="time">time</string>
+    <string name="swap_views">Swap Views</string>
 </resources>

@@ -33,30 +33,27 @@ public class InMemoryDataSource {
             new Task(1, "Morning Task 2"),
             new Task(2, "Morning Task 3")
     );
-
-    public static InMemoryDataSource morning(){
-        var data = new InMemoryDataSource();
-        for(Task task : MORNING_TASKS){
-            data.putTaskMorning(task);
-        }
-
-        return data;
-    }
-
     public final static List<Task> EVENING_TASKS = List.of(
             new Task(0, "Evening Task 1"),
             new Task(1, "Evening Task 2"),
             new Task(2, "Evening Task 3")
     );
 
-    public static InMemoryDataSource evening(){
+    public static InMemoryDataSource DEFAULT(){
         var data = new InMemoryDataSource();
+        for(Task task : MORNING_TASKS){
+            data.putTaskMorning(task);
+        }
+
         for(Task task : EVENING_TASKS){
             data.putTaskEvening(task);
         }
 
         return data;
     }
+
+
+
     public List<Task> getTasksMorning(){
         return List.copyOf(tasksMorning.values());
     }

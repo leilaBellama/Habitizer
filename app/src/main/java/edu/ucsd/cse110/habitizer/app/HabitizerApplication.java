@@ -12,7 +12,7 @@ public class HabitizerApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        this.dataSource = InMemoryDataSource.morning();
+        this.dataSource = InMemoryDataSource.DEFAULT();
         this.taskRepository = new TaskRepository(dataSource);
     }
 
