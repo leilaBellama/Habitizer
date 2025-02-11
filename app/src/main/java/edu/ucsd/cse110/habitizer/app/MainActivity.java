@@ -2,10 +2,14 @@ package edu.ucsd.cse110.habitizer.app;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -14,11 +18,19 @@ import androidx.lifecycle.ViewModelProvider;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
     private MainViewModel model;
+    ImageButton addTaskButton;
     private boolean isShowingStudy = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.app_name);
+        addTaskButton = (ImageButton) findViewById(R.id.add_task_button);
+        addTaskButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         this.view = ActivityMainBinding.inflate(getLayoutInflater());
 
@@ -37,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         ld.observe(this, (s) -> {
             System.out.println(s);
         });
+
 
     }
 
