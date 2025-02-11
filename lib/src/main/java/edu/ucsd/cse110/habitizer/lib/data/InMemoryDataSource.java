@@ -9,18 +9,15 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public class InMemoryDataSource {
     private final Map<Integer, Task> tasksEvening
             = new HashMap<>();
-
     private final Map<Integer, Subject<Task>> taskSubjectsEvening
             = new HashMap<>();
-
     private final Subject<List<Task>> allTasksSubjectEvening
             = new Subject<>();
+
     private final Map<Integer, Task> tasksMorning
             = new HashMap<>();
-
     private final Map<Integer, Subject<Task>> taskSubjectsMorning
             = new HashMap<>();
-
     private final Subject<List<Task>> allTasksSubjectMorning
             = new Subject<>();
 
@@ -44,16 +41,13 @@ public class InMemoryDataSource {
         for(Task task : MORNING_TASKS){
             data.putTaskMorning(task);
         }
-
         for(Task task : EVENING_TASKS){
             data.putTaskEvening(task);
         }
-
         return data;
     }
 
-
-
+    //morning methods
     public List<Task> getTasksMorning(){
         return List.copyOf(tasksMorning.values());
     }
@@ -83,7 +77,7 @@ public class InMemoryDataSource {
         allTasksSubjectMorning.setValue(getTasksMorning());
     }
 
-    //
+    //evening methods
 
     public List<Task> getTasksEvening(){
         return List.copyOf(tasksEvening.values());
@@ -96,7 +90,7 @@ public class InMemoryDataSource {
     public Subject<Task> getTaskSubjectEvening(int id){
         if(!taskSubjectsEvening.containsKey(id)){
             var subject = new Subject<Task>();
-            subject.setValue(getTaskMorning(id));
+            subject.setValue(getTaskEvening(id));
             taskSubjectsEvening.put(id, subject);
         }
         return taskSubjectsEvening.get(id);
@@ -111,7 +105,7 @@ public class InMemoryDataSource {
         if(taskSubjectsEvening.containsKey(task.getId())){
             taskSubjectsEvening.get(task.getId()).setValue(task);
         }
-        allTasksSubjectEvening.setValue(getTasksMorning());
+        allTasksSubjectEvening.setValue(getTasksEvening());
     }
 
 }

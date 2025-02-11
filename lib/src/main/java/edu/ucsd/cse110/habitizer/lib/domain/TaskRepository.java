@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
@@ -10,6 +11,18 @@ public class TaskRepository {
     public TaskRepository(InMemoryDataSource dataSource){
         this.dataSource = dataSource;
     }
+
+    public Subject<List<Subject<List<Task>>>> getBoth() {
+        Subject<List<Subject<List<Task>>>> liveData = new Subject<>();
+
+        List<Subject<List<Task>>> both = new ArrayList<>();
+        both.add(dataSource.getAllTasksSubjectMorning());
+        both.add(dataSource.getAllTasksSubjectEvening());
+        liveData.setValue(both);
+        return liveData;
+    }
+
+    //morning methods
 
     public Integer count() {
         return dataSource.getTasksMorning().size();

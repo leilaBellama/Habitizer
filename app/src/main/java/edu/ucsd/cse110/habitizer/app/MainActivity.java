@@ -8,17 +8,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
-import edu.ucsd.cse110.habitizer.app.ui.EveningFragment;
-import edu.ucsd.cse110.habitizer.app.ui.MorningFragment;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
     private MainViewModel model;
     private boolean isShowingMorning = true;
+    private boolean started = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,12 +29,19 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.model = modelProvider.get(MainViewModel.class);
 
+        model.getRoutineTitle().observe(text -> view.routine.setText(text));
         model.getElapsedTime().observe(time -> {
             if (time != null) {
-                view.timer.setText(time + " min");
+                view.timer.setText(time);
             }
         });
 
+        //start button starts routine and removes switch routine option
+        view.startButton.setOnClickListener(v -> model.startRoutine());
+        view.startButton.setOnClickListener(v -> {
+            started = true;
+            invalidateOptionsMenu();
+        });
 
         setContentView(view.getRoot());
 
@@ -54,14 +59,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        var item = menu.findItem(R.id.action_bar_menu_swap_views);
+        item.setVisible(!started);
+        item.setEnabled(!started);
+        return super.onPrepareOptionsMenu(menu);
+    }
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         var itemId = item.getItemId();
         if (itemId == R.id.action_bar_menu_swap_views) {
-            swapFragments();
+            model.swapRoutine();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /*
     private void swapFragments() {
         if (isShowingMorning) {
             getSupportFragmentManager()
@@ -76,4 +89,5 @@ public class MainActivity extends AppCompatActivity {
         }
         isShowingMorning = !isShowingMorning;
     }
+     */
 }
