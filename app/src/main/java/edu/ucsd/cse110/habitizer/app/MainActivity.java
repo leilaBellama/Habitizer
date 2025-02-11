@@ -26,13 +26,16 @@ public class MainActivity extends AppCompatActivity {
 
         this.view = ActivityMainBinding.inflate(getLayoutInflater());
 
-        /*
         var modelOwner = this;
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.model = modelProvider.get(MainViewModel.class);
 
-         */
+        model.getElapsedTime().observe(time -> {
+            if (time != null) {
+                view.timer.setText(time + " min");
+            }
+        });
 
 
         setContentView(view.getRoot());

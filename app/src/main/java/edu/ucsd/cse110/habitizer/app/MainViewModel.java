@@ -49,6 +49,7 @@ public class MainViewModel extends ViewModel{
         this.elapsedTime = new Subject<>();
 
         hasStarted.setValue(false);
+        elapsedTime.setValue(0);
 
         taskRepository.findAll().observe(tasks -> {
             if(tasks == null)   return;
