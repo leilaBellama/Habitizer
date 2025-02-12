@@ -87,7 +87,7 @@ public class MainViewModel extends ViewModel{
             if(ordering == null) return;
             var tasks = new ArrayList<Task>();
             for(var id : ordering){
-                var task = taskRepository.find(id).getValue();
+                var task = taskRepository.findMorning(id).getValue();
                 if(task == null) return;
                 tasks.add(task);
             }
@@ -181,10 +181,23 @@ public class MainViewModel extends ViewModel{
 
     //TODO let it receive custom tasks
     public void addTask(){
+        /*
+        var isMorning = this.inMorning.getValue();
+        if (isMorning == null) return;
+        if (isMorning) {
+            Task newTask = new Task(4, "new test task m");
+            taskRepository.appendMorning(newTask);
+            Log.d("Add Task m", "Task added m");
+        }
+        else {
+            Task newTask = new Task(4, "new test task");
+            taskRepository.appendEvening(newTask);
+            Log.d("Add Task", "Task added");
+        }
 
-        Task newTask = new Task(4, "new test task");
-        taskRepository.append(newTask);
-        Log.d("Add Task", "Task added");
+         */
+
+
     }
 
 }

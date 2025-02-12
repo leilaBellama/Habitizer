@@ -24,19 +24,19 @@ public class TaskRepository {
 
     //morning methods
 
-    public Integer count() {
+    public Integer countMorning() {
         return dataSource.getTasksMorning().size();
     }
 
-    public Subject<Task> find(int id){
+    public Subject<Task> findMorning(int id){
         return dataSource.getTaskSubjectMorning(id);
     }
 
-    public Subject<List<Task>> findAll(){
+    public Subject<List<Task>> findAllMorning(){
         return dataSource.getAllTasksSubjectMorning();
     }
 
-    public void save(Task task) {
+    public void saveMorning(Task task) {
         dataSource.putTaskMorning(task);
     }
 
@@ -57,10 +57,17 @@ public class TaskRepository {
         dataSource.putTaskEvening(task);
     }
     
-    public void append(Task task){
-        int lastId = dataSource.getTasks().size();
+    public void appendMorning(Task task){
+        int lastId = dataSource.getTasksMorning().size();
         task.setId(lastId);
         System.out.println("New Id" + task.getId());
-        dataSource.putTask(task);
+        dataSource.putTaskMorning(task);
+    }
+
+    public void appendEvening(Task task){
+        int lastId = dataSource.getTasksEvening().size();
+        task.setId(lastId);
+        System.out.println("New Id" + task.getId());
+        dataSource.putTaskEvening(task);
     }
 }
