@@ -7,13 +7,10 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
-import edu.ucsd.cse110.habitizer.lib.domain.RoutineTimer;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 import android.util.Log;
 
@@ -50,7 +47,7 @@ public class MainViewModel extends ViewModel{
         this.elapsedTime = new Subject<>();
         this.hasStarted = new Subject<>();
 
-        this.timer.setValue(new RoutineTimer(ONE_MINUTE));
+        this.timer.setValue(new RoutineTimer());
         this.hasStarted.setValue(false);
 
         taskRepository.findAll().observe(tasks -> {
@@ -95,11 +92,21 @@ public class MainViewModel extends ViewModel{
 //                t.cancel();
 //                t.purge();
 //            }
-            Log.d("timer", "time" + elapsedTime.getValue());
+            Log.d("timer observe", "time" + elapsedTime.getValue());
             routineTimer.getElapsedTime().observe(elapsedTime::setValue);
         });
 
     }
+
+    public void switchToMockTime() {
+        /*
+        if (hasStarted.getValue()) {
+            timer.getValue().stop();
+        }
+
+         */
+    }
+
 
     public Subject<String> getDisplayedText(){
         return displayedText;
@@ -114,10 +121,27 @@ public class MainViewModel extends ViewModel{
     }
 
     public void startRoutine(){
-        if (!hasStarted.getValue()) {
+        var started = hasStarted.getValue();
+        if (started == null) return;
+        elapsedTime.setValue(0);
+        if (!started) {
             hasStarted.setValue(true);
             timer.getValue().start();
+            Log.d("ST", "started time" + elapsedTime.getValue());
+
         }
+    }
+
+    public void stopTimer() {
+        var started = hasStarted.getValue();
+        if (started == null) return;
+        if (started) {
+            timer.getValue().stop();
+        }
+    }
+
+    public void advanceTime() {
+        timer.getValue().advanceTime(30);
     }
 
 }

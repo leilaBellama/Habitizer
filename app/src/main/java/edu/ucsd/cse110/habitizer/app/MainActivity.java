@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         view.startButton.setOnClickListener(v -> model.startRoutine());
+        view.stopTime.setOnClickListener(v -> model.stopTimer());
+        view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());
+
 
         setContentView(view.getRoot());
 
