@@ -12,11 +12,7 @@ public class TaskRepository {
         this.dataSource = dataSource;
     }
 
-    public Subject<List<Task>> getAll() {
-        return dataSource.getAllTasksSubject();
-    }
-
-    public Integer count() {
+        public Integer count() {
         return dataSource.getTasks().size();
     }
 

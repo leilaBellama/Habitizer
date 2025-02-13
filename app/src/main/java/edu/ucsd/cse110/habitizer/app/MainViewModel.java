@@ -73,6 +73,7 @@ public class MainViewModel extends ViewModel{
             for(int i = 0;i < tasks.size(); i++){
                 ordering.add(i);
             }
+            Log.d("obs", "observe TR");
 
             taskOrdering.setValue(ordering);
         });
@@ -102,10 +103,16 @@ public class MainViewModel extends ViewModel{
             if (inMorning == null) return;
             if (!inMorning) {
                 routineTitle.setValue("Evening Routine");
-                orderedTasks.setValue(orderedTasksEvening.getValue());
+                orderedTasksEvening.observe(eveningTasks -> {
+                    orderedTasks.setValue(orderedTasksEvening.getValue());
+
+                });
             } else {
                 routineTitle.setValue("Morning Routine");
-                orderedTasks.setValue(orderedTasksMorning.getValue());
+                orderedTasksMorning.observe(eveningTasks -> {
+                    orderedTasks.setValue(orderedTasksMorning.getValue());
+
+                });
             }
         });
 
@@ -165,7 +172,6 @@ public class MainViewModel extends ViewModel{
             hasStarted.setValue(true);
             timer.getValue().start();
             Log.d("ST", "started time" + elapsedTime.getValue());
-
         }
     }
 

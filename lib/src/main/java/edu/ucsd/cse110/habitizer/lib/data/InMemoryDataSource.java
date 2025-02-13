@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.habitizer.lib.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -63,11 +64,10 @@ public class InMemoryDataSource {
         if (taskSubjects.containsKey(fixedCard.getId())) {
             taskSubjects.get(fixedCard.getId()).setValue(fixedCard);
         }
-        allTasksSubject.setValue(getTasks());
+        allTasksSubject.setValue(new ArrayList<Task>(getTasks()));
     }
 
     public void removeTask(int id) {
-        var task = tasks.get(id);
         tasks.remove(id);
         if (taskSubjects.containsKey(id)) {
             taskSubjects.get(id).setValue(null);
