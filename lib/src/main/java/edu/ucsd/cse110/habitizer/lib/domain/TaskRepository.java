@@ -12,6 +12,32 @@ public class TaskRepository {
         this.dataSource = dataSource;
     }
 
+    public Subject<List<Task>> getAll() {
+        return dataSource.getAllTasksSubject();
+    }
+
+    public Integer count() {
+        return dataSource.getTasks().size();
+    }
+
+    public Subject<Task> find(int id){
+        return dataSource.getTaskSubject(id);
+    }
+
+    public Subject<List<Task>> findAll(){
+        return dataSource.getAllTasksSubject();
+    }
+
+    public void save(Task task) {
+        dataSource.putTask(task);
+    }
+
+    public void remove(int id) {dataSource.removeTask(id);}
+
+
+    /*
+    //evening methods
+
     public Subject<List<Subject<List<Task>>>> getBoth() {
         Subject<List<Subject<List<Task>>>> liveData = new Subject<>();
 
@@ -21,26 +47,6 @@ public class TaskRepository {
         liveData.setValue(both);
         return liveData;
     }
-
-    //morning methods
-
-    public Integer countMorning() {
-        return dataSource.getTasksMorning().size();
-    }
-
-    public Subject<Task> findMorning(int id){
-        return dataSource.getTaskSubjectMorning(id);
-    }
-
-    public Subject<List<Task>> findAllMorning(){
-        return dataSource.getAllTasksSubjectMorning();
-    }
-
-    public void saveMorning(Task task) {
-        dataSource.putTaskMorning(task);
-    }
-
-    //evening methods
     public Integer countEvening() {
         return dataSource.getTasksEvening().size();
     }
@@ -57,12 +63,7 @@ public class TaskRepository {
         dataSource.putTaskEvening(task);
     }
     
-    public void appendMorning(Task task){
-        int lastId = dataSource.getTasksMorning().size();
-        task.setId(lastId);
-        System.out.println("New Id" + task.getId());
-        dataSource.putTaskMorning(task);
-    }
+
 
     public void appendEvening(Task task){
         int lastId = dataSource.getTasksEvening().size();
@@ -70,4 +71,6 @@ public class TaskRepository {
         System.out.println("New Id" + task.getId());
         dataSource.putTaskEvening(task);
     }
+
+     */
 }

@@ -10,7 +10,7 @@ public class TaskListTest {
     // Test to force set, expected to not working
     @Test
     public void testForceSet() {
-        var task1 = new Task(1, "Task1");
+        var task1 = new Task(1, "Task1",true);
         task1.setCheckedOff(true);
         assertTrue(task1.getCheckedOffStatus());
         task1.setCheckedOff(false);
@@ -20,7 +20,7 @@ public class TaskListTest {
     // Test for reset function
     @Test
     public void testReset() {
-        var task1 = new Task(1, "Task1");
+        var task1 = new Task(1, "Task1",true);
         task1.setCheckedOff(true);
         assertTrue(task1.getCheckedOffStatus());
         task1.reset();

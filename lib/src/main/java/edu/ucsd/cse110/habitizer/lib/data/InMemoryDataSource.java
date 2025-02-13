@@ -3,10 +3,21 @@ package edu.ucsd.cse110.habitizer.lib.data;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public class InMemoryDataSource {
+
+    private int nextId = 0;
+
+    private final Map<Integer, Task> tasks
+            = new HashMap<>();
+    private final Map<Integer, Subject<Task>> taskSubjects
+            = new HashMap<>();
+    private final Subject<List<Task>> allTasksSubject
+            = new Subject<>();
+    /*
     private final Map<Integer, Task> tasksEvening
             = new HashMap<>();
     private final Map<Integer, Subject<Task>> taskSubjectsEvening
@@ -21,61 +32,111 @@ public class InMemoryDataSource {
     private final Subject<List<Task>> allTasksSubjectMorning
             = new Subject<>();
 
+     */
+
     public InMemoryDataSource(){
 
     }
 
-    public final static List<Task> MORNING_TASKS = List.of(
-            new Task(0, "Morning Task 1"),
-            new Task(1, "Morning Task 2"),
-            new Task(2, "Morning Task 3")
-    );
-    public final static List<Task> EVENING_TASKS = List.of(
-            new Task(0, "Evening Task 1"),
-            new Task(1, "Evening Task 2"),
-            new Task(2, "Evening Task 3")
+    public final static List<Task> DEFAULT = List.of(
+            new Task(0, "Morning Task 1",true),
+            new Task(1, "Morning Task 2",true),
+            new Task(2, "Morning Task 3",true),
+            new Task(3, "Evening Task 1",false),
+            new Task(4, "Evening Task 2",false),
+            new Task(5, "Evening Task 3",false),
+            new Task(null, "Evening Task 4",false),
+            new Task(null, "Evening Task 5",false)
     );
 
     public static InMemoryDataSource DEFAULT(){
         var data = new InMemoryDataSource();
-        for(Task task : MORNING_TASKS){
-            data.putTaskMorning(task);
-        }
-        for(Task task : EVENING_TASKS){
-            data.putTaskEvening(task);
+        for(Task task : DEFAULT){
+            data.putTask(task);
         }
         return data;
     }
 
-    //morning methods
-    public List<Task> getTasksMorning(){
-        return List.copyOf(tasksMorning.values());
+    public void putTask(Task task) {
+        var fixedCard = preInsert(task);
+        tasks.put(fixedCard.getId(), fixedCard);
+        if (taskSubjects.containsKey(fixedCard.getId())) {
+            taskSubjects.get(fixedCard.getId()).setValue(fixedCard);
+        }
+        allTasksSubject.setValue(getTasks());
     }
 
-    public Task getTaskMorning(int id){
-        return tasksMorning.get(id);
+    public void removeTask(int id) {
+        var task = tasks.get(id);
+        tasks.remove(id);
+        if (taskSubjects.containsKey(id)) {
+            taskSubjects.get(id).setValue(null);
+        }
+        allTasksSubject.setValue(getTasks());
     }
 
-    public Subject<Task> getTaskSubjectMorning(int id){
-        if(!taskSubjectsMorning.containsKey(id)){
+
+       /**
+     * Private utility method to maintain state of the fake DB: ensures that new
+     * cards inserted have an id, and updates the nextId if necessary.
+     */
+    private Task preInsert(Task task) {
+        var id = task.getId();
+        if (id == null) {
+            //nextId++;
+            task = task.withId(nextId++);
+        } else if (id > nextId) {
+            nextId = id + 1;
+        }
+        /*
+        if (task.isMorningTask()) {
+            if (id == null) {
+                task = task.withId(nextIdMorning++);
+            } else {
+                nextIdMorning = id++;
+            }
+        } else {
+            if (id == null) {
+                task = task.withId(nextIdEvening++);
+            } else {
+                nextIdEvening = id++;
+            }
+        }
+
+         */
+        return task;
+    }
+
+    public List<Task> getTasks(){
+        return List.copyOf(tasks.values());
+    }
+
+    public Task getTask(int id){
+        return tasks.get(id);
+    }
+
+    public Subject<Task> getTaskSubject(int id){
+        if(!taskSubjects.containsKey(id)){
             var subject = new Subject<Task>();
-            subject.setValue(getTaskMorning(id));
-            taskSubjectsMorning.put(id, subject);
+            subject.setValue(getTask(id));
+            taskSubjects.put(id, subject);
         }
-        return taskSubjectsMorning.get(id);
+        return taskSubjects.get(id);
     }
 
-    public Subject<List<Task>> getAllTasksSubjectMorning() {
-        return allTasksSubjectMorning;
+    public Subject<List<Task>> getAllTasksSubject() {
+        return allTasksSubject;
     }
 
-    public void putTaskMorning(Task task){
-        tasksMorning.put(task.getId(), task);
-        if(taskSubjectsMorning.containsKey(task.getId())){
-            taskSubjectsMorning.get(task.getId()).setValue(task);
+    /*
+    public void putTask(Task task){
+        tasks.put(task.getId(), task);
+        if(taskSubjects.containsKey(task.getId())){
+            taskSubjects.get(task.getId()).setValue(task);
         }
-        allTasksSubjectMorning.setValue(getTasksMorning());
+        allTasksSubject.setValue(getTasks());
     }
+
 
     //evening methods
 
@@ -107,5 +168,7 @@ public class InMemoryDataSource {
         }
         allTasksSubjectEvening.setValue(getTasksEvening());
     }
+
+     */
 
 }

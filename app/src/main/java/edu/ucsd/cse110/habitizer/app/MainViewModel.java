@@ -22,8 +22,6 @@ import android.util.Log;
 public class MainViewModel extends ViewModel{
     private static final String LOG_TAG = "MainViewModel";
     private final TaskRepository taskRepository;
-    private final Subject<List<Integer>> taskOrderingMorning;
-    private final Subject<List<Task>> orderedTasksMorning;
     private final Subject<List<Integer>> taskOrderingEvening;
     private final Subject<List<Task>> orderedTasksEvening;
     private final Subject<List<Task>> orderedTasks;
@@ -31,6 +29,8 @@ public class MainViewModel extends ViewModel{
     private final Subject<Boolean> hasStarted;
     private final Subject<Integer> elapsedTime;
     private final Subject<Boolean> inMorning;
+    private final Subject<List<Integer>> taskOrdering;
+    private final Subject<List<Task>> orderedTasksMorning;
     private Timer timer;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
@@ -47,7 +47,7 @@ public class MainViewModel extends ViewModel{
 
         this.orderedTasks = new Subject<>();
 
-        this.taskOrderingMorning = new Subject<>();
+        this.taskOrdering = new Subject<>();
         this.orderedTasksMorning = new Subject<>();
         this.taskOrderingEvening = new Subject<>();
         this.orderedTasksEvening = new Subject<>();
@@ -61,50 +61,36 @@ public class MainViewModel extends ViewModel{
         hasStarted.setValue(false);
         elapsedTime.setValue(0);
 
-        //when morning list changes (or is first loaded), reset ordering of both lists
-        taskRepository.getBoth().observe(tasks -> {
-            if (tasks == null || tasks.isEmpty()) return;
-            if (tasks.get(0) != null) {
-                var ordering = new ArrayList<Integer>();
-                for(int i = 0; i < Objects.requireNonNull(tasks.get(0).getValue()).size(); i++){
-                    ordering.add(i);
-                }
-                taskOrderingMorning.setValue(new ArrayList<>(ordering));
-            }
-            if (tasks.get(1) != null) {
-                var ordering = new ArrayList<Integer>();
-                for(int i = 0;i < Objects.requireNonNull(tasks.get(1).getValue()).size(); i++){
-                    ordering.add(i);
-                }
-                taskOrderingEvening.setValue(new ArrayList<>(ordering));
+        //when list changes (or is first loaded), reset ordering of both lists
+        taskRepository.findAll().observe(tasks -> {
+            if(tasks == null)   return;
+
+            var ordering = new ArrayList<Integer>();
+            for(int i = 0;i < tasks.size(); i++){
+                ordering.add(i);
             }
 
+            taskOrdering.setValue(ordering);
         });
 
-        //when morning list ordering changes, update morning taskOrdering
+        //when  list ordering changes, update both taskOrdering
         //might be useful later if we need to change order of tasks
-        taskOrderingMorning.observe(ordering -> {
+        taskOrdering.observe(ordering -> {
             if(ordering == null) return;
-            var tasks = new ArrayList<Task>();
-            for(var id : ordering){
-                var task = taskRepository.findMorning(id).getValue();
-                if(task == null) return;
-                tasks.add(task);
-            }
-            this.orderedTasksMorning.setValue(new ArrayList<Task>(tasks));
-        });
 
-        //when evening list ordering changes, update evening taskOrdering
-        taskOrderingEvening.observe(ordering -> {
-            //Log.d("DEBUG", "task order evening emitted: " + (ordering != null ? ordering.size() : "null"));
-            if(ordering == null) return;
-            var tasks = new ArrayList<Task>();
+            var morningTasks = new ArrayList<Task>();
+            var eveningTasks = new ArrayList<Task>();
             for(var id : ordering){
-                var task = taskRepository.findEvening(id).getValue();
+                var task = taskRepository.find(id).getValue();
                 if(task == null) return;
-                tasks.add(task);
+                if(task.isMorningTask()) {
+                    morningTasks.add(task);
+                } else {
+                    eveningTasks.add(task);
+                }
             }
-            this.orderedTasksEvening.setValue(new ArrayList<Task>(tasks));
+            this.orderedTasksMorning.setValue(morningTasks);
+            this.orderedTasksEvening.setValue(eveningTasks);
         });
 
         //when inMorning changes, switch title and morning/evening list
@@ -181,7 +167,7 @@ public class MainViewModel extends ViewModel{
 
     //TODO let it receive custom tasks
     public void addTask(){
-        /*
+/*
         var isMorning = this.inMorning.getValue();
         if (isMorning == null) return;
         if (isMorning) {
@@ -195,7 +181,9 @@ public class MainViewModel extends ViewModel{
             Log.d("Add Task", "Task added");
         }
 
-         */
+ */
+
+
 
 
     }
