@@ -30,6 +30,7 @@ public class MainViewModel extends ViewModel{
 
 
 
+
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -129,5 +130,12 @@ public class MainViewModel extends ViewModel{
 
     }
 
+    //TODO let it receive custom tasks
+    public void addTask(){
+
+        Task newTask = new Task(4, "new test task");
+        taskRepository.append(newTask);
+        Log.d("Add Task", "Task added");
+    }
 
 }
