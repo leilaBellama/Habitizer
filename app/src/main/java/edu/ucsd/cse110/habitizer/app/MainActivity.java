@@ -2,10 +2,14 @@ package edu.ucsd.cse110.habitizer.app;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         view.startButton.setOnClickListener(v -> model.startRoutine());
+        view.addTaskButton.setOnClickListener(v -> model.addTask());
+
 
         setContentView(view.getRoot());
 
@@ -41,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         ld.observe(this, (s) -> {
             System.out.println(s);
         });
+
 
     }
 

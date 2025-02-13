@@ -88,17 +88,9 @@ public class MainViewModel extends ViewModel{
 
         this.timer.observe(routineTimer -> {
             if (routineTimer == null) return;
-
-//            Timer t = routineTimer.getTimer();
-//
-//            if (t != null) {
-//                t.cancel();
-//                t.purge();
-//            }
             Log.d("timer", "time" + elapsedTime.getValue());
             routineTimer.getElapsedTime().observe(elapsedTime::setValue);
         });
-
     }
 
     public Subject<String> getDisplayedText(){
@@ -118,6 +110,16 @@ public class MainViewModel extends ViewModel{
             hasStarted.setValue(true);
             timer.getValue().start();
         }
+    }
+
+    //TODO let it receive custom tasks
+    public void addTask(){
+        if (hasStarted.getValue()) {
+            return;
+        }
+        Task newTask = new Task(4, "new test task");
+        taskRepository.append(newTask);
+        Log.d("Add Task", "Task added");
     }
 
 }

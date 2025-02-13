@@ -6,6 +6,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
+
 public class InMemoryDataSource {
     private final Map<Integer, Task> tasks
             = new HashMap<>();
@@ -23,7 +24,8 @@ public class InMemoryDataSource {
     public final static List<Task> DEFAULT_TASKS = List.of(
             new Task(0, "Task 1"),
             new Task(1, "Task 2"),
-            new Task(2, "Task 3")
+            new Task(2, "Task 3"),
+            new Task(3,"Task 4")
     );
 
     public static InMemoryDataSource fromDefault(){
@@ -61,6 +63,7 @@ public class InMemoryDataSource {
             taskSubjects.get(task.getId()).setValue(task);
         }
         allTasksSubject.setValue(getTasks());
+        System.out.println("Task List Updating? " + DEFAULT_TASKS.size());
     }
 
 
