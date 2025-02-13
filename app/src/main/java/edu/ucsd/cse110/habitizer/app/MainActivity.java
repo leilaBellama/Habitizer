@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.habitizer.app;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,18 +36,21 @@ public class MainActivity extends AppCompatActivity {
         this.model = modelProvider.get(MainViewModel.class);
 
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
-        model.getElapsedTime().observe(time -> {
-            if (time != null) {
-                view.time.setText(time + " min");
-            }
-        });
+
 
         //start button starts routine and removes switch routine option
-        view.startButton.setOnClickListener(v -> model.startRoutine());
         view.startButton.setOnClickListener(v -> {
+            model.getElapsedTime().observe(time -> {
+                if (time != null) {
+                    view.time.setText(time + " min");
+                }
+            });
+            model.startRoutine();
             started = true;
             invalidateOptionsMenu();
         });
+
+
         view.addTaskButton.setOnClickListener(v -> model.addTask());
         view.stopTime.setOnClickListener(v -> model.stopTimer());
         view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());

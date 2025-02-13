@@ -64,6 +64,7 @@ public class RoutineTimer {
     public void start() {
         if (this.hasStarted.getValue()) return;
         this.hasStarted.setValue(true);
+        Log.d("s","started ");
 
         /*
         if (futureTask != null && !futureTask.isCancelled()) {

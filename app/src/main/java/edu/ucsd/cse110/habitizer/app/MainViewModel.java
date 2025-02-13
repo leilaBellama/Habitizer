@@ -103,12 +103,13 @@ public class MainViewModel extends ViewModel{
             if (inMorning == null) return;
             if (!inMorning) {
                 routineTitle.setValue("Evening Routine");
+                orderedTasksMorning.removeObservers();
                 orderedTasksEvening.observe(eveningTasks -> {
                     orderedTasks.setValue(orderedTasksEvening.getValue());
-
                 });
             } else {
                 routineTitle.setValue("Morning Routine");
+                orderedTasksEvening.removeObservers();
                 orderedTasksMorning.observe(eveningTasks -> {
                     orderedTasks.setValue(orderedTasksMorning.getValue());
 
@@ -139,14 +140,6 @@ public class MainViewModel extends ViewModel{
 
     }
 
-    public void switchToMockTime() {
-        /*
-        if (hasStarted.getValue()) {
-            timer.getValue().stop();
-        }
-
-         */
-    }
 
     public Subject<String> getRoutineTitle(){
         return routineTitle;
@@ -165,7 +158,10 @@ public class MainViewModel extends ViewModel{
     }
 
     public void startRoutine(){
+        Log.d("ST", "started " + hasStarted.getValue());
+
         var started = hasStarted.getValue();
+
         if (started == null) return;
         elapsedTime.setValue(0);
         if (!started) {
@@ -182,15 +178,16 @@ public class MainViewModel extends ViewModel{
             timer.getValue().stop();
         }
     }
+    public void advanceTime() {
+        timer.getValue().advanceTime(30);
+    }
     public void swapRoutine() {
         var isMorning = this.inMorning.getValue();
         if (isMorning == null) return;
         this.inMorning.setValue(!isMorning);
     }
 
-    public void advanceTime() {
-        timer.getValue().advanceTime(30);
-    }
+
     //TODO let it receive custom tasks
     public void addTask(){
         var isMorning = this.inMorning.getValue();

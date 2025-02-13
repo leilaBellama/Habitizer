@@ -31,4 +31,11 @@ public class Subject<T> {
     public void removeObserver(Observer<T> observer){
         observers.remove(observer);
     }
+    public void removeObservers(){
+        for (var observer : observers){
+            observers.remove(observer);
+        }
+    }
+
+
 }
