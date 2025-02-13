@@ -98,5 +98,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/stop_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="stop time"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/advance_time_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="advance time"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toTopOf="@+id/stop_time"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_constraintBottom_toTopOf="@id/stop_time" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

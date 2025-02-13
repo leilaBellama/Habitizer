@@ -21,12 +21,15 @@ import android.util.Log;
 
 public class MainViewModel extends ViewModel{
     private static final String LOG_TAG = "MainViewModel";
+    private static final Integer ONE_MINUTE = 60000;
+
     private final TaskRepository taskRepository;
     private final Subject<List<Integer>> taskOrderingEvening;
     private final Subject<List<Task>> orderedTasksEvening;
     private final Subject<List<Task>> orderedTasks;
     private final Subject<String> routineTitle;
     private final Subject<Boolean> hasStarted;
+    private final Subject<RoutineTimer> timer;
     private final Subject<Integer> elapsedTime;
     private final Subject<Boolean> inMorning;
     private final Subject<List<Integer>> taskOrdering;
@@ -55,11 +58,13 @@ public class MainViewModel extends ViewModel{
         this.routineTitle = new Subject<>();
         this.inMorning = new Subject<>();
         this.hasStarted = new Subject<>();
+        this.timer = new Subject<>();
         this.elapsedTime = new Subject<>();
 
-        inMorning.setValue(true);
-        hasStarted.setValue(false);
-        elapsedTime.setValue(0);
+        this.inMorning.setValue(true);
+        this.hasStarted.setValue(false);
+        this.elapsedTime.setValue(0);
+        this.timer.setValue(new RoutineTimer());
 
         //when list changes (or is first loaded), reset ordering of both lists
         taskRepository.findAll().observe(tasks -> {
@@ -113,27 +118,28 @@ public class MainViewModel extends ViewModel{
 //            this.topTask.setValue(task);
 //        });
 
-        //when hasStarted changes, start timer
-        hasStarted.observe(hasStarted -> {
-            if (hasStarted == null || !hasStarted) return;
+        this.timer.observe(routineTimer -> {
+            if (routineTimer == null) return;
 
-            if (timer != null) {
-                timer.cancel();
-                timer.purge();
-            }
-
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                @Override
-                public void run() {
-                    Log.d("timer", "time " + elapsedTime.getValue());
-                    var time = elapsedTime.getValue();
-                    if(time == null) return;
-                    elapsedTime.setValue((int) (time + 1.0));
-                }
-            };
-            timer.schedule(task,0,60000);//60000 milliseconds = 1 minute
+//            Timer t = routineTimer.getTimer();
+//
+//            if (t != null) {
+//                t.cancel();
+//                t.purge();
+//            }
+            Log.d("timer observe", "time" + elapsedTime.getValue());
+            routineTimer.getElapsedTime().observe(elapsedTime::setValue);
         });
+
+    }
+
+    public void switchToMockTime() {
+        /*
+        if (hasStarted.getValue()) {
+            timer.getValue().stop();
+        }
+
+         */
     }
 
     public Subject<String> getRoutineTitle(){
@@ -143,6 +149,7 @@ public class MainViewModel extends ViewModel{
     public Subject<List<Task>> getOrderedTasks() {
         return orderedTasks;
     }
+
     public Subject<Integer> getElapsedTime() {
         return elapsedTime;
     }
@@ -152,19 +159,33 @@ public class MainViewModel extends ViewModel{
     }
 
     public void startRoutine(){
-        var started = this.hasStarted.getValue();
-        if (started == null || started) return;
-        this.hasStarted.setValue(true);
+        var started = hasStarted.getValue();
+        if (started == null) return;
+        elapsedTime.setValue(0);
+        if (!started) {
+            hasStarted.setValue(true);
+            timer.getValue().start();
+            Log.d("ST", "started time" + elapsedTime.getValue());
 
-        this.elapsedTime.setValue(0);
+        }
     }
 
+    public void stopTimer() {
+        var started = hasStarted.getValue();
+        if (started == null) return;
+        if (started) {
+            timer.getValue().stop();
+        }
+    }
     public void swapRoutine() {
         var isMorning = this.inMorning.getValue();
         if (isMorning == null) return;
         this.inMorning.setValue(!isMorning);
     }
 
+    public void advanceTime() {
+        timer.getValue().advanceTime(30);
+    }
     //TODO let it receive custom tasks
     public void addTask(){
 /*

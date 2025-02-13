@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
             invalidateOptionsMenu();
         });
         view.addTaskButton.setOnClickListener(v -> model.addTask());
+        view.stopTime.setOnClickListener(v -> model.stopTimer());
+        view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());
+
 
         setContentView(view.getRoot());
 
