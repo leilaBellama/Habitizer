@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
         model.getElapsedTime().observe(time -> {
             if (time != null) {
-                view.timer.setText(time + " min");
+                view.time.setText(time + " min");
             }
         });
 

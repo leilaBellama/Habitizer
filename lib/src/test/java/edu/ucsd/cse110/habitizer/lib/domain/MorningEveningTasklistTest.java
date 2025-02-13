@@ -16,7 +16,6 @@ public class MorningEveningTasklistTest {
         var task1 = new Task(1,"new task morning",true);
         taskRepository.save(task1);
         var numTaskAfter = taskRepository.count();
-        var id = task1.getId();
 
         assertEquals((int) numTaskAfter, 1);
         taskRepository.remove(1);
