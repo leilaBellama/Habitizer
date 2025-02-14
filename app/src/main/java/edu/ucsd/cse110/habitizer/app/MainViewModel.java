@@ -13,22 +13,22 @@ import java.util.TimerTask;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
+import edu.ucsd.cse110.habitizer.lib.domain.RoutineTimer;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 import android.util.Log;
 
 public class MainViewModel extends ViewModel{
     private static final String LOG_TAG = "MainViewModel";
+    private static final Integer ONE_MINUTE = 60000;
 
     private final TaskRepository taskRepository;
 
     private final Subject<List<Integer>> taskOrdering;
     private final Subject<List<Task>> orderedTasks;
     private final Subject<String> displayedText;
-    private final Subject<Boolean> hasStarted;
+    private final Subject<RoutineTimer> timer;
     private final Subject<Integer> elapsedTime;
-    private Timer timer;
-
-
+    private final Subject<Boolean> hasStarted;
 
 
     public static final ViewModelInitializer<MainViewModel> initializer =
@@ -46,11 +46,12 @@ public class MainViewModel extends ViewModel{
         this.taskOrdering = new Subject<>();
         this.orderedTasks = new Subject<>();
         this.displayedText = new Subject<>();
-        this.hasStarted = new Subject<>();
+        this.timer = new Subject<>();
         this.elapsedTime = new Subject<>();
+        this.hasStarted = new Subject<>();
 
-        hasStarted.setValue(false);
-        elapsedTime.setValue(0);
+        this.timer.setValue(new RoutineTimer(ONE_MINUTE));
+        this.hasStarted.setValue(false);
 
         taskRepository.findAll().observe(tasks -> {
             if(tasks == null)   return;
@@ -85,29 +86,11 @@ public class MainViewModel extends ViewModel{
 //            this.topTask.setValue(task);
 //        });
 
-        hasStarted.observe(hasStarted -> {
-            if (hasStarted == null || !hasStarted) return;
-
-            if (timer != null) {
-                timer.cancel();
-                timer.purge();
-            }
-
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                @Override
-                public void run() {
-                    Log.d("timer", "time " + elapsedTime.getValue());
-                    var time = elapsedTime.getValue();
-                    if(time == null) return;
-                    elapsedTime.setValue((int) (time + 1.0));
-                }
-            };
-            timer.schedule(task,0,60000);//60000 milliseconds = 1 minute
-
+        this.timer.observe(routineTimer -> {
+            if (routineTimer == null) return;
+            Log.d("timer", "time" + elapsedTime.getValue());
+            routineTimer.getElapsedTime().observe(elapsedTime::setValue);
         });
-
-
     }
 
     public Subject<String> getDisplayedText(){
@@ -117,22 +100,23 @@ public class MainViewModel extends ViewModel{
     public Subject<List<Task>> getOrderedTasks() {
         return orderedTasks;
     }
+
     public Subject<Integer> getElapsedTime() {
         return elapsedTime;
     }
 
     public void startRoutine(){
-        var started = this.hasStarted.getValue();
-        if (started == null || started) return;
-        this.hasStarted.setValue(true);
-
-        this.elapsedTime.setValue(0);
-
+        if (!hasStarted.getValue()) {
+            hasStarted.setValue(true);
+            timer.getValue().start();
+        }
     }
 
     //TODO let it receive custom tasks
     public void addTask(){
-
+        if (hasStarted.getValue()) {
+            return;
+        }
         Task newTask = new Task(4, "new test task");
         taskRepository.append(newTask);
         Log.d("Add Task", "Task added");
