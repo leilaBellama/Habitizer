@@ -122,4 +122,8 @@ public class MainViewModel extends ViewModel{
         Log.d("Add Task", "Task added");
     }
 
+    public Subject<Boolean> getHasStarted() {
+        return hasStarted;
+    }
+
 }

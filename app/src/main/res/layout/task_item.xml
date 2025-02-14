@@ -30,4 +30,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/taskName"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/taskTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:gravity="center_vertical"
+        android:text="Time taken: --"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/taskName"
+        app:layout_constraintEnd_toEndOf="@+id/taskName"
+        app:layout_constraintTop_toTopOf="@+id/taskName" />
 </androidx.constraintlayout.widget.ConstraintLayout>
