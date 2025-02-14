@@ -80,6 +80,7 @@
         tools:layout="@layout/fragment_task_list" />
 
 
+
     <ImageButton
         android:id="@+id/add_task_button"
         android:layout_width="wrap_content"
@@ -118,17 +119,6 @@
         app:layout_constraintBottom_toTopOf="@+id/stop_time"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_constraintBottom_toTopOf="@id/stop_time" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
-        android:name="edu.ucsd.cse110.habitizer.app.ui.timer.TimerFragment"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/fragment_timer"
-        tools:layout_constraintBottom_toBottomOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

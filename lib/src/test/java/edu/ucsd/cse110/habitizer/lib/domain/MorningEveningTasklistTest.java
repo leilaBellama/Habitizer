@@ -29,11 +29,8 @@ public class MorningEveningTasklistTest {
         for(Task task : tasks){
             taskRepository.save(task);
         }
-        var all = taskRepository.findAll();
         assertEquals((int) taskRepository.count(), 8);
-
         taskRepository.remove(1);
-
         assertEquals((int) taskRepository.count(), 7);
 
     }

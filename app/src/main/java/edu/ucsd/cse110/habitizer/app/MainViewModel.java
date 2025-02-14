@@ -74,7 +74,7 @@ public class MainViewModel extends ViewModel{
             for(int i = 0;i < tasks.size(); i++){
                 ordering.add(i);
             }
-            Log.d("obs", "observe TR");
+            //Log.d("obs", "observe TR");
 
             taskOrdering.setValue(ordering);
         });
@@ -128,7 +128,7 @@ public class MainViewModel extends ViewModel{
 
         this.timer.observe(routineTimer -> {
             if (routineTimer == null) return;
-            Log.d("timer", "time" + elapsedTime.getValue());
+            //Log.d("timer", "time" + elapsedTime.getValue());
             routineTimer.getElapsedTime().observe(elapsedTime::setValue);
         });
     }
@@ -151,13 +151,13 @@ public class MainViewModel extends ViewModel{
     }
 
     public void startRoutine(){
-        Log.d("ST", "started " + hasStarted.getValue());
+        //Log.d("ST", "started " + hasStarted.getValue());
 
         elapsedTime.setValue(0);
         if (!hasStarted.getValue()) {
             hasStarted.setValue(true);
             timer.getValue().start();
-            Log.d("ST", "started time" + elapsedTime.getValue());
+            //Log.d("ST", "started time" + elapsedTime.getValue());
         }
     }
 
@@ -185,18 +185,14 @@ public class MainViewModel extends ViewModel{
         if (isMorning) {
             Task newTask = new Task(null, "new test task m",true);
             taskRepository.save(newTask);
-            Log.d("Add Task m", "Task added m");
+            //Log.d("Add Task m", "Task added m");
         }
         else {
             Task newTask = new Task(null, "new test task",false);
             taskRepository.save(newTask);
-            Log.d("Add Task", "Task added");
+            //Log.d("Add Task", "Task added");
         }
 
-    }
-
-    public Subject<Boolean> getHasStarted() {
-        return hasStarted;
     }
 
 }

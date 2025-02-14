@@ -18,22 +18,6 @@ public class InMemoryDataSource {
             = new HashMap<>();
     private final Subject<List<Task>> allTasksSubject
             = new Subject<>();
-    /*
-    private final Map<Integer, Task> tasksEvening
-            = new HashMap<>();
-    private final Map<Integer, Subject<Task>> taskSubjectsEvening
-            = new HashMap<>();
-    private final Subject<List<Task>> allTasksSubjectEvening
-            = new Subject<>();
-
-    private final Map<Integer, Task> tasksMorning
-            = new HashMap<>();
-    private final Map<Integer, Subject<Task>> taskSubjectsMorning
-            = new HashMap<>();
-    private final Subject<List<Task>> allTasksSubjectMorning
-            = new Subject<>();
-
-     */
 
     public InMemoryDataSource(){
 
@@ -67,19 +51,7 @@ public class InMemoryDataSource {
         allTasksSubject.setValue(new ArrayList<Task>(getTasks()));
     }
 
-    public void removeTask(int id) {
-        tasks.remove(id);
-        if (taskSubjects.containsKey(id)) {
-            taskSubjects.get(id).setValue(null);
-        }
-        allTasksSubject.setValue(getTasks());
-    }
-
-
-       /**
-     * Private utility method to maintain state of the fake DB: ensures that new
-     * cards inserted have an id, and updates the nextId if necessary.
-     */
+    //if task to insert has null id, create new task with next id
     private Task preInsert(Task task) {
         var id = task.getId();
         if (id == null) {
@@ -88,23 +60,15 @@ public class InMemoryDataSource {
         } else if (id > nextId) {
             nextId = id + 1;
         }
-        /*
-        if (task.isMorningTask()) {
-            if (id == null) {
-                task = task.withId(nextIdMorning++);
-            } else {
-                nextIdMorning = id++;
-            }
-        } else {
-            if (id == null) {
-                task = task.withId(nextIdEvening++);
-            } else {
-                nextIdEvening = id++;
-            }
-        }
-
-         */
         return task;
+    }
+
+    public void removeTask(int id) {
+        tasks.remove(id);
+        if (taskSubjects.containsKey(id)) {
+            taskSubjects.get(id).setValue(null);
+        }
+        allTasksSubject.setValue(getTasks());
     }
 
     public List<Task> getTasks(){
@@ -127,48 +91,5 @@ public class InMemoryDataSource {
     public Subject<List<Task>> getAllTasksSubject() {
         return allTasksSubject;
     }
-
-    /*
-    public void putTask(Task task){
-        tasks.put(task.getId(), task);
-        if(taskSubjects.containsKey(task.getId())){
-            taskSubjects.get(task.getId()).setValue(task);
-        }
-        allTasksSubject.setValue(getTasks());
-    }
-
-
-    //evening methods
-
-    public List<Task> getTasksEvening(){
-        return List.copyOf(tasksEvening.values());
-    }
-
-    public Task getTaskEvening(int id){
-        return tasksEvening.get(id);
-    }
-
-    public Subject<Task> getTaskSubjectEvening(int id){
-        if(!taskSubjectsEvening.containsKey(id)){
-            var subject = new Subject<Task>();
-            subject.setValue(getTaskEvening(id));
-            taskSubjectsEvening.put(id, subject);
-        }
-        return taskSubjectsEvening.get(id);
-    }
-
-    public Subject<List<Task>> getAllTasksSubjectEvening() {
-        return allTasksSubjectEvening;
-    }
-
-    public void putTaskEvening(Task task){
-        tasksEvening.put(task.getId(), task);
-        if(taskSubjectsEvening.containsKey(task.getId())){
-            taskSubjectsEvening.get(task.getId()).setValue(task);
-        }
-        allTasksSubjectEvening.setValue(getTasksEvening());
-    }
-
-     */
 
 }

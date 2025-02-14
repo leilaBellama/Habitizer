@@ -18,7 +18,7 @@ import edu.ucsd.cse110.habitizer.app.databinding.TaskItemBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class TaskListAdapter extends ArrayAdapter<Task>{
-    private Double lastCheckedOffTime = null;
+    private int lastCheckedOffTime;
     private final MainViewModel mainViewModel;
 
     public TaskListAdapter(Context context, List<Task> tasks, MainViewModel mainViewModel){
@@ -58,30 +58,36 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
                 return;
             }
 
-            Log.d("TaskListAdapter", "Task: " + task.getTaskName() + " Before: " + task.getCheckedOffStatus());
+            //Log.d("TaskListAdapter", "Task: " + task.getTaskName() + " Before: " + task.getCheckedOffStatus());
 
             if (isChecked) {
-                double currentTime = mainViewModel.getElapsedTime().getValue();
+                int currentTime = mainViewModel.getElapsedTime().getValue();
+                int timeTaken = 0;
                 task.setCheckedOff(true, (int)currentTime);
                 binding.checkBox.setEnabled(false); //disable it so we cannot check it off
 
+                /*
                 if (lastCheckedOffTime != null) {
                     double timeTaken = currentTime - lastCheckedOffTime;
-                    Log.d("TaskListAdapter", "Time taken since last task: " + timeTaken + " mins");
+                    //Log.d("TaskListAdapter", "Task: " + task.getTaskName() + "Time taken since last task: " + timeTaken + " mins");
                 }
-
-                int timeTaken;
                 if (lastCheckedOffTime == null) {
                     timeTaken = (int) currentTime;
                 } else {
                     timeTaken = (int) currentTime - lastCheckedOffTime.intValue();
                 }
 
+                 */
+                timeTaken = currentTime - (int)lastCheckedOffTime + 1;
+
+                Log.d("TaskListAdapter", "Task: " + task.getTaskName() + "cur time: " + currentTime + " mins" + "last time" + lastCheckedOffTime);
+
+
                 binding.taskTime.setText(timeTaken + " mins");
                 lastCheckedOffTime = currentTime;
             }
 
-            Log.d("TaskListAdapter", "Task: " + task.getTaskName() + " After: " + task.getCheckedOffStatus());
+            //Log.d("TaskListAdapter", "Task: " + task.getTaskName() + " After: " + task.getCheckedOffStatus());
         });
         return binding.getRoot();
     }
