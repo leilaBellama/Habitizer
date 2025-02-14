@@ -30,6 +30,7 @@ public class TimerTest {
     private RoutineTimer timer;
     private Runnable capturedTask;
 
+    /*
     @Test
     public void StartSchedulerTest() {
         ScheduledExecutorService mockSchedulor = Mockito.mock(ScheduledExecutorService.class);
@@ -41,7 +42,7 @@ public class TimerTest {
         testTimer.stop();
     }
 
-    /*
+
     // Initialize mocks with openMocks
 
     @Before

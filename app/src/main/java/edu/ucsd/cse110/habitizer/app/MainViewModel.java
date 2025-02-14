@@ -21,7 +21,7 @@ import android.util.Log;
 
 public class MainViewModel extends ViewModel{
     private static final String LOG_TAG = "MainViewModel";
-    private static final Integer ONE_MINUTE = 60000;
+    private static final Integer ONE_MINUTE = 60;
 
     private final TaskRepository taskRepository;
     private final Subject<List<Integer>> taskOrderingEvening;
@@ -63,7 +63,7 @@ public class MainViewModel extends ViewModel{
         this.inMorning.setValue(true);
         this.hasStarted.setValue(false);
         this.elapsedTime.setValue(0);
-        this.timer.setValue(new RoutineTimer());
+        this.timer.setValue(new RoutineTimer(ONE_MINUTE));
 
         //when list changes (or is first loaded), reset ordering of both lists
         taskRepository.findAll().observe(tasks -> {

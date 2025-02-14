@@ -10,30 +10,37 @@ import android.util.Log;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 
 public class RoutineTimer {
-    private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledExecutorService scheduler;
     //private ScheduledFuture<?> futureTask;
     private int elapsedSeconds;
     private Subject<Boolean> hasStarted;
     private Subject<Integer> elapsedTime;
 
-    public RoutineTimer() {
+    private Integer interval;
+
+    public RoutineTimer(Integer interval) {
         this.hasStarted = new Subject<>();
         this.elapsedTime = new Subject<>();
+        this.interval = interval;
+        this.scheduler = Executors.newSingleThreadScheduledExecutor();
+        //this.timer = new Timer();
 
-        this.elapsedTime.setValue(0);
-        this.elapsedSeconds = 0;
+        elapsedTime.setValue(0);
         hasStarted.setValue(false);
     }
 
-    public RoutineTimer(ScheduledExecutorService scheduler) {
+    /*
+    public RoutineTimer(Integer interval, ScheduledExecutorService scheduler) {
         this.scheduler = scheduler;
         this.hasStarted = new Subject<>();
         this.elapsedTime = new Subject<>();
-
+        this.interval = interval;
         this.elapsedTime.setValue(0);
         this.elapsedSeconds = 0;
         hasStarted.setValue(false);
     }
+
+     */
 
     public Subject<Integer> getElapsedTime() {
         return elapsedTime;
@@ -47,16 +54,17 @@ public class RoutineTimer {
         return hasStarted;
     }
 
-    public void setTime(Integer time) {
-        this.elapsedSeconds = time;
+    public void setTime(Integer minutes, int seconds) {
+        this.getElapsedTime().setValue(minutes);
+        this.elapsedSeconds = seconds;
     }
 
     public void advanceTime(Integer advance) {
         if (!hasStarted.getValue()) return;
         elapsedSeconds += advance; // Increase elapsed seconds
-        if (elapsedSeconds >= 60) {
+        if (elapsedSeconds >= interval) {
             elapsedTime.setValue(elapsedTime.getValue()+1);
-            elapsedSeconds -= 60;
+            elapsedSeconds -= interval;
         }
         Log.d("m","Advanced by 30 seconds. New time: " + getElapsedTime().getValue() + " minutes, ");
     }
@@ -76,7 +84,7 @@ public class RoutineTimer {
         //futureTask = scheduler.scheduleWithFixedDelay(() -> {
         scheduler.scheduleWithFixedDelay(() -> {
             elapsedSeconds++;
-            if (elapsedSeconds >= 60) {
+            if (elapsedSeconds >= interval) {
                 elapsedTime.setValue(elapsedTime.getValue() + 1);
                 elapsedSeconds = 0;
                 Log.d("m","Elapsed time: " + getElapsedTime().getValue() + " minutes,");
