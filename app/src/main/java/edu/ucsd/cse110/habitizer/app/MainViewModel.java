@@ -14,6 +14,7 @@ import java.util.TimerTask;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
+import edu.ucsd.cse110.habitizer.app.RoutineTimer;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 
 import android.database.Observable;
@@ -127,17 +128,9 @@ public class MainViewModel extends ViewModel{
 
         this.timer.observe(routineTimer -> {
             if (routineTimer == null) return;
-
-//            Timer t = routineTimer.getTimer();
-//
-//            if (t != null) {
-//                t.cancel();
-//                t.purge();
-//            }
-            Log.d("timer observe", "time" + elapsedTime.getValue());
+            Log.d("timer", "time" + elapsedTime.getValue());
             routineTimer.getElapsedTime().observe(elapsedTime::setValue);
         });
-
     }
 
 
