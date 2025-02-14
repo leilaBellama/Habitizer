@@ -10,6 +10,7 @@ public class Task implements Serializable {
     private @Nullable Integer id;
     private @NonNull String taskName;
     private boolean checkedOff;
+    private Integer checkedOffTime;
 
     private boolean isMorningTask;
 
@@ -20,6 +21,7 @@ public class Task implements Serializable {
         this.checkedOff = false;
         this.isMorningTask = isMorningTask;
 
+        this.checkedOffTime = 0;
     }
 
     public @Nullable Integer getId(){return id;}
@@ -32,15 +34,18 @@ public class Task implements Serializable {
 
     public boolean isMorningTask() {return isMorningTask;}
 
+    public Integer getCheckedOffTime() { return checkedOffTime; }
+
     public void setName(String taskName){
         this.taskName = taskName;
     }
 
     // Does not support unchecking, adds another if statement
     // to prevent checkoff
-    public void setCheckedOff(boolean isChecked){
+    public void setCheckedOff(boolean isChecked, Integer checkedOffTime){
         if (!this.checkedOff) {
             this.checkedOff = isChecked;
+            this.checkedOffTime = checkedOffTime;
         }
     }
 

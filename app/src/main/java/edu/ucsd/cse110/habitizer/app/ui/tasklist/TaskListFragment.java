@@ -41,11 +41,16 @@ public class TaskListFragment extends Fragment{
         var ModelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = ModelProvider.get(MainViewModel.class);
 
-        this.adapter = new TaskListAdapter(requireContext(), List.of());
+        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
         activityModel.getOrderedTasks().observe(tasks -> {
             if(tasks == null) return;
             adapter.clear();
             adapter.addAll(new ArrayList<>(tasks));
+            adapter.notifyDataSetChanged();
+        });
+
+        activityModel.getHasStarted().observe(started -> {
+            if (started == null) return;
             adapter.notifyDataSetChanged();
         });
     }

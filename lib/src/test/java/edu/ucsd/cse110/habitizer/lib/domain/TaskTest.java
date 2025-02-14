@@ -18,7 +18,7 @@ public class TaskTest {
     @Test
     public void testSetter(){
         var task1 = new Task(1, "Task1",true);
-        task1.setCheckedOff(true);
+        task1.setCheckedOff(true, 0);
         task1.setName("Task2");
         assertEquals(true, task1.getCheckedOffStatus());
         assertEquals("Task2", task1.getTaskName());

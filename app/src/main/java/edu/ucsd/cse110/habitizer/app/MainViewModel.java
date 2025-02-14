@@ -195,4 +195,8 @@ public class MainViewModel extends ViewModel{
 
     }
 
+    public Subject<Boolean> getHasStarted() {
+        return hasStarted;
+    }
+
 }
