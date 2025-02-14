@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         //start button starts routine, removes switch routine and add option
         view.startButton.setOnClickListener(v -> {
+            view.startButton.setEnabled(false);
             model.getElapsedTime().observe(time -> {
                 if (time != null) {
                     view.time.setText(time + " min");
