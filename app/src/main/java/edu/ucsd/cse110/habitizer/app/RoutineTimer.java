@@ -75,7 +75,7 @@ public class RoutineTimer {
                 elapsedSeconds = 0;
                 //Log.d("m","Elapsed time: " + getElapsedTime().getValue() + " minutes,");
             }
-            Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
+            //Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
         }, 0, 1, TimeUnit.SECONDS);
     }
 

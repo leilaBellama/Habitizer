@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
 
 
-        //start button starts routine and removes switch routine option
+        //start button starts routine, removes switch routine and add option
         view.startButton.setOnClickListener(v -> {
             model.getElapsedTime().observe(time -> {
                 if (time != null) {
