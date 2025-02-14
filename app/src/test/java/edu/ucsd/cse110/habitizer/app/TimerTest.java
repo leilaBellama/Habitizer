@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
+
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -21,104 +22,106 @@ import java.util.concurrent.TimeUnit;
 @RunWith(MockitoJUnitRunner.class)
 public class TimerTest {
 
-    @Mock
-    private ScheduledExecutorService mockExecutor;
+    private ScheduledExecutorService mockScheduler;
+    private RoutineTimer routineTimer;
+    private RoutineTimer routineTimer2;
+    private Runnable capturedRunnable;
 
-    @Mock
-    private ScheduledFuture<?> mockFuture;
-
-    private RoutineTimer timer;
-    private Runnable capturedTask;
-
-    /*
-    @Test
-    public void StartSchedulerTest() {
-        ScheduledExecutorService mockSchedulor = Mockito.mock(ScheduledExecutorService.class);
-        RoutineTimer testTimer = Mockito.spy(new RoutineTimer(mockSchedulor));
-
-        testTimer.start();
-        Mockito.verify(mockSchedulor, times(1)).scheduleWithFixedDelay(Mockito.any(Runnable.class), anyLong(), anyLong(), Mockito.any(TimeUnit.class));
-        assertEquals((int) testTimer.getElapsedTime().getValue(),0);
-        testTimer.stop();
-    }
-
-
-    // Initialize mocks with openMocks
 
     @Before
     public void setUp() {
+        // Mock the scheduler
+        mockScheduler = Mockito.mock(ScheduledExecutorService.class);
+        // Create RoutineTimer with the mock scheduler
+        routineTimer = new RoutineTimer(1, mockScheduler); // 1-second interval
 
-        try (var mocks = MockitoAnnotations.openMocks(this)) {  // try-with-resources
-            // Capture the Runnable passed to scheduleAtFixedRate
-            ArgumentCaptor<Runnable> taskCaptor = ArgumentCaptor.forClass(Runnable.class);
-
-            ScheduledFuture mockFuture = mock(ScheduledFuture.class);
-
-// Mock the scheduleAtFixedRate method
-            when(mockExecutor.scheduleAtFixedRate(taskCaptor.capture(), anyLong(), anyLong(), any(TimeUnit.class)))
-                    .thenReturn(mockFuture);
-
-            // Initialize TimerManager with the mocked scheduler
-            timer = new RoutineTimer(mockExecutor);
-
-            // Start the timer which should schedule a task
-            timer.start();
-
-            // Retrieve the captured task
-            capturedTask = taskCaptor.getValue();
-
-            // Ensure the captured task is not null
-            assertNotNull("Scheduled task should not be null", capturedTask);
-        } catch (Exception e) {
-            e.printStackTrace();  // In case of errors during setup
-        }
-        assertNotNull("Captured Runnable should not be null", capturedTask);
-
-
-    }
-
-    // Clean up mocks after test
-    @After
-    public void tearDown() throws Exception {
-        // Close the mocks to release resources
-        mockExecutor = null;
+        routineTimer2 = new RoutineTimer(60);
+        routineTimer2.getHasStarted().setValue(true);
+        routineTimer2.getElapsedTime().setValue(0);
     }
 
     @Test
-    public void testVerifyScheduleCalled() {
-        // Verify that scheduleWithFixedDelay was called exactly once with the correct arguments
-        verify(mockExecutor, times(1)).scheduleWithFixedDelay(any(Runnable.class), anyLong(), anyLong(), any(TimeUnit.class));
+    public void testElapsedTimeUpdatesCorrectly() {
 
-        // Ensure the captured task is not null before running it
-        assertNotNull("Captured Runnable should not be null", capturedTask);
+        // Capture the runnable that gets scheduled
+        ArgumentCaptor<Runnable> runnableCaptor = ArgumentCaptor.forClass(Runnable.class);
+        routineTimer.start();
+
+        // Verify that scheduleWithFixedDelay() was called with a Runnable
+        verify(mockScheduler).scheduleWithFixedDelay(
+                runnableCaptor.capture(), anyLong(), anyLong(), any(TimeUnit.class)
+        );
+
+        // Retrieve the captured runnable
+        Runnable capturedRunnable = runnableCaptor.getValue();
+
+        // Simulate multiple time intervals passing
+        capturedRunnable.run();
+        assertEquals(1, (int) routineTimer.getElapsedTime().getValue());
+
+        capturedRunnable.run();
+        assertEquals(2, (int) routineTimer.getElapsedTime().getValue());
+
+        capturedRunnable.run();
+        assertEquals(3, (int) routineTimer.getElapsedTime().getValue());
+
+        // Stop the timer (if needed)
+        routineTimer.stop();
     }
 
     @Test
-    public void testTimerIncrementsSeconds() {
-        // Simulate the task running for 30 seconds
-        for (int i = 0; i < 30; i++) {
-            capturedTask.run();
-        }
+    public void testAdvanceTimeUpdatesCorrectly() {
 
-        // Verify that elapsed seconds are counted correctly
-        assertEquals( 30, timer.getElapsedSeconds());
-        assertEquals(0, (int) timer.getElapsedTime().getValue()); // Should still be 0
+        // Capture the runnable that gets scheduled
+        ArgumentCaptor<Runnable> runnableCaptor = ArgumentCaptor.forClass(Runnable.class);
+        routineTimer.start();
+
+        // Verify that scheduleWithFixedDelay() was called with a Runnable
+        verify(mockScheduler).scheduleWithFixedDelay(
+                runnableCaptor.capture(), anyLong(), anyLong(), any(TimeUnit.class)
+        );
+
+        // Retrieve the captured runnable
+        Runnable capturedRunnable = runnableCaptor.getValue();
+
+        // Simulate multiple time intervals passing
+        capturedRunnable.run();
+        assertEquals(1, (int) routineTimer.getElapsedTime().getValue());
+
+        capturedRunnable.run();
+        assertEquals(2, (int) routineTimer.getElapsedTime().getValue());
+
+        capturedRunnable.run();
+        assertEquals(3, (int) routineTimer.getElapsedTime().getValue());
+
+        // Stop the timer (if needed)
+        routineTimer.stop();
     }
 
     @Test
-    public void testTimerIncrementsMinutes() {
-        // Simulate the task running for 60 seconds
-        for (int i = 0; i < 60; i++) {
-            capturedTask.run();
-        }
+    public void testAdvanceTimeCrossesInterval() {
+        routineTimer2.advanceTime(60); // Advance by 60 seconds
 
-        // Verify that seconds reset and minutes increment
-        assertEquals(0, timer.getElapsedSeconds()); // Should reset after 60 seconds
-        assertEquals(1, (int) timer.getElapsedTime().getValue()); // 1 minute should have passed
+        // Since 60 seconds = 1 minute, elapsedTime should increase by 1
+        assertEquals(1, (int) routineTimer2.getElapsedTime().getValue());
     }
-    */
+
+    @Test
+    public void testAdvanceTimeAccumulatesProperly() {
+        routineTimer2.advanceTime(30); // Advance by 30 seconds
+        assertEquals(0, (int) routineTimer2.getElapsedTime().getValue());
+        assertEquals(30, (int) routineTimer2.getElapsedSeconds());
+
+        routineTimer2.advanceTime(30); // Advance another 30 seconds (total = 60)
+        assertEquals(1, (int) routineTimer2.getElapsedTime().getValue());
+        assertEquals(0, (int) routineTimer2.getElapsedSeconds());
 
 
+        routineTimer2.advanceTime(90); // Advance by 90 seconds (should add 1.5 minutes)
+        assertEquals(2, (int) routineTimer2.getElapsedTime().getValue()); // 1 full minute added
+        assertEquals(30, (int) routineTimer2.getElapsedSeconds());
+
+    }
 
 }
 

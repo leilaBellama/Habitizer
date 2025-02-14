@@ -153,11 +153,8 @@ public class MainViewModel extends ViewModel{
     public void startRoutine(){
         Log.d("ST", "started " + hasStarted.getValue());
 
-        var started = hasStarted.getValue();
-
-        if (started == null) return;
         elapsedTime.setValue(0);
-        if (!started) {
+        if (!hasStarted.getValue()) {
             hasStarted.setValue(true);
             timer.getValue().start();
             Log.d("ST", "started time" + elapsedTime.getValue());
