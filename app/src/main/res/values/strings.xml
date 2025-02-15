@@ -2,8 +2,13 @@
     <string name="app_name">Habitizer</string>
     <string name="routine">Routine</string>
     <string name="morning_routine">Morning Routine</string>
+    <string name="evening_routine">Evening Routine</string>
+    <string name="morning_">Morning</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="start">Start</string>
     <string name="end_routine">End Routine</string>
     <string name="time">time</string>
+    <string name="swap_views">Swap Views</string>
+    <string name="time_elapsed">Time Elapsed:</string>
+    <string name="out_of">Out Of:</string>
 </resources>

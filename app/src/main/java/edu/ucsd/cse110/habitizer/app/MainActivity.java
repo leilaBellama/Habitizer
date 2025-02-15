@@ -1,11 +1,14 @@
 package edu.ucsd.cse110.habitizer.app;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
@@ -18,7 +21,8 @@ import androidx.lifecycle.ViewModelProvider;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
     private MainViewModel model;
-    private boolean isShowingStudy = true;
+    private boolean isShowingMorning = true;
+    private boolean started = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,14 +35,26 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.model = modelProvider.get(MainViewModel.class);
 
-        model.getElapsedTime().observe(time -> {
-            if (time != null) {
-                view.timer.setText(time + " min");
-            }
+        model.getRoutineTitle().observe(text -> view.routine.setText(text));
+
+
+        //start button starts routine, removes switch routine and add option
+        view.startButton.setOnClickListener(v -> {
+            view.startButton.setEnabled(false);
+            model.getElapsedTime().observe(time -> {
+                if (time != null) {
+                    view.time.setText(time + " min");
+                }
+            });
+            model.startRoutine();
+            started = true;
+            invalidateOptionsMenu();
         });
 
-        view.startButton.setOnClickListener(v -> model.startRoutine());
+
         view.addTaskButton.setOnClickListener(v -> model.addTask());
+        view.stopTime.setOnClickListener(v -> model.stopTimer());
+        view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());
 
 
         setContentView(view.getRoot());
@@ -48,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(s);
         });
 
-
     }
 
     @Override
@@ -56,4 +71,37 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.action_bar, menu);
         return true;
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        var item = menu.findItem(R.id.action_bar_menu_swap_views);
+        item.setVisible(!started);
+        item.setEnabled(!started);
+        return super.onPrepareOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        var itemId = item.getItemId();
+        if (itemId == R.id.action_bar_menu_swap_views) {
+            model.swapRoutine();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /*
+    private void swapFragments() {
+        if (isShowingMorning) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainerView, EveningFragment.newInstance())
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainerView, MorningFragment.newInstance())
+                    .commit();
+        }
+        isShowingMorning = !isShowingMorning;
+    }
+     */
 }

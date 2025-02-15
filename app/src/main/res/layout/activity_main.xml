@@ -21,12 +21,12 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/timer"
-                android:layout_width="0dp"
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:gravity="left|center_vertical"
-                android:text="@string/time"
+                android:text="---"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:translationY="-5dp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/time_elapsed"
@@ -37,37 +37,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
-                android:gravity="center"
                 android:text="@string/morning_routine"
-                android:textSize="24sp"
+                android:textSize="32sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/time_elapsed"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="center"
-                android:text="Time Elapsed:"
-                app:layout_constraintEnd_toStartOf="@+id/timer"
-                app:layout_constraintStart_toEndOf="@+id/routine"
+                android:layout_marginEnd="64dp"
+                android:text="@string/time_elapsed"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="64dp"
                 android:layout_marginBottom="8dp"
-                android:gravity="center_vertical"
-                android:text="Out Of:"
+                android:text="@string/out_of"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/time_elapsed"
                 app:layout_constraintTop_toBottomOf="@+id/time_elapsed"
                 app:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -84,6 +78,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/routine_bar"
         tools:layout="@layout/fragment_task_list" />
+
 
 
     <ImageButton
@@ -105,6 +100,25 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/stop_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="stop time"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/advance_time_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="advance time"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toTopOf="@+id/stop_time"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_constraintBottom_toTopOf="@id/stop_time" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

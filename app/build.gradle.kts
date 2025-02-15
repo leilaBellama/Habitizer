@@ -56,4 +56,7 @@ dependencies {
 //    androidTestImplementation("androidx.test:rules:1.6.1u")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
 //    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.junit.jupiter)
 }

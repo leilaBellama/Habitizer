@@ -8,7 +8,7 @@ public class TaskTest {
     // Test for getter
     @Test
     public void testGetter(){
-        var task1 = new Task(1, "Task1");
+        var task1 = new Task(1, "Task1",true);
         assertEquals(Integer.valueOf(1), task1.getId());
         assertEquals("Task1", task1.getTaskName());
         assertEquals(false, task1.getCheckedOffStatus());
@@ -17,7 +17,7 @@ public class TaskTest {
     // Test for setter
     @Test
     public void testSetter(){
-        var task1 = new Task(1, "Task1");
+        var task1 = new Task(1, "Task1",true);
         task1.setCheckedOff(true, 0);
         task1.setName("Task2");
         assertEquals(true, task1.getCheckedOffStatus());

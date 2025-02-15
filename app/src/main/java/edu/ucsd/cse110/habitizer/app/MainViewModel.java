@@ -7,29 +7,34 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
-import edu.ucsd.cse110.habitizer.lib.domain.RoutineTimer;
+import edu.ucsd.cse110.habitizer.app.RoutineTimer;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
+
+import android.database.Observable;
 import android.util.Log;
 
 public class MainViewModel extends ViewModel{
     private static final String LOG_TAG = "MainViewModel";
-    private static final Integer ONE_MINUTE = 60000;
+    private static final Integer ONE_MINUTE = 60;
 
     private final TaskRepository taskRepository;
-
-    private final Subject<List<Integer>> taskOrdering;
+    private final Subject<List<Integer>> taskOrderingEvening;
+    private final Subject<List<Task>> orderedTasksEvening;
     private final Subject<List<Task>> orderedTasks;
-    private final Subject<String> displayedText;
+    private final Subject<String> routineTitle;
+    private final Subject<Boolean> hasStarted;
     private final Subject<RoutineTimer> timer;
     private final Subject<Integer> elapsedTime;
-    private final Subject<Boolean> hasStarted;
-
+    private final Subject<Boolean> inMorning;
+    private final Subject<List<Integer>> taskOrdering;
+    private final Subject<List<Task>> orderedTasksMorning;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -43,16 +48,25 @@ public class MainViewModel extends ViewModel{
     public MainViewModel(TaskRepository taskRepository){
         this.taskRepository = taskRepository;
 
-        this.taskOrdering = new Subject<>();
         this.orderedTasks = new Subject<>();
-        this.displayedText = new Subject<>();
+
+        this.taskOrdering = new Subject<>();
+        this.orderedTasksMorning = new Subject<>();
+        this.taskOrderingEvening = new Subject<>();
+        this.orderedTasksEvening = new Subject<>();
+
+        this.routineTitle = new Subject<>();
+        this.inMorning = new Subject<>();
+        this.hasStarted = new Subject<>();
         this.timer = new Subject<>();
         this.elapsedTime = new Subject<>();
-        this.hasStarted = new Subject<>();
 
-        this.timer.setValue(new RoutineTimer(ONE_MINUTE));
+        this.inMorning.setValue(true);
         this.hasStarted.setValue(false);
+        this.elapsedTime.setValue(0);
+        this.timer.setValue(new RoutineTimer(ONE_MINUTE));
 
+        //when list changes (or is first loaded), reset ordering of both lists
         taskRepository.findAll().observe(tasks -> {
             if(tasks == null)   return;
 
@@ -60,22 +74,48 @@ public class MainViewModel extends ViewModel{
             for(int i = 0;i < tasks.size(); i++){
                 ordering.add(i);
             }
+            //Log.d("obs", "observe TR");
 
             taskOrdering.setValue(ordering);
         });
 
+        //when  list ordering changes, update both taskOrdering
         //might be useful later if we need to change order of tasks
         taskOrdering.observe(ordering -> {
             if(ordering == null) return;
 
-            var tasks = new ArrayList<Task>();
+            var morningTasks = new ArrayList<Task>();
+            var eveningTasks = new ArrayList<Task>();
             for(var id : ordering){
                 var task = taskRepository.find(id).getValue();
                 if(task == null) return;
-
-                tasks.add(task);
+                if(task.isMorningTask()) {
+                    morningTasks.add(task);
+                } else {
+                    eveningTasks.add(task);
+                }
             }
-            this.orderedTasks.setValue(tasks);
+            this.orderedTasksMorning.setValue(morningTasks);
+            this.orderedTasksEvening.setValue(eveningTasks);
+        });
+
+        //when inMorning changes, switch title and morning/evening list
+        inMorning.observe(inMorning -> {
+            if (inMorning == null) return;
+            if (!inMorning) {
+                routineTitle.setValue("Evening Routine");
+                orderedTasksMorning.removeObservers();
+                orderedTasksEvening.observe(eveningTasks -> {
+                    orderedTasks.setValue(orderedTasksEvening.getValue());
+                });
+            } else {
+                routineTitle.setValue("Morning Routine");
+                orderedTasksEvening.removeObservers();
+                orderedTasksMorning.observe(eveningTasks -> {
+                    orderedTasks.setValue(orderedTasksMorning.getValue());
+
+                });
+            }
         });
 
         // When the ordering changes, update the first task
@@ -88,13 +128,14 @@ public class MainViewModel extends ViewModel{
 
         this.timer.observe(routineTimer -> {
             if (routineTimer == null) return;
-            Log.d("timer", "time" + elapsedTime.getValue());
+            //Log.d("timer", "time" + elapsedTime.getValue());
             routineTimer.getElapsedTime().observe(elapsedTime::setValue);
         });
     }
 
-    public Subject<String> getDisplayedText(){
-        return displayedText;
+
+    public Subject<String> getRoutineTitle(){
+        return routineTitle;
     }
 
     public Subject<List<Task>> getOrderedTasks() {
@@ -105,25 +146,53 @@ public class MainViewModel extends ViewModel{
         return elapsedTime;
     }
 
+    public Subject<Boolean> getHasStarted() {
+        return hasStarted;
+    }
+
     public void startRoutine(){
+        //Log.d("ST", "started " + hasStarted.getValue());
+
+        elapsedTime.setValue(0);
         if (!hasStarted.getValue()) {
             hasStarted.setValue(true);
             timer.getValue().start();
+            //Log.d("ST", "started time" + elapsedTime.getValue());
         }
     }
+
+    public void stopTimer() {
+        var started = hasStarted.getValue();
+        if (started == null) return;
+        if (started) {
+            timer.getValue().stop();
+        }
+    }
+    public void advanceTime() {
+        timer.getValue().advanceTime(30);
+    }
+    public void swapRoutine() {
+        var isMorning = this.inMorning.getValue();
+        if (isMorning == null) return;
+        this.inMorning.setValue(!isMorning);
+    }
+
 
     //TODO let it receive custom tasks
     public void addTask(){
-        if (hasStarted.getValue()) {
-            return;
+        var isMorning = this.inMorning.getValue();
+        if (isMorning == null) return;
+        if (isMorning) {
+            Task newTask = new Task(null, "new test task m",true);
+            taskRepository.save(newTask);
+            //Log.d("Add Task m", "Task added m");
         }
-        Task newTask = new Task(4, "new test task");
-        taskRepository.append(newTask);
-        Log.d("Add Task", "Task added");
-    }
+        else {
+            Task newTask = new Task(null, "new test task",false);
+            taskRepository.save(newTask);
+            //Log.d("Add Task", "Task added");
+        }
 
-    public Subject<Boolean> getHasStarted() {
-        return hasStarted;
     }
 
 }
