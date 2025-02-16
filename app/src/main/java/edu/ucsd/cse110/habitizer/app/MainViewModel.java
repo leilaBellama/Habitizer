@@ -35,7 +35,7 @@ public class MainViewModel extends ViewModel{
     private final Subject<Boolean> inMorning;
     private final Subject<List<Integer>> taskOrdering;
     private final Subject<List<Task>> orderedTasksMorning;
-
+    private final Subject<String> taskName;
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -60,7 +60,7 @@ public class MainViewModel extends ViewModel{
         this.hasStarted = new Subject<>();
         this.timer = new Subject<>();
         this.elapsedTime = new Subject<>();
-
+        this.taskName = new Subject<>();
         this.inMorning.setValue(true);
         this.hasStarted.setValue(false);
         this.elapsedTime.setValue(0);
@@ -193,6 +193,14 @@ public class MainViewModel extends ViewModel{
             //Log.d("Add Task", "Task added");
         }
 
+    }
+
+    public void setTaskName(int taskId, String taskName){
+        taskRepository.editName(taskId, taskName);
+    }
+
+    public Subject<String> getTaskName(){
+        return this.taskName;
     }
 
 }

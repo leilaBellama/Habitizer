@@ -71,6 +71,9 @@ public class InMemoryDataSource {
         allTasksSubject.setValue(getTasks());
     }
 
+    public void editTask(int id, String name){
+        tasks.get(id).setName(name);
+    }
     public List<Task> getTasks(){
         return List.copyOf(tasks.values());
     }
