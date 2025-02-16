@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,15 +56,15 @@ public class EditTaskDialogFragment extends DialogFragment {
                 .create();
     }
 
-    private void onPositiveButtonClick(DialogInterface dialog, int which){
+    private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var taskName = view.editTaskName.getText().toString();
 
-        if(!taskName.isEmpty()){
-            activityModel.setTaskName(taskId, taskName);
+        if (taskName == null || taskName.isEmpty()) {
+            Toast.makeText(requireContext(), "Task name cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
         }
-        else{
-            throw new IllegalArgumentException("Task name cannot be empty");
-        }
+
+        activityModel.setTaskName(taskId, taskName);
         dialog.dismiss();
     }
 
