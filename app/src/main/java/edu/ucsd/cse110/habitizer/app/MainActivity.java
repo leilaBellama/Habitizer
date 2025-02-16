@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
 
         model.getGoalTime().observe(goalTime -> {
-            boolean isGoalTimeSet = goalTime != null && !goalTime.isEmpty();
-            view.goalTime.setText(isGoalTimeSet ? goalTime + " min" : "Set");
-            view.startButton.setEnabled(isGoalTimeSet && !model.getHasStarted().getValue());
+            if(goalTime != null){
+                view.goalTime.setText(goalTime + " min");
+            }
         });
 
         //start button starts routine, removes switch routine and add option
