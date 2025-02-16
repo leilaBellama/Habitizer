@@ -12,7 +12,7 @@ public class TaskRepository {
         this.dataSource = dataSource;
     }
 
-        public Integer count() {
+    public Integer count() {
         return dataSource.getTasks().size();
     }
 
