@@ -36,6 +36,7 @@ public class MainViewModel extends ViewModel{
     private final Subject<List<Integer>> taskOrdering;
     private final Subject<List<Task>> orderedTasksMorning;
     private final Subject<String> taskName;
+    private final Subject<String> goalTime;
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -61,6 +62,7 @@ public class MainViewModel extends ViewModel{
         this.timer = new Subject<>();
         this.elapsedTime = new Subject<>();
         this.taskName = new Subject<>();
+        this.goalTime = new Subject<>();
         this.inMorning.setValue(true);
         this.hasStarted.setValue(false);
         this.elapsedTime.setValue(0);
@@ -152,6 +154,10 @@ public class MainViewModel extends ViewModel{
 
     public void startRoutine(){
         //Log.d("ST", "started " + hasStarted.getValue());
+        if (goalTime.getValue() == null || goalTime.getValue().isEmpty()) {
+            //Log.d(LOG_TAG, "Cannot start routine. Goal time is not set.");
+            return; // Do not start if goal time is not set
+        }
 
         elapsedTime.setValue(0);
         if (!hasStarted.getValue()) {
@@ -201,6 +207,14 @@ public class MainViewModel extends ViewModel{
 
     public Subject<String> getTaskName(){
         return this.taskName;
+    }
+
+
+    public Subject<String> getGoalTime(){
+        return this.goalTime;
+    }
+    public void setGoalTime(String goalTime){
+        this.goalTime.setValue(goalTime);
     }
 
 }
