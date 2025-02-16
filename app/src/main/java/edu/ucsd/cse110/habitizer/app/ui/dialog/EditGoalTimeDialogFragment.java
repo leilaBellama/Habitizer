@@ -1,0 +1,68 @@
+package edu.ucsd.cse110.habitizer.app.ui.dialog;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import edu.ucsd.cse110.habitizer.app.MainViewModel;
+import edu.ucsd.cse110.habitizer.app.databinding.FragmentEditGoalTimeDialogBinding;
+
+public class EditGoalTimeDialogFragment extends DialogFragment{
+    private FragmentEditGoalTimeDialogBinding view;
+    private MainViewModel activityModel;
+
+    //need empty constructor
+    public EditGoalTimeDialogFragment(){}
+
+    public static EditGoalTimeDialogFragment newInstance() {
+        var fragment = new EditGoalTimeDialogFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        var modelOwner = requireActivity();
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        this.activityModel = modelProvider.get(MainViewModel.class);
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        this.view = FragmentEditGoalTimeDialogBinding.inflate(getLayoutInflater());
+
+        return new AlertDialog.Builder(getActivity())
+                .setTitle("Edit Goal Time")
+                .setMessage("Please enter the new goal time.")
+                .setView(view.getRoot())
+                .setPositiveButton("Confirm", this::onPositiveButtonClick)
+                .setNegativeButton("Cancel", this::onNegativeButtonClick)
+                .create();
+    }
+
+    private void onPositiveButtonClick(DialogInterface dialog, int which){
+        var goalTime = view.editGoalTimeText.getText().toString();
+        if(!goalTime.isEmpty()){
+            activityModel.setGoalTime(goalTime);
+        }
+        else{
+            throw new IllegalArgumentException("Goal Time Cannot Be Empty");
+        }
+        dialog.dismiss();
+    }
+
+    private void onNegativeButtonClick(DialogInterface dialog, int which){
+        dialog.cancel();
+    }
+}
