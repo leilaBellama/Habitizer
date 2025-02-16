@@ -15,5 +15,7 @@ dependencies {
     testImplementation(libs.junit4)
     testImplementation(libs.hamcrest)
     testImplementation("junit:junit:4.13.2")
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.junit.jupiter)
 
 }

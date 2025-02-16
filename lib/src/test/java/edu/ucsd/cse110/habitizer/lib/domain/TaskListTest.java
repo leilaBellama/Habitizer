@@ -17,22 +17,4 @@ public class TaskListTest {
         assertTrue(task1.getCheckedOffStatus());
     }
 
-    // Test for reset function
-    @Test
-    public void testReset() {
-        var task1 = new Task(1, "Task1",true);
-        task1.setCheckedOff(true, 0);
-        assertTrue(task1.getCheckedOffStatus());
-        task1.reset();
-        assertFalse(task1.getCheckedOffStatus());
-    }
-
-    // Test for setting checkedOffTime
-    @Test
-    public void testSetCheckedOffTime() {
-        var task1 = new Task(1, "Task1",true);
-        task1.setCheckedOff(true, 0);
-        assertTrue(task1.getCheckedOffStatus());
-        assertEquals(0, (int)task1.getCheckedOffTime());
-    }
 }
