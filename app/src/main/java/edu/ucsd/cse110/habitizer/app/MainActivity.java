@@ -61,12 +61,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         view.endButton.setOnClickListener(v -> {
-            view.advanceTimeButton.setVisibility(View.GONE);
-            view.stopTime.setVisibility(View.GONE);
-            view.endButton.setEnabled(false);
-            view.endButton.setText("Routine Ended");
+            endRoutine();
         });
 
+        model.getRoutineEnded().observe(this, ended -> {
+            endRoutine();
+        });
 
         view.addTaskButton.setOnClickListener(v -> model.addTask());
         view.stopTime.setOnClickListener(v -> model.stopTimer());
@@ -107,6 +107,15 @@ public class MainActivity extends AppCompatActivity {
             model.swapRoutine();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void endRoutine() {
+        view.advanceTimeButton.setVisibility(View.GONE);
+        view.stopTime.setVisibility(View.GONE);
+        view.endButton.setEnabled(false);
+        view.endButton.setText("Routine Ended");
+        view.endButton.requestLayout();
+        model.endRoutine();
     }
 
     /*

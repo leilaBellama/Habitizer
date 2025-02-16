@@ -2,6 +2,8 @@ package edu.ucsd.cse110.habitizer.app;
 
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
@@ -30,6 +32,7 @@ public class MainViewModel extends ViewModel{
     private final Subject<List<Task>> orderedTasks;
     private final Subject<String> routineTitle;
     private final Subject<Boolean> hasStarted;
+    private final MutableLiveData<Boolean> routineEnded;
     private final Subject<RoutineTimer> timer;
     private final Subject<Integer> elapsedTime;
     private final Subject<Boolean> inMorning;
@@ -67,6 +70,8 @@ public class MainViewModel extends ViewModel{
         this.hasStarted.setValue(false);
         this.elapsedTime.setValue(0);
         this.timer.setValue(new RoutineTimer(ONE_MINUTE));
+
+        this.routineEnded = new MutableLiveData<>();
 
         //when list changes (or is first loaded), reset ordering of both lists
         taskRepository.findAll().observe(tasks -> {
@@ -120,6 +125,25 @@ public class MainViewModel extends ViewModel{
             }
         });
 
+//        orderedTasks.observe(tasks -> {
+//            if (tasks == null || tasks.isEmpty()) return;
+//
+//            Log.d("Ordered Tasks Changed", tasks.toString());
+//
+//            boolean allCheckedOff = true;
+//            for (Task task: tasks) {
+//                if (!task.getCheckedOffStatus()) {
+//                    allCheckedOff = false;
+//                    break;
+//                }
+//            }
+//
+//            if (allCheckedOff) {
+//                Log.d("All checked off", "Ended at " + elapsedTime.getValue());
+//                routineEnded.setValue(true);
+//            }
+//        });
+
         // When the ordering changes, update the first task
         //again might be useful
 //        orderedTasks.observe(tasks -> {
@@ -130,7 +154,7 @@ public class MainViewModel extends ViewModel{
 
         this.timer.observe(routineTimer -> {
             if (routineTimer == null) return;
-            //Log.d("timer", "time" + elapsedTime.getValue());
+            Log.d("timer", "time" + elapsedTime.getValue());
             routineTimer.getElapsedTime().observe(elapsedTime::setValue);
         });
     }
@@ -167,6 +191,12 @@ public class MainViewModel extends ViewModel{
         }
     }
 
+    public void endRoutine() {
+        if (timer.getValue() == null) return;
+        timer.getValue().stop();
+        hasStarted.setValue(false);
+    }
+
     public void stopTimer() {
         var started = hasStarted.getValue();
         if (started == null) return;
@@ -201,6 +231,13 @@ public class MainViewModel extends ViewModel{
 
     }
 
+    public LiveData<Boolean> getRoutineEnded() {
+        return routineEnded;
+    }
+
+    public void setRoutineEnded(boolean ended) {
+        routineEnded.setValue(ended);
+    }
 
     public Subject<String> getGoalTime(){
         return this.goalTime;
