@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +43,15 @@ public class EditGoalTimeDialogFragment extends DialogFragment{
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentEditGoalTimeDialogBinding.inflate(getLayoutInflater());
 
+        if (activityModel.getHasStarted().getValue()) {
+            return new AlertDialog.Builder(getActivity())
+                    .setTitle("Edit Goal Time")
+                    .setMessage("Editing is disabled because the routine has started.")
+                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                    .create();
+        }
+
+
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Edit Goal Time")
                 .setMessage("Please enter the new goal time.")
@@ -51,15 +61,39 @@ public class EditGoalTimeDialogFragment extends DialogFragment{
                 .create();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        AlertDialog dialog = (AlertDialog) getDialog();
+        if (dialog != null) {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(
+                    v -> onPositiveButtonClick(dialog, 0));
+        }
+    }
+
     private void onPositiveButtonClick(DialogInterface dialog, int which){
         var goalTime = view.editGoalTimeText.getText().toString();
-        if(!goalTime.isEmpty()){
+
+        if (goalTime.isEmpty()) {
+            Toast.makeText(getActivity(), "Goal Time Cannot Be Empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try{
+            int goalTimeStr = Integer.parseInt(goalTime);
+            if (goalTimeStr < 1) {
+                Toast.makeText(getContext(), "You must enter an integer from 1 and above for goal time.",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             activityModel.setGoalTime(goalTime);
+            dialog.dismiss();
         }
-        else{
-            throw new IllegalArgumentException("Goal Time Cannot Be Empty");
+        catch(NumberFormatException e){
+            Toast.makeText(getActivity(), "Goal Time Must Be An Integer",
+                    Toast.LENGTH_SHORT).show();
         }
-        dialog.dismiss();
     }
 
     private void onNegativeButtonClick(DialogInterface dialog, int which){

@@ -154,6 +154,10 @@ public class MainViewModel extends ViewModel{
 
     public void startRoutine(){
         //Log.d("ST", "started " + hasStarted.getValue());
+        if (goalTime.getValue() == null || goalTime.getValue().isEmpty()) {
+            //Log.d(LOG_TAG, "Cannot start routine. Goal time is not set.");
+            return; // Do not start if goal time is not set
+        }
 
         elapsedTime.setValue(0);
         if (!hasStarted.getValue()) {
