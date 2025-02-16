@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.habitizer.app.ui.dialog.EditGoalTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 import androidx.lifecycle.MutableLiveData;
@@ -37,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
 
+        model.getGoalTime().observe(goalTime -> {
+            boolean isGoalTimeSet = goalTime != null && !goalTime.isEmpty();
+            view.goalTime.setText(isGoalTimeSet ? goalTime + " min" : "Set");
+            view.startButton.setEnabled(isGoalTimeSet && !model.getHasStarted().getValue());
+        });
 
         //start button starts routine, removes switch routine and add option
         view.startButton.setOnClickListener(v -> {
@@ -65,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
         view.addTaskButton.setOnClickListener(v -> model.addTask());
         view.stopTime.setOnClickListener(v -> model.stopTimer());
         view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());
+
+        view.goalTime.setOnClickListener(v -> {
+            var dialogFragment = EditGoalTimeDialogFragment.newInstance();
+            dialogFragment.show(getSupportFragmentManager(), "EditGoalTimeDialogFragment");
+        });
 
 
         setContentView(view.getRoot());
