@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.habitizer.app.ui.dialog.CreateTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.dialog.EditGoalTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
@@ -57,10 +58,16 @@ public class MainActivity extends AppCompatActivity {
             invalidateOptionsMenu();
         });
 
-
-        view.addTaskButton.setOnClickListener(v -> model.addTask());
         view.stopTime.setOnClickListener(v -> model.stopTimer());
         view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());
+        this.view.addTaskButton.setOnClickListener(v -> {
+            if(started){
+                view.addTaskButton.setEnabled(false);
+            }else {
+                var dialogFragment = CreateTaskDialogFragment.newInstance();
+                dialogFragment.show(getSupportFragmentManager(), "CreateTaskDialogFragment");
+            }
+        });
 
         view.goalTime.setOnClickListener(v -> {
             var dialogFragment = EditGoalTimeDialogFragment.newInstance();

@@ -34,6 +34,10 @@ public class Task implements Serializable {
 
     public boolean isMorningTask() {return isMorningTask;}
 
+    public void setMorningTask(boolean isMorningTask){
+        this.isMorningTask = isMorningTask;
+    }
+
     public Integer getCheckedOffTime() { return checkedOffTime; }
 
     public void setName(String taskName){

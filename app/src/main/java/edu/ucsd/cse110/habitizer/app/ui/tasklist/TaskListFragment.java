@@ -15,6 +15,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
+import edu.ucsd.cse110.habitizer.app.ui.dialog.CreateTaskDialogFragment;
 
 public class TaskListFragment extends Fragment{
     private MainViewModel activityModel;
@@ -64,6 +65,7 @@ public class TaskListFragment extends Fragment{
     ){
         this.view = FragmentTaskListBinding.inflate(inflater, container, false);
         view.taskList.setAdapter(adapter);
+
         return view.getRoot();
     }
 }
