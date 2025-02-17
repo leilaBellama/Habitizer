@@ -58,7 +58,6 @@ public class TaskListFragment extends Fragment{
             if (started == null) return;
             adapter.notifyDataSetChanged();
         });
-
     }
 
     @Nullable
@@ -70,7 +69,6 @@ public class TaskListFragment extends Fragment{
     ){
         this.view = FragmentTaskListBinding.inflate(inflater, container, false);
         view.taskList.setAdapter(adapter);
-
         return view.getRoot();
     }
 }

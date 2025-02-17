@@ -91,6 +91,8 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
 
                 binding.taskTime.setText(timeTaken + " mins");
                 lastCheckedOffTime = currentTime;
+
+                checkAllTasksCheckedOff();
             }
 
             //Log.d("TaskListAdapter", "Task: " + task.getTaskName() + " After: " + task.getCheckedOffStatus());
@@ -110,6 +112,20 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
             }
         });
         return binding.getRoot();
+    }
+
+    public void checkAllTasksCheckedOff() {
+        boolean allChecked = true;
+        for (int i = 0; i < getCount(); i++) {
+            if (!getItem(i).getCheckedOffStatus()) {
+                allChecked = false;
+                break;
+            }
+        }
+
+        if (allChecked) {
+            mainViewModel.setRoutineEnded(true);
+        }
     }
 
     @Override

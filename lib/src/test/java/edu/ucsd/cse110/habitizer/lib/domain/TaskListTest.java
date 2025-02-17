@@ -16,5 +16,4 @@ public class TaskListTest {
         task1.setCheckedOff(false, 0);
         assertTrue(task1.getCheckedOffStatus());
     }
-
 }

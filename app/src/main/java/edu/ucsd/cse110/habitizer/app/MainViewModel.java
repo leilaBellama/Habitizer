@@ -2,6 +2,8 @@ package edu.ucsd.cse110.habitizer.app;
 
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
@@ -30,6 +32,7 @@ public class MainViewModel extends ViewModel{
     private final Subject<List<Task>> orderedTasks;
     private final Subject<String> routineTitle;
     private final Subject<Boolean> hasStarted;
+    private final MutableLiveData<Boolean> routineEnded;
     private final Subject<RoutineTimer> timer;
     private final Subject<Integer> elapsedTime;
     private final Subject<Boolean> inMorning;
@@ -67,6 +70,8 @@ public class MainViewModel extends ViewModel{
         this.hasStarted.setValue(false);
         this.elapsedTime.setValue(0);
         this.timer.setValue(new RoutineTimer(ONE_MINUTE));
+
+        this.routineEnded = new MutableLiveData<>();
 
         //when list changes (or is first loaded), reset ordering of both lists
         taskRepository.findAll().observe(tasks -> {
@@ -130,7 +135,7 @@ public class MainViewModel extends ViewModel{
 
         this.timer.observe(routineTimer -> {
             if (routineTimer == null) return;
-            //Log.d("timer", "time" + elapsedTime.getValue());
+            Log.d("timer", "time" + elapsedTime.getValue());
             routineTimer.getElapsedTime().observe(elapsedTime::setValue);
         });
     }
@@ -153,8 +158,6 @@ public class MainViewModel extends ViewModel{
     }
 
     public void startRoutine(){
-        //Log.d("ST", "started " + hasStarted.getValue());
-
         // set start button as disabled (use if needed)
 //        if (goalTime.getValue() == null || goalTime.getValue().isEmpty()) {
 //            //Log.d(LOG_TAG, "Cannot start routine. Goal time is not set.");
@@ -165,8 +168,17 @@ public class MainViewModel extends ViewModel{
         if (!hasStarted.getValue()) {
             hasStarted.setValue(true);
             timer.getValue().start();
-            //Log.d("ST", "started time" + elapsedTime.getValue());
         }
+    }
+
+    public void endRoutine() {
+        if (timer.getValue() == null) return;
+        timer.getValue().stop();
+        int elapsedSeconds = timer.getValue().getElapsedSeconds();
+        int elapsedMinutes = timer.getValue().getElapsedTime().getValue();
+        int roundedMinutes = elapsedMinutes + (elapsedSeconds + 59) / 60;
+        timer.getValue().setTime(roundedMinutes, 0);
+        hasStarted.setValue(false);
     }
 
     public void stopTimer() {
@@ -200,6 +212,13 @@ public class MainViewModel extends ViewModel{
         return this.taskName;
     }
 
+    public LiveData<Boolean> getRoutineEnded() {
+        return routineEnded;
+    }
+
+    public void setRoutineEnded(boolean ended) {
+        routineEnded.setValue(ended);
+    }
 
     public Subject<String> getGoalTime(){
         return this.goalTime;
