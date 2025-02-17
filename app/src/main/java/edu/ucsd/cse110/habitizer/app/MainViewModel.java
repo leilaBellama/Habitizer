@@ -38,9 +38,8 @@ public class MainViewModel extends ViewModel{
     private final Subject<Boolean> inMorning;
     private final Subject<List<Integer>> taskOrdering;
     private final Subject<List<Task>> orderedTasksMorning;
-
+    private final Subject<String> taskName;
     private final Subject<String> goalTime;
-
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -65,6 +64,7 @@ public class MainViewModel extends ViewModel{
         this.hasStarted = new Subject<>();
         this.timer = new Subject<>();
         this.elapsedTime = new Subject<>();
+        this.taskName = new Subject<>();
         this.goalTime = new Subject<>();
         this.inMorning.setValue(true);
         this.hasStarted.setValue(false);
@@ -199,20 +199,17 @@ public class MainViewModel extends ViewModel{
 
 
     //TODO let it receive custom tasks
-    public void addTask(){
-        var isMorning = this.inMorning.getValue();
-        if (isMorning == null) return;
-        if (isMorning) {
-            Task newTask = new Task(null, "new test task m",true);
-            taskRepository.save(newTask);
-            //Log.d("Add Task m", "Task added m");
-        }
-        else {
-            Task newTask = new Task(null, "new test task",false);
-            taskRepository.save(newTask);
-            //Log.d("Add Task", "Task added");
-        }
+    public void addTask(Task task){
+        if(task == null){return;}
+        taskRepository.save(task);
+    }
 
+    public void setTaskName(int taskId, String taskName){
+        taskRepository.editName(taskId, taskName);
+    }
+
+    public Subject<String> getTaskName(){
+        return this.taskName;
     }
 
     public LiveData<Boolean> getRoutineEnded() {

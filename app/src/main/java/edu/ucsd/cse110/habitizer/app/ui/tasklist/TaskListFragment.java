@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,8 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
-import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import edu.ucsd.cse110.habitizer.app.ui.dialog.EditTaskDialogFragment;
+//import edu.ucsd.cse110.habitizer.app.ui.dialog.CreateTaskDialogFragment;
 
 public class TaskListFragment extends Fragment{
     private MainViewModel activityModel;
@@ -43,7 +43,10 @@ public class TaskListFragment extends Fragment{
         var ModelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = ModelProvider.get(MainViewModel.class);
 
-        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
+        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel, id ->{
+            var dialogFragment = EditTaskDialogFragment.newInstance(id);
+            dialogFragment.show(getParentFragmentManager(), "EditTaskDialogFragment");
+        });
         activityModel.getOrderedTasks().observe(tasks -> {
             if(tasks == null) return;
             adapter.clear();
