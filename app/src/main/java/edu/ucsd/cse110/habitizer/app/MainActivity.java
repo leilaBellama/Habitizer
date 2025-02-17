@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.model = modelProvider.get(MainViewModel.class);
 
+        view.stopTime.setVisibility(View.INVISIBLE);
+        view.advanceTimeButton.setVisibility(View.INVISIBLE);
+
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
 
         model.getGoalTime().observe(goalTime -> {
@@ -49,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
             view.startButton.setEnabled(false);
             view.startButton.setVisibility(View.INVISIBLE);
             view.endButton.setVisibility(View.VISIBLE);
+
+            view.addTaskButton.setVisibility(View.GONE);
+            view.stopTime.setVisibility(View.VISIBLE);
+            view.advanceTimeButton.setVisibility(View.VISIBLE);
 
             model.getElapsedTime().observe(time -> {
                 if (time != null) {

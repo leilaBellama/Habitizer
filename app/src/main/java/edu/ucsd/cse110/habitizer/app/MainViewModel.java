@@ -125,25 +125,6 @@ public class MainViewModel extends ViewModel{
             }
         });
 
-//        orderedTasks.observe(tasks -> {
-//            if (tasks == null || tasks.isEmpty()) return;
-//
-//            Log.d("Ordered Tasks Changed", tasks.toString());
-//
-//            boolean allCheckedOff = true;
-//            for (Task task: tasks) {
-//                if (!task.getCheckedOffStatus()) {
-//                    allCheckedOff = false;
-//                    break;
-//                }
-//            }
-//
-//            if (allCheckedOff) {
-//                Log.d("All checked off", "Ended at " + elapsedTime.getValue());
-//                routineEnded.setValue(true);
-//            }
-//        });
-
         // When the ordering changes, update the first task
         //again might be useful
 //        orderedTasks.observe(tasks -> {
@@ -177,8 +158,6 @@ public class MainViewModel extends ViewModel{
     }
 
     public void startRoutine(){
-        //Log.d("ST", "started " + hasStarted.getValue());
-
         // set start button as disabled (use if needed)
 //        if (goalTime.getValue() == null || goalTime.getValue().isEmpty()) {
 //            //Log.d(LOG_TAG, "Cannot start routine. Goal time is not set.");
@@ -189,13 +168,16 @@ public class MainViewModel extends ViewModel{
         if (!hasStarted.getValue()) {
             hasStarted.setValue(true);
             timer.getValue().start();
-            //Log.d("ST", "started time" + elapsedTime.getValue());
         }
     }
 
     public void endRoutine() {
         if (timer.getValue() == null) return;
         timer.getValue().stop();
+        int elapsedSeconds = timer.getValue().getElapsedSeconds();
+        int elapsedMinutes = timer.getValue().getElapsedTime().getValue();
+        int roundedMinutes = elapsedMinutes + (elapsedSeconds + 59) / 60;
+        timer.getValue().setTime(roundedMinutes, 0);
         hasStarted.setValue(false);
     }
 
