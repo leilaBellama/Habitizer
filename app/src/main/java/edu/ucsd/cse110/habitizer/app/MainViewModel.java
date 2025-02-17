@@ -187,20 +187,9 @@ public class MainViewModel extends ViewModel{
 
 
     //TODO let it receive custom tasks
-    public void addTask(){
-        var isMorning = this.inMorning.getValue();
-        if (isMorning == null) return;
-        if (isMorning) {
-            Task newTask = new Task(null, "new test task m",true);
-            taskRepository.save(newTask);
-            //Log.d("Add Task m", "Task added m");
-        }
-        else {
-            Task newTask = new Task(null, "new test task",false);
-            taskRepository.save(newTask);
-            //Log.d("Add Task", "Task added");
-        }
-
+    public void addTask(Task task){
+        if(task == null){return;}
+        taskRepository.save(task);
     }
 
     public void setTaskName(int taskId, String taskName){
