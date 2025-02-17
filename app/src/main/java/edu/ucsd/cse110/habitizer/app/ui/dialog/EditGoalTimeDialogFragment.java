@@ -44,11 +44,14 @@ public class EditGoalTimeDialogFragment extends DialogFragment{
         this.view = FragmentEditGoalTimeDialogBinding.inflate(getLayoutInflater());
 
         if (activityModel.getHasStarted().getValue()) {
-            return new AlertDialog.Builder(getActivity())
-                    .setTitle("Edit Goal Time")
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setTitle("Warning")
                     .setMessage("Editing is disabled because the routine has started.")
-                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                     .create();
+
+            dialog.show();
+            dialog.getWindow().getDecorView().postDelayed(dialog::dismiss, 1500);
+            return dialog;
         }
 
 
@@ -80,9 +83,9 @@ public class EditGoalTimeDialogFragment extends DialogFragment{
         }
 
         try{
-            int goalTimeStr = Integer.parseInt(goalTime);
-            if (goalTimeStr < 1) {
-                Toast.makeText(getContext(), "You must enter an integer from 1 and above for goal time.",
+            int goalTimeInt = Integer.parseInt(goalTime);
+            if (goalTimeInt < 1) {
+                Toast.makeText(getContext(), "You must enter an integer from 1 and above.",
                         Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -99,4 +102,5 @@ public class EditGoalTimeDialogFragment extends DialogFragment{
     private void onNegativeButtonClick(DialogInterface dialog, int which){
         dialog.cancel();
     }
+
 }
