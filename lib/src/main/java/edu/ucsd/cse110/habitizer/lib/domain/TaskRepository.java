@@ -30,6 +30,8 @@ public class TaskRepository {
 
     public void remove(int id) {dataSource.removeTask(id);}
 
+    public void editName(int id, String name) {dataSource.editTask(id, name);}
+
 
     /*
     //evening methods
