@@ -94,7 +94,7 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
         return binding.getRoot();
     }
 
-    private void checkAllTasksCheckedOff() {
+    public void checkAllTasksCheckedOff() {
         boolean allChecked = true;
         for (int i = 0; i < getCount(); i++) {
             if (!getItem(i).getCheckedOffStatus()) {
@@ -104,7 +104,6 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
         }
 
         if (allChecked) {
-            Log.d("TaskListAdapter", "All tasks checked off!");
             mainViewModel.setRoutineEnded(true);
         }
     }
