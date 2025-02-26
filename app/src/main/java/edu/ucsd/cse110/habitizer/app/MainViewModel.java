@@ -7,19 +7,12 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
-import edu.ucsd.cse110.habitizer.app.RoutineTimer;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
-import edu.ucsd.cse110.observables.MutableSubject;
-import edu.ucsd.cse110.observables.PlainMutableSubject;
 
-import android.database.Observable;
 import android.util.Log;
 
 public class MainViewModel extends ViewModel{
@@ -32,7 +25,7 @@ public class MainViewModel extends ViewModel{
     private final Subject<List<Task>> orderedTasks;
     private final Subject<String> routineTitle;
     private final Subject<Boolean> hasStarted;
-    private final PlainMutableSubject<RoutineTimer> timer;
+    private final Subject<RoutineTimer> timer;
     private final Subject<Integer> elapsedTime;
     private final Subject<Boolean> inMorning;
     private final Subject<List<Integer>> taskOrdering;
@@ -62,14 +55,13 @@ public class MainViewModel extends ViewModel{
         this.routineTitle = new Subject<>();
         this.inMorning = new Subject<>();
         this.hasStarted = new Subject<>();
-        this.timer = new PlainMutableSubject<>();
+        this.timer = new Subject<>();
         this.elapsedTime = new Subject<>();
         this.goalTime = new Subject<>();
         this.inMorning.setValue(true);
         this.hasStarted.setValue(false);
         this.elapsedTime.setValue(0);
         this.timer.setValue(new RoutineTimer(ONE_MINUTE));
-        Log.d("t", "MVM1");
 
         //when list changes (or is first loaded), reset ordering of both lists
         taskRepository.findAll().observe(tasks -> {
@@ -131,54 +123,29 @@ public class MainViewModel extends ViewModel{
 //            this.topTask.setValue(task);
 //        });
 
-        this.timer.observe(routineTimer -> {
-            if (routineTimer == null) return;
-            //Log.d("timer", "time" + elapsedTime.getValue());
-            routineTimer.getElapsedTime().observe(elapsedTime::setValue);
+        //when timers elapsedTime updates, update this elapsedTime
+        timer.getValue().getElapsedTime().observe(val -> {
+            //Log.d("timer", "time received: " + val);
+
+            Integer currentTime = elapsedTime.getValue();
+            if (currentTime == null) currentTime = 0;
+            if (!currentTime.equals(val)) {
+                elapsedTime.setValue(currentTime + 1);
+                //Log.d("timer", "after setValue");
+            }
         });
-    }
 
-
-    public Subject<String> getRoutineTitle(){
-        return routineTitle;
-    }
-
-    public Subject<List<Task>> getOrderedTasks() {
-        return orderedTasks;
-    }
-
-    public Subject<Integer> getElapsedTime() {
-        return elapsedTime;
-    }
-
-    public Subject<Boolean> getHasStarted() {
-        return hasStarted;
     }
 
     public void startRoutine(){
-        Log.d("ST", "started " + hasStarted.getValue());
-
         // set start button as disabled (use if needed)
 //        if (goalTime.getValue() == null || goalTime.getValue().isEmpty()) {
 //            //Log.d(LOG_TAG, "Cannot start routine. Goal time is not set.");
 //            return; // Do not start if goal time is not set
 //        }
-
-        Log.d("t", "elapsed time " + elapsedTime.getValue());
-
-
-        elapsedTime.setValue(0);
-        Log.d("t", "set elapsed time " + elapsedTime.getValue());
-
         if (!hasStarted.getValue()) {
-            Log.d("t", "started " + hasStarted.getValue());
-
             hasStarted.setValue(true);
-            Log.d("t", "set has started " + hasStarted.getValue());
-            Log.d("T", "timer is null " + (timer.getValue() == null));
-
             timer.getValue().start();
-            Log.d("ST", "started time" + elapsedTime.getValue());
         }
     }
 
@@ -198,19 +165,32 @@ public class MainViewModel extends ViewModel{
         this.inMorning.setValue(!isMorning);
     }
 
-
-    //TODO let it receive custom tasks
     public void addTask(Task task){
         if(task == null){return;}
         taskRepository.save(task);
     }
-
 
     public Subject<String> getGoalTime(){
         return this.goalTime;
     }
     public void setGoalTime(String goalTime){
         this.goalTime.setValue(goalTime);
+    }
+
+    public Subject<String> getRoutineTitle(){
+        return routineTitle;
+    }
+
+    public Subject<List<Task>> getOrderedTasks() {
+        return orderedTasks;
+    }
+
+    public Subject<Integer> getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public Subject<Boolean> getHasStarted() {
+        return hasStarted;
     }
 
 }

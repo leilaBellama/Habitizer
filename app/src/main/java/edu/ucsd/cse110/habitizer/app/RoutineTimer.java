@@ -57,37 +57,29 @@ public class RoutineTimer {
     }
 
     public void advanceTime(Integer advance) {
-        Log.d("m0","Advanced by 30 seconds. New time: " + getElapsedTime().getValue() + " minutes, ");
         if (!hasStarted.getValue()) return;
-        Log.d("m","Advanced by 30 seconds. New time: " + getElapsedTime().getValue() + " minutes, ");
 
-        elapsedSeconds += 55;
+        elapsedSeconds += advance;
         if (elapsedSeconds >= interval) {
             elapsedTime.setValue(elapsedTime.getValue()+1);
             elapsedSeconds -= interval;
         }
-        Log.d("m","Advanced by 30 seconds. New time: " + getElapsedTime().getValue() + " minutes, ");
+        //Log.d("m","Advanced by 30 seconds minutes: " + getElapsedTime().getValue() + " seconds " + elapsedSeconds);
     }
 
     public void start() {
-        //Log.d("s","started ");
         //Log.d("s","hasStarted " + (this.hasStarted.getValue()));
         if (hasStarted.getValue()) return;
         hasStarted.setValue(true);
         //Log.d("s","hasStarted " + (hasStarted.getValue()));
-
-
         scheduler.scheduleWithFixedDelay(() -> {
-
             elapsedSeconds++;
             if (elapsedSeconds >= interval) {
-                Log.d("t","reached interval elapsed time is null " + (this.elapsedTime.getValue() == null));
-                this.elapsedTime.setValue(1);
-                //elapsedTime.getValue() + 1);
+                elapsedTime.setValue(elapsedTime.getValue() + 1);
                 elapsedSeconds = 0;
-                Log.d("m","Elapsed time: " + getElapsedTime().getValue() + " minutes,");
+                //Log.d("m","Elapsed time: " + getElapsedTime().getValue() + " minutes,");
             }
-            Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
+            //Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
         }, 0, 1, TimeUnit.SECONDS);
     }
 

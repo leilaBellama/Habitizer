@@ -48,9 +48,10 @@ public class MainActivity extends AppCompatActivity {
         //start button starts routine, removes switch routine and add option
         view.startButton.setOnClickListener(v -> {
             view.startButton.setEnabled(false);
+            view.startButton.setVisibility(View.INVISIBLE);
             model.getElapsedTime().observe(time -> {
                 if (time != null) {
-                    view.time.setText(time + " min");
+                    runOnUiThread(() -> view.time.setText(time + " min"));
                 }
             });
             model.startRoutine();
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         view.stopTime.setOnClickListener(v -> model.stopTimer());
         view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());
-        this.view.addTaskButton.setOnClickListener(v -> {
+        view.addTaskButton.setOnClickListener(v -> {
             if(started){
                 view.addTaskButton.setEnabled(false);
             }else {
