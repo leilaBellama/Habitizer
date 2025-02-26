@@ -16,6 +16,8 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 import edu.ucsd.cse110.habitizer.app.RoutineTimer;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
+import edu.ucsd.cse110.observables.MutableSubject;
+import edu.ucsd.cse110.observables.PlainMutableSubject;
 
 import android.database.Observable;
 import android.util.Log;
@@ -30,7 +32,7 @@ public class MainViewModel extends ViewModel{
     private final Subject<List<Task>> orderedTasks;
     private final Subject<String> routineTitle;
     private final Subject<Boolean> hasStarted;
-    private final Subject<RoutineTimer> timer;
+    private final PlainMutableSubject<RoutineTimer> timer;
     private final Subject<Integer> elapsedTime;
     private final Subject<Boolean> inMorning;
     private final Subject<List<Integer>> taskOrdering;
@@ -60,13 +62,14 @@ public class MainViewModel extends ViewModel{
         this.routineTitle = new Subject<>();
         this.inMorning = new Subject<>();
         this.hasStarted = new Subject<>();
-        this.timer = new Subject<>();
+        this.timer = new PlainMutableSubject<>();
         this.elapsedTime = new Subject<>();
         this.goalTime = new Subject<>();
         this.inMorning.setValue(true);
         this.hasStarted.setValue(false);
         this.elapsedTime.setValue(0);
         this.timer.setValue(new RoutineTimer(ONE_MINUTE));
+        Log.d("t", "MVM1");
 
         //when list changes (or is first loaded), reset ordering of both lists
         taskRepository.findAll().observe(tasks -> {
@@ -153,7 +156,7 @@ public class MainViewModel extends ViewModel{
     }
 
     public void startRoutine(){
-        //Log.d("ST", "started " + hasStarted.getValue());
+        Log.d("ST", "started " + hasStarted.getValue());
 
         // set start button as disabled (use if needed)
 //        if (goalTime.getValue() == null || goalTime.getValue().isEmpty()) {
@@ -161,11 +164,21 @@ public class MainViewModel extends ViewModel{
 //            return; // Do not start if goal time is not set
 //        }
 
+        Log.d("t", "elapsed time " + elapsedTime.getValue());
+
+
         elapsedTime.setValue(0);
+        Log.d("t", "set elapsed time " + elapsedTime.getValue());
+
         if (!hasStarted.getValue()) {
+            Log.d("t", "started " + hasStarted.getValue());
+
             hasStarted.setValue(true);
+            Log.d("t", "set has started " + hasStarted.getValue());
+            Log.d("T", "timer is null " + (timer.getValue() == null));
+
             timer.getValue().start();
-            //Log.d("ST", "started time" + elapsedTime.getValue());
+            Log.d("ST", "started time" + elapsedTime.getValue());
         }
     }
 

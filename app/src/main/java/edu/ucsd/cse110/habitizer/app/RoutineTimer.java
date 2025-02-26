@@ -33,7 +33,7 @@ public class RoutineTimer {
         this.interval = interval;
         this.elapsedTime.setValue(0);
         this.elapsedSeconds = 0;
-        hasStarted.setValue(false);
+        this.hasStarted.setValue(false);
     }
 
     public Subject<Integer> getElapsedTime() {
@@ -55,27 +55,34 @@ public class RoutineTimer {
 
     public void advanceTime(Integer advance) {
         if (!hasStarted.getValue()) return;
-        elapsedSeconds += advance; // Increase elapsed seconds
+        Log.d("m","Advanced by 30 seconds. New time: " + getElapsedTime().getValue() + " minutes, ");
+
+        elapsedSeconds += 57; // Increase elapsed seconds
         if (elapsedSeconds >= interval) {
             elapsedTime.setValue(elapsedTime.getValue()+1);
             elapsedSeconds -= interval;
         }
-        //Log.d("m","Advanced by 30 seconds. New time: " + getElapsedTime().getValue() + " minutes, ");
+        Log.d("m","Advanced by 30 seconds. New time: " + getElapsedTime().getValue() + " minutes, ");
     }
 
     public void start() {
-        if (this.hasStarted.getValue()) return;
-        this.hasStarted.setValue(true);
         //Log.d("s","started ");
+        //Log.d("s","hasStarted " + (this.hasStarted.getValue()));
+        if (hasStarted.getValue()) return;
+        hasStarted.setValue(true);
+        //Log.d("s","hasStarted " + (hasStarted.getValue()));
+
 
         scheduler.scheduleWithFixedDelay(() -> {
+
             elapsedSeconds++;
             if (elapsedSeconds >= interval) {
+                //Log.d("t","reached interval");
                 elapsedTime.setValue(elapsedTime.getValue() + 1);
                 elapsedSeconds = 0;
-                //Log.d("m","Elapsed time: " + getElapsedTime().getValue() + " minutes,");
+                Log.d("m","Elapsed time: " + getElapsedTime().getValue() + " minutes,");
             }
-            //Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
+            Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
         }, 0, 1, TimeUnit.SECONDS);
     }
 
