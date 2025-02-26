@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.model = modelProvider.get(MainViewModel.class);
 
+        view.stopTime.setVisibility(View.INVISIBLE);
+        view.advanceTimeButton.setVisibility(View.INVISIBLE);
+
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
 
         model.getGoalTime().observe(goalTime -> {
@@ -49,6 +52,12 @@ public class MainActivity extends AppCompatActivity {
         view.startButton.setOnClickListener(v -> {
             view.startButton.setEnabled(false);
             view.startButton.setVisibility(View.INVISIBLE);
+            view.endButton.setVisibility(View.VISIBLE);
+
+            view.addTaskButton.setVisibility(View.GONE);
+            view.stopTime.setVisibility(View.VISIBLE);
+            view.advanceTimeButton.setVisibility(View.VISIBLE);
+
             model.getElapsedTime().observe(time -> {
                 if (time != null) {
                     runOnUiThread(() -> view.time.setText(time + " min"));
@@ -57,6 +66,14 @@ public class MainActivity extends AppCompatActivity {
             model.startRoutine();
             started = true;
             invalidateOptionsMenu();
+        });
+
+        view.endButton.setOnClickListener(v -> {
+            endRoutine();
+        });
+
+        model.getRoutineEnded().observe(this, ended -> {
+            endRoutine();
         });
 
         view.stopTime.setOnClickListener(v -> model.stopTimer());
@@ -105,6 +122,15 @@ public class MainActivity extends AppCompatActivity {
             model.swapRoutine();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void endRoutine() {
+        view.advanceTimeButton.setVisibility(View.GONE);
+        view.stopTime.setVisibility(View.GONE);
+        view.endButton.setEnabled(false);
+        view.endButton.setText("Routine Ended");
+        view.endButton.requestLayout();
+        model.endRoutine();
     }
 
     /*

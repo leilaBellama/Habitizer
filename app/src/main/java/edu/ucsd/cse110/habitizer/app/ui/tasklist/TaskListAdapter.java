@@ -9,21 +9,27 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.TaskItemBinding;
+import edu.ucsd.cse110.habitizer.app.ui.dialog.EditTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class TaskListAdapter extends ArrayAdapter<Task>{
     private int lastCheckedOffTime;
     private final MainViewModel mainViewModel;
 
-    public TaskListAdapter(Context context, List<Task> tasks, MainViewModel mainViewModel){
+    Consumer<Integer> onEditClick;
+
+    public TaskListAdapter(Context context, List<Task> tasks, MainViewModel mainViewModel, Consumer<Integer> onEditClick){
         super(context, 0, new ArrayList<>(tasks));
         this.mainViewModel = mainViewModel;
+        this.onEditClick = onEditClick;
     }
 
     @NonNull
@@ -85,11 +91,41 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
 
                 binding.taskTime.setText(timeTaken + " mins");
                 lastCheckedOffTime = currentTime;
+
+                checkAllTasksCheckedOff();
             }
 
             //Log.d("TaskListAdapter", "Task: " + task.getTaskName() + " After: " + task.getCheckedOffStatus());
         });
+
+        binding.taskName.setOnClickListener(v -> {
+            if(!hasStarted){
+                var id = task.getId();
+                assert id != null;
+                onEditClick.accept(id);
+            }
+        });
+
+        mainViewModel.getTaskName().observe(taskName -> {
+            if(taskName != null){
+                task.setName(taskName);
+            }
+        });
         return binding.getRoot();
+    }
+
+    public void checkAllTasksCheckedOff() {
+        boolean allChecked = true;
+        for (int i = 0; i < getCount(); i++) {
+            if (!getItem(i).getCheckedOffStatus()) {
+                allChecked = false;
+                break;
+            }
+        }
+
+        if (allChecked) {
+            mainViewModel.setRoutineEnded(true);
+        }
     }
 
     @Override

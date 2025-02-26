@@ -2,6 +2,8 @@ package edu.ucsd.cse110.habitizer.app;
 
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
@@ -25,12 +27,13 @@ public class MainViewModel extends ViewModel{
     private final Subject<List<Task>> orderedTasks;
     private final Subject<String> routineTitle;
     private final Subject<Boolean> hasStarted;
+    private final MutableLiveData<Boolean> routineEnded;
     private final Subject<RoutineTimer> timer;
     private final Subject<Integer> elapsedTime;
     private final Subject<Boolean> inMorning;
     private final Subject<List<Integer>> taskOrdering;
     private final Subject<List<Task>> orderedTasksMorning;
-
+    private final Subject<String> taskName;
     private final Subject<String> goalTime;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
@@ -57,11 +60,14 @@ public class MainViewModel extends ViewModel{
         this.hasStarted = new Subject<>();
         this.timer = new Subject<>();
         this.elapsedTime = new Subject<>();
+        this.taskName = new Subject<>();
         this.goalTime = new Subject<>();
         this.inMorning.setValue(true);
         this.hasStarted.setValue(false);
         this.elapsedTime.setValue(0);
         this.timer.setValue(new RoutineTimer(ONE_MINUTE));
+
+        this.routineEnded = new MutableLiveData<>();
 
         //when list changes (or is first loaded), reset ordering of both lists
         taskRepository.findAll().observe(tasks -> {
@@ -149,6 +155,16 @@ public class MainViewModel extends ViewModel{
         }
     }
 
+    public void endRoutine() {
+        if (timer.getValue() == null) return;
+        timer.getValue().stop();
+        int elapsedSeconds = timer.getValue().getElapsedSeconds();
+        int elapsedMinutes = timer.getValue().getElapsedTime().getValue();
+        int roundedMinutes = elapsedMinutes + (elapsedSeconds + 59) / 60;
+        timer.getValue().setTime(roundedMinutes, 0);
+        hasStarted.setValue(false);
+    }
+
     public void stopTimer() {
         var started = hasStarted.getValue();
         if (started == null) return;
@@ -168,6 +184,22 @@ public class MainViewModel extends ViewModel{
     public void addTask(Task task){
         if(task == null){return;}
         taskRepository.save(task);
+    }
+
+    public void setTaskName(int taskId, String taskName){
+        taskRepository.editName(taskId, taskName);
+    }
+
+    public Subject<String> getTaskName(){
+        return this.taskName;
+    }
+
+    public LiveData<Boolean> getRoutineEnded() {
+        return routineEnded;
+    }
+
+    public void setRoutineEnded(boolean ended) {
+        routineEnded.setValue(ended);
     }
 
     public Subject<String> getGoalTime(){
