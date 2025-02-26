@@ -58,7 +58,6 @@ public class RoutineTimer {
 
     public void advanceTime(Integer advance) {
         if (!hasStarted.getValue()) return;
-
         elapsedSeconds += advance;
         if (elapsedSeconds >= interval) {
             elapsedTime.setValue(elapsedTime.getValue()+1);
@@ -79,11 +78,16 @@ public class RoutineTimer {
                 elapsedSeconds = 0;
                 //Log.d("m","Elapsed time: " + getElapsedTime().getValue() + " minutes,");
             }
-            //Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
+            Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
         }, 0, 1, TimeUnit.SECONDS);
     }
 
     public void stop() {
         scheduler.shutdown();
+        int seconds = 0;
+        if (elapsedSeconds > 0) { seconds = 1;}
+        elapsedTime.setValue(elapsedTime.getValue() + seconds);
+        Log.d("m","Elapsed time: " + getElapsedTime().getValue() + " minutes,");
+
     }
 }

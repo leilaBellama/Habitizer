@@ -16,4 +16,5 @@
     <string name="advance_time">Advance Time</string>
     <string name="nothing">---</string>
     <string name="input_name">Input Name</string>
+    <string name="dashes">---</string>
 </resources>

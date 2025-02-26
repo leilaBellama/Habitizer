@@ -2,32 +2,24 @@ package edu.ucsd.cse110.habitizer.app;
 
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
-
 import java.util.ArrayList;
 import java.util.List;
-
-
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
-
 import android.util.Log;
 
 public class MainViewModel extends ViewModel{
     private static final String LOG_TAG = "MainViewModel";
     private static final Integer ONE_MINUTE = 60;
-
     private final TaskRepository taskRepository;
-    private final Subject<List<Integer>> taskOrderingEvening;
     private final Subject<List<Task>> orderedTasksEvening;
     private final Subject<List<Task>> orderedTasks;
     private final Subject<String> routineTitle;
     private final Subject<Boolean> hasStarted;
-    private final MutableLiveData<Boolean> routineEnded;
+    //private final Subject<Boolean> routineEnded;
     private final Subject<RoutineTimer> timer;
     private final Subject<Integer> elapsedTime;
     private final Subject<Boolean> inMorning;
@@ -52,7 +44,6 @@ public class MainViewModel extends ViewModel{
 
         this.taskOrdering = new Subject<>();
         this.orderedTasksMorning = new Subject<>();
-        this.taskOrderingEvening = new Subject<>();
         this.orderedTasksEvening = new Subject<>();
 
         this.routineTitle = new Subject<>();
@@ -61,13 +52,14 @@ public class MainViewModel extends ViewModel{
         this.timer = new Subject<>();
         this.elapsedTime = new Subject<>();
         this.taskName = new Subject<>();
+        //this.routineEnded = new Subject<>();
         this.goalTime = new Subject<>();
+
         this.inMorning.setValue(true);
-        this.hasStarted.setValue(false);
+        //this.hasStarted.setValue(false);
         this.elapsedTime.setValue(0);
         this.timer.setValue(new RoutineTimer(ONE_MINUTE));
-
-        this.routineEnded = new MutableLiveData<>();
+        //this.routineEnded.setValue(false);
 
         //when list changes (or is first loaded), reset ordering of both lists
         taskRepository.findAll().observe(tasks -> {
@@ -132,7 +124,6 @@ public class MainViewModel extends ViewModel{
         //when timers elapsedTime updates, update this elapsedTime
         timer.getValue().getElapsedTime().observe(val -> {
             //Log.d("timer", "time received: " + val);
-
             Integer currentTime = elapsedTime.getValue();
             if (currentTime == null) currentTime = 0;
             if (!currentTime.equals(val)) {
@@ -149,20 +140,27 @@ public class MainViewModel extends ViewModel{
 //            //Log.d(LOG_TAG, "Cannot start routine. Goal time is not set.");
 //            return; // Do not start if goal time is not set
 //        }
-        if (!hasStarted.getValue()) {
-            hasStarted.setValue(true);
+        Log.d("s", "started");
+        if (timer.getValue() == null) return;
+        if (hasStarted.getValue() != null) return;
+        hasStarted.setValue(true);
+        Log.d("s", "has started " + hasStarted.getValue());
+
+        if (hasStarted.getValue()) {
+            Log.d("s", "has started " + hasStarted.getValue());
+
             timer.getValue().start();
         }
     }
 
     public void endRoutine() {
+        if (hasStarted.getValue() == null) return;
+        if (!hasStarted.getValue()) return;
+        hasStarted.setValue(false);
+        Log.d("MVM", "has started " + hasStarted.getValue());
+
         if (timer.getValue() == null) return;
         timer.getValue().stop();
-        int elapsedSeconds = timer.getValue().getElapsedSeconds();
-        int elapsedMinutes = timer.getValue().getElapsedTime().getValue();
-        int roundedMinutes = elapsedMinutes + (elapsedSeconds + 59) / 60;
-        timer.getValue().setTime(roundedMinutes, 0);
-        hasStarted.setValue(false);
     }
 
     public void stopTimer() {
@@ -194,13 +192,16 @@ public class MainViewModel extends ViewModel{
         return this.taskName;
     }
 
-    public LiveData<Boolean> getRoutineEnded() {
+    /*
+    public Subject<Boolean> getRoutineEnded() {
         return routineEnded;
     }
 
     public void setRoutineEnded(boolean ended) {
         routineEnded.setValue(ended);
     }
+
+     */
 
     public Subject<String> getGoalTime(){
         return this.goalTime;
