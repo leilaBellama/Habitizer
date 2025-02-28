@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
         model.getHasStarted().observe(hasStarted -> {
             if (hasStarted == null) return;
-            //Log.d("MA", started + " started is " + model.getHasStarted().getValue());
             if (!hasStarted) endRoutine();
         });
         model.getGoalTime().observe(goalTime -> {
@@ -41,10 +40,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //start button starts routine, removes switch routine and add option
         view.startButton.setOnClickListener(v -> startRoutine());
         view.endButton.setOnClickListener(v -> endRoutine());
-        view.stopTime.setOnClickListener(v -> model.stopTimer());
+        view.stopTime.setOnClickListener(v -> {
+            model.stopTimer();
+            view.stopTime.setVisibility(View.GONE);
+            view.advanceTimeButton.setVisibility(View.VISIBLE);
+        });
         view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());
         view.addTaskButton.setOnClickListener(v -> {
             if(started){
@@ -62,15 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         setContentView(view.getRoot());
-
-        /*
-        var ld = new MutableLiveData<String>();
-        ld.observe(this, (s) -> {
-            System.out.println(s);
-        });
-
-         */
-
     }
 
     @Override
@@ -97,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void endRoutine() {
         view.advanceTimeButton.setVisibility(View.GONE);
-        view.stopTime.setVisibility(View.GONE);
         view.endButton.setEnabled(false);
         view.endButton.setText("Routine Ended");
         view.endButton.requestLayout();
@@ -110,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
         view.endButton.setVisibility(View.VISIBLE);
         view.addTaskButton.setVisibility(View.GONE);
         view.stopTime.setVisibility(View.VISIBLE);
-        view.advanceTimeButton.setVisibility(View.VISIBLE);
         model.getElapsedTime().observe(time -> {
             if (time != null) {
                 runOnUiThread(() -> view.time.setText(time + " min"));
@@ -120,21 +111,4 @@ public class MainActivity extends AppCompatActivity {
         started = true;
         invalidateOptionsMenu();
     }
-
-    /*
-    private void swapFragments() {
-        if (isShowingMorning) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainerView, EveningFragment.newInstance())
-                    .commit();
-        } else {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainerView, MorningFragment.newInstance())
-                    .commit();
-        }
-        isShowingMorning = !isShowingMorning;
-    }
-     */
 }

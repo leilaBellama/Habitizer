@@ -19,7 +19,6 @@ public class MainViewModel extends ViewModel{
     private final Subject<List<Task>> orderedTasks;
     private final Subject<String> routineTitle;
     private final Subject<Boolean> hasStarted;
-    //private final Subject<Boolean> routineEnded;
     private final Subject<RoutineTimer> timer;
     private final Subject<Integer> elapsedTime;
     private final Subject<Boolean> inMorning;
@@ -52,16 +51,12 @@ public class MainViewModel extends ViewModel{
         this.timer = new Subject<>();
         this.elapsedTime = new Subject<>();
         this.taskName = new Subject<>();
-        //this.routineEnded = new Subject<>();
         this.goalTime = new Subject<>();
 
         this.inMorning.setValue(true);
-        //this.hasStarted.setValue(false);
         this.elapsedTime.setValue(0);
         this.timer.setValue(new RoutineTimer(ONE_MINUTE));
-        //this.routineEnded.setValue(false);
 
-        //when list changes (or is first loaded), reset ordering of both lists
         taskRepository.findAll().observe(tasks -> {
             if(tasks == null)   return;
 
@@ -69,13 +64,9 @@ public class MainViewModel extends ViewModel{
             for(int i = 0;i < tasks.size(); i++){
                 ordering.add(i);
             }
-            //Log.d("obs", "observe TR");
-
             taskOrdering.setValue(ordering);
         });
 
-        //when  list ordering changes, update both taskOrdering
-        //might be useful later if we need to change order of tasks
         taskOrdering.observe(ordering -> {
             if(ordering == null) return;
 
@@ -94,7 +85,6 @@ public class MainViewModel extends ViewModel{
             this.orderedTasksEvening.setValue(eveningTasks);
         });
 
-        //when inMorning changes, switch title and morning/evening list
         inMorning.observe(inMorning -> {
             if (inMorning == null) return;
             if (!inMorning) {
@@ -113,33 +103,16 @@ public class MainViewModel extends ViewModel{
             }
         });
 
-        // When the ordering changes, update the first task
-        //again might be useful
-//        orderedTasks.observe(tasks -> {
-//            if (tasks == null || tasks.size() == 0) return;
-//            var task = tasks.get(0);
-//            this.topTask.setValue(task);
-//        });
-
-        //when timers elapsedTime updates, update this elapsedTime
         timer.getValue().getElapsedTime().observe(val -> {
-            //Log.d("timer", "time received: " + val);
             Integer currentTime = elapsedTime.getValue();
             if (currentTime == null) currentTime = 0;
             if (!currentTime.equals(val)) {
-                elapsedTime.setValue(currentTime + 1);
-                //Log.d("timer", "after setValue");
+                elapsedTime.setValue(val);
             }
         });
-
     }
 
     public void startRoutine(){
-        // set start button as disabled (use if needed)
-//        if (goalTime.getValue() == null || goalTime.getValue().isEmpty()) {
-//            //Log.d(LOG_TAG, "Cannot start routine. Goal time is not set.");
-//            return; // Do not start if goal time is not set
-//        }
         Log.d("s", "started");
         if (timer.getValue() == null) return;
         if (hasStarted.getValue() != null) return;
@@ -160,7 +133,7 @@ public class MainViewModel extends ViewModel{
         Log.d("MVM", "has started " + hasStarted.getValue());
 
         if (timer.getValue() == null) return;
-        timer.getValue().stop();
+        timer.getValue().end();
     }
 
     public void stopTimer() {
@@ -171,7 +144,7 @@ public class MainViewModel extends ViewModel{
         }
     }
     public void advanceTime() {
-        timer.getValue().advanceTime(30);
+        timer.getValue().advanceTime(15);
     }
     public void swapRoutine() {
         var isMorning = this.inMorning.getValue();
@@ -191,17 +164,6 @@ public class MainViewModel extends ViewModel{
     public Subject<String> getTaskName(){
         return this.taskName;
     }
-
-    /*
-    public Subject<Boolean> getRoutineEnded() {
-        return routineEnded;
-    }
-
-    public void setRoutineEnded(boolean ended) {
-        routineEnded.setValue(ended);
-    }
-
-     */
 
     public Subject<String> getGoalTime(){
         return this.goalTime;
