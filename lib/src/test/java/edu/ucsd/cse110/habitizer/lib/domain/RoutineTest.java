@@ -1,0 +1,39 @@
+package edu.ucsd.cse110.habitizer.lib.domain;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
+import java.util.List;
+import java.util.Optional;
+
+public class RoutineTest {
+
+    @Test
+    public void testBuilderSet(){
+        List<Task> tasks = List.of(
+                new Task(0, "Morning Task 1",true),
+                new Task(1, "Morning Task 2",true),
+                new Task(2, "Morning Task 3",true),
+                new Task(3, "Evening Task 1",false),
+                new Task(4, "Evening Task 2",false),
+                new Task(5, "Evening Task 3",false),
+                new Task(null, "Evening Task 4",false),
+                new Task(null, "Evening Task 5",false)
+        );
+        RoutineBuilder builder = new RoutineBuilder();
+        Routine r = builder
+                .setId(1)
+                .setName("new routine")
+                .setHasStarted(false)
+                .setElapsedTime(10)
+                .setTasks(tasks)
+                .buildRoutine();
+
+        assertEquals(Optional.ofNullable(r.getId()), Optional.of(1));
+        assertEquals(r.getName(),"new routine");
+        assertEquals(r.getHasStarted(),false);
+        assertEquals(Optional.ofNullable(r.getElapsedTime()), Optional.of(10));
+        assertEquals(r.getTasks().size(),8);
+
+    }
+}
