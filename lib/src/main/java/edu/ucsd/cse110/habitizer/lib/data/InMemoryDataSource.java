@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.habitizer.lib.domain.OriginalTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.SimpleTask;
@@ -37,6 +38,22 @@ public class InMemoryDataSource {
     public InMemoryDataSource() {
 
     }
+
+    public final static List<Task> Morning = List.of(
+            new OriginalTask(0, "Morning Task 1",true),
+            new OriginalTask(1, "Morning Task 2",true),
+            new OriginalTask(2, "Morning Task 3",true),
+            new OriginalTask(null, "Morning Task 4",true),
+            new OriginalTask(null, "Morning Task 5",true)
+    );
+
+    public final static List<Task> Evening = List.of(
+            new OriginalTask(0, "Evening Task 1",false),
+            new OriginalTask(4, "Evening Task 2",false),
+            new OriginalTask(5, "Evening Task 3",false),
+            new OriginalTask(null, "Evening Task 4",false),
+            new OriginalTask(null, "Evening Task 5",false)
+    );
 
 
     public final static List<SimpleTask> defaultTasks = List.of(
