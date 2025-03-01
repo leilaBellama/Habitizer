@@ -1,10 +1,9 @@
-package edu.ucsd.cse110.habitizer.app;
+package edu.ucsd.cse110.habitizer.lib.domain;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import android.util.Log;
 
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 
@@ -78,7 +77,7 @@ public class RoutineTimer {
                 elapsedSeconds = 0;
                 //Log.d("m","Elapsed time: " + getElapsedTime().getValue() + " minutes,");
             }
-            Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
+            //Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
         }, 0, 1, TimeUnit.SECONDS);
     }
 
@@ -90,7 +89,7 @@ public class RoutineTimer {
     public void end() {
         scheduler.shutdown();
         elapsedMin.setValue(elapsedMin.getValue() + 1);
-        Log.d("m","Elapsed time: " + getElapsedMinutes().getValue() + " minutes,");
+        //Log.d("m","Elapsed time: " + getElapsedMinutes().getValue() + " minutes,");
 
     }
 }

@@ -9,8 +9,10 @@ import java.util.stream.Collectors;
 import edu.ucsd.cse110.habitizer.lib.domain.OriginalTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineBuilder;
+import edu.ucsd.cse110.habitizer.lib.domain.RoutineTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.SimpleTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import edu.ucsd.cse110.habitizer.lib.domain.TaskList;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public class InMemoryDataSource {
 
@@ -44,21 +46,19 @@ public class InMemoryDataSource {
     }
 
     public final static List<Task> Morning = List.of(
-            new OriginalTask(null, "Morning Task 1",true),
-            new OriginalTask(null, "Morning Task 2",true),
-            new OriginalTask(null, "Morning Task 3",true),
-            new OriginalTask(null, "Morning Task 4",true),
-            new OriginalTask(null, "Morning Task 5",true)
+            new OriginalTask(0, "Morning Task 1",true),
+            new OriginalTask(1, "Morning Task 2",true),
+            new OriginalTask(2, "Morning Task 3",true),
+            new OriginalTask(3, "Morning Task 4",true),
+            new OriginalTask(4, "Morning Task 5",true)
     );
 
     public final static List<Task> Evening = List.of(
-            new OriginalTask(null, "Evening Task 1",false),
-            new OriginalTask(null, "Evening Task 2",false),
-            new OriginalTask(null, "Evening Task 3",false),
-            new OriginalTask(null, "Evening Task 4",false),
-            new OriginalTask(null, "Evening Task 5",false)
+            new OriginalTask(0, "Evening Task 1",false),
+            new OriginalTask(1, "Evening Task 2",false),
+            new OriginalTask(2, "Evening Task 3",false),
+            new OriginalTask(3, "Evening Task 4",false)
     );
-
 
     public final static List<SimpleTask> defaultTasks = List.of(
 
@@ -78,21 +78,23 @@ public class InMemoryDataSource {
             new RoutineBuilder()
                     .setId(null)
                     .setName("Morning")
-                    .setHasStarted(null)
-                    .setElapsedMinutes(0)
-                    .setElapsedSeconds(0)
+                    //.setHasStarted(null)
+                    //.setElapsedMinutes(0)
+                    //.setElapsedSeconds(0)
                     .setTasks(Morning)
                     .setGoalTime("35")
+                    .setTimer(new RoutineTimer(60))
                     .buildRoutine(),
 
             new RoutineBuilder()
                     .setId(null)
                     .setName("Evening")
-                    .setHasStarted(null)
-                    .setGoalTime("30")
-                    .setElapsedMinutes(0)
-                    .setElapsedSeconds(0)
+                    //.setHasStarted(null)
+                    //.setElapsedMinutes(0)
+                    //.setElapsedSeconds(0)
                     .setTasks(Evening)
+                    .setGoalTime("30")
+                    .setTimer(new RoutineTimer(60))
                     .buildRoutine()
     );
 

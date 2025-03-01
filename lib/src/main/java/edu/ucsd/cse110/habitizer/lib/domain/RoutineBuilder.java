@@ -12,13 +12,14 @@ public class RoutineBuilder {
     private Integer elapsedSeconds;
     private String goalTime;
     private List<Task> tasks;
+    private RoutineTimer timer;
 
     public RoutineBuilder(){
 
     }
 
     public Routine buildRoutine() {
-        return new Routine(this.id,this.name,this.hasStarted,this.hasEnded, this.elapsedMinutes,this.elapsedSeconds, this.goalTime, this.tasks);
+        return new Routine(this.id,this.name,this.hasStarted,this.hasEnded, this.elapsedMinutes,this.elapsedSeconds, this.goalTime, this.tasks,this.timer);
     }
 
     public RoutineBuilder setElapsedMinutes(Integer elapsedMinutes) {
@@ -56,6 +57,10 @@ public class RoutineBuilder {
 
     public RoutineBuilder setGoalTime(String time) {
         this.goalTime = time;
+        return this;
+    }
+    public RoutineBuilder setTimer(RoutineTimer timer) {
+        this.timer = timer;
         return this;
     }
 }

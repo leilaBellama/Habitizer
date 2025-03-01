@@ -4,24 +4,22 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
-public class TaskRepository {
+public class Repository {
     private final InMemoryDataSource dataSource;
 
-    public TaskRepository(InMemoryDataSource dataSource){
+    public Repository(InMemoryDataSource dataSource){
         this.dataSource = dataSource;
     }
 
+    /*
 
     public Integer countTasksWithRoutineId(Integer routineId) {
         return dataSource.getTasksWithRoutineId(routineId).size();
     }
 
-
-    /*
     public Subject<List<Task>> findAllTasksWithRoutineID(Integer routineID){
         return dataSource.getAllTasksSubjectWithRoutineId(routineID);
     }
-     */
 
 
     public Integer countTasks() {
@@ -48,19 +46,21 @@ public class TaskRepository {
 
     //public void editTaskName(int id, String name) {dataSource.editTask(id, name);}
 
+     */
 
-    public Integer countRoutines() {return dataSource.getRoutines().size();}
 
-    public Subject<Routine> findRoutine(int id) {return dataSource.getRoutineSubject(id);}
-    public Subject<List<Routine>> findAllRoutines() {return dataSource.getAllRoutinesSubject();}
+    public Integer count() {return dataSource.getRoutines().size();}
 
-    public void saveRoutine(Routine routine) {dataSource.putRoutine(routine);}
-    public void saveRoutines(List<Routine> routines) {
+    public Subject<Routine> find(int id) {return dataSource.getRoutineSubject(id);}
+    public Subject<List<Routine>> findAll() {return dataSource.getAllRoutinesSubject();}
+
+    public void save(Routine routine) {dataSource.putRoutine(routine);}
+    public void save(List<Routine> routines) {
         for(var routine : routines){
             dataSource.putRoutine(routine);
         }
     }
 
-    public void removeRoutine(int id) {dataSource.removeRoutine(id);}
+    public void remove(int id) {dataSource.removeRoutine(id);}
 
 }

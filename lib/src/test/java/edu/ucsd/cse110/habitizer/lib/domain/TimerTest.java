@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.habitizer.app;
+package edu.ucsd.cse110.habitizer.lib.domain;
 
 
 import static org.junit.Assert.*;

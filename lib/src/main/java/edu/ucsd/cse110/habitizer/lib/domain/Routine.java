@@ -14,8 +14,10 @@ public class Routine {
     private Integer elapsedSeconds;
     private String goalTime;
     private List<Task> tasks;
+    private RoutineTimer timer;
 
-    public Routine(@Nullable Integer id, @Nullable String name, @Nullable Boolean hasStarted, @Nullable Boolean hasEnded, @Nullable Integer elapsedMinutes,@Nullable Integer elapsedSeconds, @Nullable String goalTime,@Nullable List<Task> tasks){
+
+    public Routine(@Nullable Integer id, @Nullable String name, @Nullable Boolean hasStarted, @Nullable Boolean hasEnded, @Nullable Integer elapsedMinutes,@Nullable Integer elapsedSeconds, @Nullable String goalTime,@Nullable List<Task> tasks, @Nullable RoutineTimer timer){
         this.id = id;
         this.name = name;
         this.hasStarted = hasStarted;
@@ -23,6 +25,7 @@ public class Routine {
         this.elapsedMinutes = elapsedMinutes;
         this.elapsedSeconds = elapsedSeconds;
         this.goalTime = goalTime;
+        this.timer = timer;
         this.tasks = (tasks != null) ? List.copyOf(tasks) : new ArrayList<>();
     }
 
@@ -47,9 +50,12 @@ public class Routine {
     }
 
     public List<Task> getTasks() {return tasks;}
+    public RoutineTimer getTimer() {return timer;}
+    public void setTimer(RoutineTimer timer) {this.timer = timer;}
+
 
     public Routine withId(Integer id){
-        return new Routine(id,this.name,this.hasStarted,this.hasEnded, this.elapsedMinutes,this.elapsedSeconds, this.goalTime, this.tasks);
+        return new Routine(id,this.name,this.hasStarted,this.hasEnded, this.elapsedMinutes,this.elapsedSeconds, this.goalTime, this.tasks,this.timer);
     }
 
     public void setElapsedMinutes(Integer elapsedMinutes) {
