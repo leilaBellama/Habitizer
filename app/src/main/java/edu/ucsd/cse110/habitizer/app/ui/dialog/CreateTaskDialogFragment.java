@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentDialogCreateTaskBinding;
-import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import edu.ucsd.cse110.habitizer.lib.domain.OriginalTask;
 
 public class CreateTaskDialogFragment extends DialogFragment{
     private FragmentDialogCreateTaskBinding view;
@@ -45,7 +45,7 @@ public class CreateTaskDialogFragment extends DialogFragment{
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var taskName = view.createTaskNameText.getText().toString();
 
-        var task = new Task(null, taskName, true);
+        var task = new OriginalTask(null, taskName, true);
 
         if (view.morningRadioButton.isChecked()) {
             task.setMorningTask(true);

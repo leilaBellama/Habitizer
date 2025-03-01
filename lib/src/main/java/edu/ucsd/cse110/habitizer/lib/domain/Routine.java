@@ -36,8 +36,10 @@ public class Routine {
         return elapsedTime;
     }
 
-    public List<Task> getTasks() {
-        return tasks;
+    public List<Task> getTasks() {return tasks;}
+
+    public Routine withId(Integer id){
+        return new Routine(id,this.name,this.hasStarted, this.elapsedTime, this.tasks);
     }
 
     /*

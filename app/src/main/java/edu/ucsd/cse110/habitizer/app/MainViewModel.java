@@ -12,6 +12,7 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 import android.util.Log;
 
 public class MainViewModel extends ViewModel{
+    /*
     private static final String LOG_TAG = "MainViewModel";
     private static final Integer ONE_MINUTE = 60;
     private final TaskRepository taskRepository;
@@ -179,29 +180,22 @@ public class MainViewModel extends ViewModel{
         this.inMorning.setValue(!isMorning);
     }
 
+
     public void addTask(Task task){
         if(task == null){return;}
-        taskRepository.save(task);
+        taskRepository.saveRoutine(task);
     }
 
     public void setTaskName(int taskId, String taskName){
-        taskRepository.editName(taskId, taskName);
+        taskRepository.editTaskName(taskId, taskName);
     }
+
+
 
     public Subject<String> getTaskName(){
         return this.taskName;
     }
 
-    /*
-    public Subject<Boolean> getRoutineEnded() {
-        return routineEnded;
-    }
-
-    public void setRoutineEnded(boolean ended) {
-        routineEnded.setValue(ended);
-    }
-
-     */
 
     public Subject<String> getGoalTime(){
         return this.goalTime;
@@ -225,5 +219,7 @@ public class MainViewModel extends ViewModel{
     public Subject<Boolean> getHasStarted() {
         return hasStarted;
     }
+
+     */
 
 }

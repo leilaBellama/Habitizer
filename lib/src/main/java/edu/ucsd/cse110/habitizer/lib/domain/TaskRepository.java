@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
@@ -12,63 +11,57 @@ public class TaskRepository {
         this.dataSource = dataSource;
     }
 
-    public Integer count() {
-        return dataSource.getTasks().size();
+
+    public Integer countTasksWithRoutineId(Integer routineId) {
+        return dataSource.getTasksWithRoutineId(routineId).size();
     }
-
-    public Subject<Task> find(int id){
-        return dataSource.getTaskSubject(id);
-    }
-
-    public Subject<List<Task>> findAll(){
-        return dataSource.getAllTasksSubject();
-    }
-
-    public void save(Task task) {
-        dataSource.putTask(task);
-    }
-
-    public void remove(int id) {dataSource.removeTask(id);}
-
-    public void editName(int id, String name) {dataSource.editTask(id, name);}
 
 
     /*
-    //evening methods
-
-    public Subject<List<Subject<List<Task>>>> getBoth() {
-        Subject<List<Subject<List<Task>>>> liveData = new Subject<>();
-
-        List<Subject<List<Task>>> both = new ArrayList<>();
-        both.add(dataSource.getAllTasksSubjectMorning());
-        both.add(dataSource.getAllTasksSubjectEvening());
-        liveData.setValue(both);
-        return liveData;
-    }
-    public Integer countEvening() {
-        return dataSource.getTasksEvening().size();
-    }
-
-    public Subject<Task> findEvening(int id){
-        return dataSource.getTaskSubjectEvening(id);
-    }
-
-    public Subject<List<Task>> findAllEvening(){
-        return dataSource.getAllTasksSubjectEvening();
-    }
-
-    public void saveEvening(Task task) {
-        dataSource.putTaskEvening(task);
-    }
-    
-
-
-    public void appendEvening(Task task){
-        int lastId = dataSource.getTasksEvening().size();
-        task.setId(lastId);
-        System.out.println("New Id" + task.getId());
-        dataSource.putTaskEvening(task);
+    public Subject<List<Task>> findAllTasksWithRoutineID(Integer routineID){
+        return dataSource.getAllTasksSubjectWithRoutineId(routineID);
     }
 
      */
+
+
+    public Integer countTasks() {
+        return dataSource.getTasks().size();
+    }
+
+    public Subject<Task> findTask(int id){
+        return dataSource.getTaskSubject(id);
+    }
+
+    public Subject<List<Task>> findAllTasks(){
+        return dataSource.getAllTasksSubject();
+    }
+
+    public void saveTask(Task task) {dataSource.putTask(task);}
+    public void saveTasks(List<Task> tasks) {
+        for(var task : tasks){
+            dataSource.putTask(task);
+        }
+    }
+    //
+
+    public void removeTask(int id) {dataSource.removeTask(id);}
+
+    public void editTaskName(int id, String name) {dataSource.editTask(id, name);}
+
+
+    public Integer countRoutines() {return dataSource.getRoutines().size();}
+
+    public Subject<Routine> findRoutine(int id) {return dataSource.getRoutineSubject(id);}
+    public Subject<List<Routine>> findAllRoutines() {return dataSource.getAllRoutinesSubject();}
+
+    public void saveRoutine(Routine routine) {dataSource.putRoutine(routine);}
+    public void saveRoutines(List<Routine> routines) {
+        for(var routine : routines){
+            dataSource.putRoutine(routine);
+        }
+    }
+
+    public void removeRoutine(int id) {dataSource.removeRoutine(id);}
+
 }

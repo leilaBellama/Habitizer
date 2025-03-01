@@ -11,17 +11,17 @@ public class RoutineTest {
     @Test
     public void testBuilderSet(){
         List<Task> tasks = List.of(
-                new Task(0, "Morning Task 1",true),
-                new Task(1, "Morning Task 2",true),
-                new Task(2, "Morning Task 3",true),
-                new Task(3, "Evening Task 1",false),
-                new Task(4, "Evening Task 2",false),
-                new Task(5, "Evening Task 3",false),
-                new Task(null, "Evening Task 4",false),
-                new Task(null, "Evening Task 5",false)
+                new OriginalTask(0, "Morning Task 1",true),
+                new OriginalTask(1, "Morning Task 2",true),
+                new OriginalTask(2, "Morning Task 3",true),
+                new OriginalTask(3, "Evening Task 1",false),
+                new OriginalTask(4, "Evening Task 2",false),
+                new OriginalTask(5, "Evening Task 3",false),
+                new OriginalTask(null, "Evening Task 4",false),
+                new OriginalTask(null, "Evening Task 5",false)
         );
         RoutineBuilder builder = new RoutineBuilder();
-        Routine r = builder
+        Routine r = new RoutineBuilder()
                 .setId(1)
                 .setName("new routine")
                 .setHasStarted(false)
