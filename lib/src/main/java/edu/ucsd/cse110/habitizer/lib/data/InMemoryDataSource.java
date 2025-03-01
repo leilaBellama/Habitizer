@@ -25,6 +25,8 @@ public class InMemoryDataSource {
 
 
     private int nextId = 0;
+
+    /*
     private int nextTaskId = 0;
 
     private final Map<Integer, Task> tasks
@@ -34,23 +36,25 @@ public class InMemoryDataSource {
     private final Subject<List<Task>> allTasksSubject
             = new Subject<>();
 
+     */
+
 
     public InMemoryDataSource() {
 
     }
 
     public final static List<Task> Morning = List.of(
-            new OriginalTask(0, "Morning Task 1",true),
-            new OriginalTask(1, "Morning Task 2",true),
-            new OriginalTask(2, "Morning Task 3",true),
+            new OriginalTask(null, "Morning Task 1",true),
+            new OriginalTask(null, "Morning Task 2",true),
+            new OriginalTask(null, "Morning Task 3",true),
             new OriginalTask(null, "Morning Task 4",true),
             new OriginalTask(null, "Morning Task 5",true)
     );
 
     public final static List<Task> Evening = List.of(
-            new OriginalTask(0, "Evening Task 1",false),
-            new OriginalTask(4, "Evening Task 2",false),
-            new OriginalTask(5, "Evening Task 3",false),
+            new OriginalTask(null, "Evening Task 1",false),
+            new OriginalTask(null, "Evening Task 2",false),
+            new OriginalTask(null, "Evening Task 3",false),
             new OriginalTask(null, "Evening Task 4",false),
             new OriginalTask(null, "Evening Task 5",false)
     );
@@ -77,6 +81,7 @@ public class InMemoryDataSource {
                     .setHasStarted(null)
                     .setElapsedMinutes(0)
                     .setElapsedSeconds(0)
+                    .setTasks(Morning)
                     .setGoalTime("35")
                     .buildRoutine(),
 
@@ -87,6 +92,7 @@ public class InMemoryDataSource {
                     .setGoalTime("30")
                     .setElapsedMinutes(0)
                     .setElapsedSeconds(0)
+                    .setTasks(Evening)
                     .buildRoutine()
     );
 
@@ -95,11 +101,9 @@ public class InMemoryDataSource {
         for(Routine routine : DEFAULT){
             data.putRoutine(routine);
         }
-        for(Task task : defaultTasks){
-            data.putTask(task);
-        }
         return data;
     }
+
 
     public void putRoutine(Routine routine) {
         var fixedRoutine = preInsertRoutine(routine);
@@ -150,6 +154,9 @@ public class InMemoryDataSource {
     }
 
 
+
+    /*
+
     public void putTask(Task task) {
         var fixedCard = preInsertTask(task);
         tasks.put(fixedCard.getId(), fixedCard);
@@ -182,7 +189,7 @@ public class InMemoryDataSource {
         tasks.get(id).setName(name);
     }
 
-     */
+
 
     public List<Task> getTasks(){
         return List.copyOf(tasks.values());
@@ -211,6 +218,8 @@ public class InMemoryDataSource {
     public Subject<List<Task>> getAllTasksSubject() {
         return allTasksSubject;
     }
+
+     */
 
 
 }
