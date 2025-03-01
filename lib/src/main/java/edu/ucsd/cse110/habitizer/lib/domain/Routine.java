@@ -10,16 +10,18 @@ public class Routine {
     private String name;
     private Boolean hasStarted;
     private Boolean hasEnded;
-    private Integer elapsedTime;
-    private Integer goalTime;
+    private Integer elapsedMinutes;
+    private Integer elapsedSeconds;
+    private String goalTime;
     private List<Task> tasks;
 
-    public Routine(@Nullable Integer id, @Nullable String name, @Nullable Boolean hasStarted, @Nullable Boolean hasEnded, @Nullable Integer elapsedTime, @Nullable Integer goalTime,@Nullable List<Task> tasks){
+    public Routine(@Nullable Integer id, @Nullable String name, @Nullable Boolean hasStarted, @Nullable Boolean hasEnded, @Nullable Integer elapsedMinutes,@Nullable Integer elapsedSeconds, @Nullable String goalTime,@Nullable List<Task> tasks){
         this.id = id;
         this.name = name;
         this.hasStarted = hasStarted;
         this.hasEnded = hasEnded;
-        this.elapsedTime = elapsedTime;
+        this.elapsedMinutes = elapsedMinutes;
+        this.elapsedSeconds = elapsedSeconds;
         this.goalTime = goalTime;
         this.tasks = (tasks != null) ? List.copyOf(tasks) : new ArrayList<>();
     }
@@ -34,21 +36,27 @@ public class Routine {
         return hasStarted;
     }
 
-    public Integer getElapsedTime() {
-        return elapsedTime;
+    public Integer getElapsedMinutes() {
+        return elapsedMinutes;
     }
-    public Integer getGoalTime() {
+    public Integer getElapsedSeconds() {
+        return elapsedSeconds;
+    }
+    public String getGoalTime() {
         return goalTime;
     }
 
     public List<Task> getTasks() {return tasks;}
 
     public Routine withId(Integer id){
-        return new Routine(id,this.name,this.hasStarted,this.hasEnded, this.elapsedTime, this.goalTime, this.tasks);
+        return new Routine(id,this.name,this.hasStarted,this.hasEnded, this.elapsedMinutes,this.elapsedSeconds, this.goalTime, this.tasks);
     }
 
-    public void setElapsedTime(Integer elapsedTime) {
-        this.elapsedTime = elapsedTime;
+    public void setElapsedMinutes(Integer elapsedMinutes) {
+        this.elapsedMinutes = elapsedMinutes;
+    }
+    public void setElapsedSeconds(Integer elapsedSeconds) {
+        this.elapsedSeconds = elapsedSeconds;
     }
 
     public void setHasStarted(Boolean hasStarted) {
@@ -69,6 +77,10 @@ public class Routine {
     public void setId(Integer id) {
         this.id = id;
     }
+    public void setGoalTime(String goalTime) {
+        this.goalTime = goalTime;
+    }
+
 
     /*
     public static List<Routine> swapIsShowing(List<Routine> routines){

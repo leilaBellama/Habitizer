@@ -36,20 +36,17 @@ public class RepositoryTest {
                     .setId(null)
                     .setName("Morning")
                     .setHasStarted(false)
-                    .setElapsedTime(0)
                     .buildRoutine(),
 
             new RoutineBuilder()
                     .setId(null)
                     .setName("Evening")
                     .setHasStarted(false)
-                    .setElapsedTime(0)
                     .buildRoutine(),
             new RoutineBuilder()
                     .setId(null)
                     .setName("Monday")
                     .setHasStarted(false)
-                    .setElapsedTime(0)
                     .buildRoutine()
 
     );
@@ -62,7 +59,6 @@ public class RepositoryTest {
                 .setId(null)
                 .setName("Tuesday")
                 .setHasStarted(false)
-                .setElapsedTime(0)
                 .setTasks(tasks)
                 .buildRoutine());
         assertEquals(4,(int) repository.countRoutines());

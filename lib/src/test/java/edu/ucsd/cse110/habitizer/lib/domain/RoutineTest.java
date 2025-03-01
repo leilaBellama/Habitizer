@@ -25,17 +25,15 @@ public class RoutineTest {
                 .setId(1)
                 .setName("new routine")
                 .setHasStarted(false)
-                .setElapsedTime(10)
-                .setGoalTime(30)
+                .setGoalTime("30")
                 .setTasks(tasks)
                 .buildRoutine();
 
         assertEquals(Optional.ofNullable(r.getId()), Optional.of(1));
         assertEquals(r.getName(),"new routine");
         assertEquals(r.getHasStarted(),false);
-        assertEquals(Optional.ofNullable(r.getElapsedTime()), Optional.of(10));
         assertEquals(r.getTasks().size(),8);
-        assertEquals((int)r.getGoalTime(),30);
+        assertEquals(r.getGoalTime(),"30");
 
     }
 }

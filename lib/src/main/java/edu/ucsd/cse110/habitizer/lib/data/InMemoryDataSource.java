@@ -58,18 +58,18 @@ public class InMemoryDataSource {
                     .setId(null)
                     .setName("Morning")
                     .setHasStarted(null)
-                    .setHasEnded(false)
-                    .setElapsedTime(0)
-                    .setGoalTime(35)
+                    .setElapsedMinutes(0)
+                    .setElapsedSeconds(0)
+                    .setGoalTime("35")
                     .buildRoutine(),
 
             new RoutineBuilder()
                     .setId(null)
                     .setName("Evening")
                     .setHasStarted(null)
-                    .setHasEnded(false)
-                    .setGoalTime(30)
-                    .setElapsedTime(0)
+                    .setGoalTime("30")
+                    .setElapsedMinutes(0)
+                    .setElapsedSeconds(0)
                     .buildRoutine()
     );
 

@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.habitizer.app;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,9 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
         model.getHasStarted().observe(hasStarted -> {
-            if (hasStarted == null) return;
+            if (hasStarted == null) reset();
             //Log.d("MA", started + " started is " + model.getHasStarted().getValue());
-            if (!hasStarted) endRoutine();
+            else if (!hasStarted) endRoutine();
+            else startRoutine();
+
         });
         model.getGoalTime().observe(goalTime -> {
             if(goalTime != null){
@@ -98,26 +101,50 @@ public class MainActivity extends AppCompatActivity {
     private void endRoutine() {
         view.advanceTimeButton.setVisibility(View.GONE);
         view.stopTime.setVisibility(View.GONE);
-        view.endButton.setEnabled(false);
         view.endButton.setText("Routine Ended");
+        view.endButton.setEnabled(false);
         view.endButton.requestLayout();
         model.endRoutine();
+        started = false;
+        invalidateOptionsMenu();
     }
 
     private void startRoutine() {
         view.startButton.setEnabled(false);
-        view.startButton.setVisibility(View.INVISIBLE);
+        view.startButton.setVisibility(View.GONE);
+        view.endButton.setText("End");
         view.endButton.setVisibility(View.VISIBLE);
+        view.endButton.setEnabled(true);
         view.addTaskButton.setVisibility(View.GONE);
         view.stopTime.setVisibility(View.VISIBLE);
         view.advanceTimeButton.setVisibility(View.VISIBLE);
         model.getElapsedTime().observe(time -> {
             if (time != null) {
                 runOnUiThread(() -> view.time.setText(time + " min"));
+                Log.d("MA","obs time " + time);
+
             }
         });
         model.startRoutine();
         started = true;
+        invalidateOptionsMenu();
+    }
+    private void reset() {
+        view.startButton.setVisibility(View.VISIBLE);
+        view.startButton.setEnabled(true);
+        view.endButton.setVisibility(View.GONE);
+        view.addTaskButton.setVisibility(View.VISIBLE);
+        view.stopTime.setVisibility(View.GONE);
+        view.advanceTimeButton.setVisibility(View.GONE);
+        model.getElapsedTime().observe(time -> {
+            if (time != null) {
+                runOnUiThread(() -> view.time.setText(time + " min"));
+                Log.d("MA","obs time " + time);
+
+            }
+        });
+        //model.startRoutine();
+        started = false;
         invalidateOptionsMenu();
     }
 

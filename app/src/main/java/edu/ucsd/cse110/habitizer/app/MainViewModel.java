@@ -126,6 +126,15 @@ public class MainViewModel extends ViewModel{
             orderedTasks.setValue(taskList);
         });
 
+        taskRepository.findRoutine(routineId.getValue()).observe(curRoutine -> {
+            routineTitle.setValue(curRoutine.getName());
+            hasStarted.setValue(curRoutine.getHasStarted());
+            elapsedTime.setValue(curRoutine.getElapsedMinutes());
+            goalTime.setValue(String.valueOf(curRoutine.getGoalTime()));
+            Log.d("obs findRoutine", "title " + routineTitle.getValue() + " hasStarted " + hasStarted.getValue() + " elp time " + elapsedTime.getValue() + " goal time " + goalTime.getValue());
+
+        });
+
         routineId.observe(id -> {
             if (id == null) return;
             var tasks = new ArrayList<Task>();
@@ -140,19 +149,27 @@ public class MainViewModel extends ViewModel{
             var curRoutine = taskRepository.findRoutine(id).getValue();
             routineTitle.setValue(curRoutine.getName());
             hasStarted.setValue(curRoutine.getHasStarted());
-            elapsedTime.setValue(curRoutine.getElapsedTime());
+            elapsedTime.setValue(curRoutine.getElapsedMinutes());
             goalTime.setValue(String.valueOf(curRoutine.getGoalTime()));
+            Log.d("obs routineId", "title " + routineTitle.getValue() + " hasStarted " + hasStarted.getValue() + " elp time " + elapsedTime.getValue() + " goal time " + goalTime.getValue());
+
         });
 
         //when timers elapsedTime updates, update this elapsedTime
-        timer.getValue().getElapsedTime().observe(val -> {
-            //Log.d("timer", "time received: " + val);
+        timer.getValue().getElapsedMinutes().observe(val -> {
+            if(val == null) return;
+            Log.d("timer", "time received: " + val);
+            elapsedTime.setValue(val);
+
+            /*
             Integer currentTime = elapsedTime.getValue();
             if (currentTime == null) currentTime = 0;
             if (!currentTime.equals(val)) {
                 elapsedTime.setValue(currentTime + 1);
                 //Log.d("timer", "after setValue");
             }
+
+             */
         });
         /*
 
@@ -218,11 +235,20 @@ public class MainViewModel extends ViewModel{
     public void endRoutine() {
         if (hasStarted.getValue() == null) return;
         if (!hasStarted.getValue()) return;
-        hasStarted.setValue(false);
-        Log.d("MVM", "has started " + hasStarted.getValue());
+
+
+        //Log.d("end routine", "has started " + hasStarted.getValue());
 
         if (timer.getValue() == null) return;
-        timer.getValue().stop();
+        timer.getValue().end();
+
+        var routine = taskRepository.findRoutine(routineId.getValue()).getValue();
+        routine.setHasStarted(false);
+        routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
+        routine.setElapsedSeconds(timer.getValue().getElapsedSeconds());
+        Log.d("end routine", "has started " + hasStarted.getValue() + " mins " + routine.getElapsedMinutes() + " sec " + routine.getElapsedSeconds());
+
+        taskRepository.saveRoutine(routine);
     }
 
     public void stopTimer() {
@@ -231,17 +257,26 @@ public class MainViewModel extends ViewModel{
         if (started) {
             timer.getValue().stop();
         }
+        var routine = taskRepository.findRoutine(routineId.getValue()).getValue();
+        routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
+        routine.setElapsedSeconds(timer.getValue().getElapsedSeconds());
+        Log.d("stop routine", "has started " + hasStarted.getValue() + " mins " + routine.getElapsedMinutes() + " sec " + routine.getElapsedSeconds());
+
+        taskRepository.saveRoutine(routine);
     }
     public void advanceTime() {
         timer.getValue().advanceTime(30);
     }
     public void swapRoutine() {
+        Log.d("swap", "swap routine " +routineId.getValue());
         if (routineId.getValue() == null) return;
         if (routineId.getValue() == 0){
             routineId.setValue(1);
         } else {
             routineId.setValue(0);
         }
+        Log.d("swap", "swap routine " +routineId.getValue());
+
     }
 
     public void addTask(Task task){
@@ -256,6 +291,12 @@ public class MainViewModel extends ViewModel{
         taskRepository.saveTask(task);
         //taskRepository.editTaskName(taskId, taskName);
     }
+    public void setGoalTime(String goalTime){
+        var routine = taskRepository.findRoutine(routineId.getValue()).getValue();
+        routine.setGoalTime(goalTime);
+        taskRepository.saveRoutine(routine);
+        //this.goalTime.setValue(goalTime);
+    }
 
     public Subject<String> getTaskName(){
         return this.taskName;
@@ -265,9 +306,7 @@ public class MainViewModel extends ViewModel{
     public Subject<String> getGoalTime(){
         return this.goalTime;
     }
-    public void setGoalTime(String goalTime){
-        this.goalTime.setValue(goalTime);
-    }
+
 
     public Subject<String> getRoutineTitle(){
         return routineTitle;

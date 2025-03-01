@@ -29,7 +29,6 @@ public class InMemoryDataSourceTest {
                     .setId(null)
                     .setName("Morning")
                     .setHasStarted(false)
-                    .setElapsedTime(0)
                     .setTasks(tasks)
                     .buildRoutine(),
 
@@ -37,7 +36,6 @@ public class InMemoryDataSourceTest {
                     .setId(null)
                     .setName("Evening")
                     .setHasStarted(false)
-                    .setElapsedTime(0)
                     .setTasks(tasks)
                     .buildRoutine()
     );
@@ -54,7 +52,6 @@ public class InMemoryDataSourceTest {
                 .setId(null)
                 .setName("Monday")
                 .setHasStarted(false)
-                .setElapsedTime(0)
                 .setTasks(tasks)
                 .buildRoutine());
         assertEquals(data.getRoutines().size(),3);
