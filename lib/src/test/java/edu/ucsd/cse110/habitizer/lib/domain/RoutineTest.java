@@ -26,6 +26,7 @@ public class RoutineTest {
                 .setName("new routine")
                 .setHasStarted(false)
                 .setElapsedTime(10)
+                .setGoalTime(30)
                 .setTasks(tasks)
                 .buildRoutine();
 
@@ -34,6 +35,7 @@ public class RoutineTest {
         assertEquals(r.getHasStarted(),false);
         assertEquals(Optional.ofNullable(r.getElapsedTime()), Optional.of(10));
         assertEquals(r.getTasks().size(),8);
+        assertEquals((int)r.getGoalTime(),30);
 
     }
 }

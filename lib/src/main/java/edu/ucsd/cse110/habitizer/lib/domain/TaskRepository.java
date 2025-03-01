@@ -21,7 +21,6 @@ public class TaskRepository {
     public Subject<List<Task>> findAllTasksWithRoutineID(Integer routineID){
         return dataSource.getAllTasksSubjectWithRoutineId(routineID);
     }
-
      */
 
 
@@ -47,7 +46,7 @@ public class TaskRepository {
 
     public void removeTask(int id) {dataSource.removeTask(id);}
 
-    public void editTaskName(int id, String name) {dataSource.editTask(id, name);}
+    //public void editTaskName(int id, String name) {dataSource.editTask(id, name);}
 
 
     public Integer countRoutines() {return dataSource.getRoutines().size();}

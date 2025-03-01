@@ -23,8 +23,8 @@ public class InMemoryDataSource {
             = new Subject<>();
 
 
-    private int nextId = -1;
-    private int nextTaskId = -1;
+    private int nextId = 0;
+    private int nextTaskId = 0;
 
     private final Map<Integer, Task> tasks
             = new HashMap<>();
@@ -57,14 +57,18 @@ public class InMemoryDataSource {
             new RoutineBuilder()
                     .setId(null)
                     .setName("Morning")
-                    .setHasStarted(false)
+                    .setHasStarted(null)
+                    .setHasEnded(false)
                     .setElapsedTime(0)
+                    .setGoalTime(35)
                     .buildRoutine(),
 
             new RoutineBuilder()
                     .setId(null)
                     .setName("Evening")
-                    .setHasStarted(false)
+                    .setHasStarted(null)
+                    .setHasEnded(false)
+                    .setGoalTime(30)
                     .setElapsedTime(0)
                     .buildRoutine()
     );
@@ -92,9 +96,9 @@ public class InMemoryDataSource {
     private Routine preInsertRoutine(Routine routine) {
         var id = routine.getId();
         if (id == null) {
-            nextId += 1;
-            routine = routine.withId(nextId);
-        } else if (id > nextId) {
+            routine = routine.withId(nextId++);
+            //nextId += 1;
+        } else if (id >= nextId) {
             nextId = id + 1;
         }
         return routine;
@@ -140,9 +144,10 @@ public class InMemoryDataSource {
     private Task preInsertTask(Task task) {
         var id = task.getId();
         if (id == null) {
-            nextTaskId += 1;
-            task = task.withId(nextTaskId);
-        } else if (id > nextTaskId) {
+
+            //nextTaskId += 1;
+            task = task.withId(nextTaskId++);
+        } else if (id >= nextTaskId) {
             nextTaskId = id + 1;
         }
         return task;
@@ -155,9 +160,12 @@ public class InMemoryDataSource {
         allTasksSubject.setValue(getTasks());
     }
 
+    /*
     public void editTask(int id, String name){
         tasks.get(id).setName(name);
     }
+
+     */
 
     public List<Task> getTasks(){
         return List.copyOf(tasks.values());

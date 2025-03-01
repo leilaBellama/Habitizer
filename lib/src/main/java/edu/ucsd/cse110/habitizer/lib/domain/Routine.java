@@ -9,21 +9,23 @@ public class Routine {
     private Integer id;
     private String name;
     private Boolean hasStarted;
+    private Boolean hasEnded;
     private Integer elapsedTime;
+    private Integer goalTime;
     private List<Task> tasks;
 
-    public Routine(@Nullable Integer id, @Nullable String name, @Nullable Boolean hasStarted, @Nullable Integer elapsedTime, @Nullable List<Task> tasks){
+    public Routine(@Nullable Integer id, @Nullable String name, @Nullable Boolean hasStarted, @Nullable Boolean hasEnded, @Nullable Integer elapsedTime, @Nullable Integer goalTime,@Nullable List<Task> tasks){
         this.id = id;
         this.name = name;
         this.hasStarted = hasStarted;
+        this.hasEnded = hasEnded;
         this.elapsedTime = elapsedTime;
+        this.goalTime = goalTime;
         this.tasks = (tasks != null) ? List.copyOf(tasks) : new ArrayList<>();
     }
 
 
-    public Integer getId() {
-        return id;
-    }
+    public Integer getId() {return id;}
 
     public String getName() {
         return name;
@@ -35,11 +37,37 @@ public class Routine {
     public Integer getElapsedTime() {
         return elapsedTime;
     }
+    public Integer getGoalTime() {
+        return goalTime;
+    }
 
     public List<Task> getTasks() {return tasks;}
 
     public Routine withId(Integer id){
-        return new Routine(id,this.name,this.hasStarted, this.elapsedTime, this.tasks);
+        return new Routine(id,this.name,this.hasStarted,this.hasEnded, this.elapsedTime, this.goalTime, this.tasks);
+    }
+
+    public void setElapsedTime(Integer elapsedTime) {
+        this.elapsedTime = elapsedTime;
+    }
+
+    public void setHasStarted(Boolean hasStarted) {
+        this.hasStarted = hasStarted;
+    }
+    public void setHasEnded(Boolean hasEnded) {
+        this.hasEnded = hasEnded;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     /*

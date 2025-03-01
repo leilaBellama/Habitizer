@@ -7,7 +7,9 @@ public class RoutineBuilder {
     private Integer id;
     private String name;
     private Boolean hasStarted;
+    private Boolean hasEnded;
     private Integer elapsedTime;
+    private Integer goalTime;
     private List<Task> tasks;
 
     public RoutineBuilder(){
@@ -15,7 +17,7 @@ public class RoutineBuilder {
     }
 
     public Routine buildRoutine() {
-        return new Routine(this.id,this.name,this.hasStarted, this.elapsedTime, this.tasks);
+        return new Routine(this.id,this.name,this.hasStarted,this.hasEnded, this.elapsedTime, this.goalTime, this.tasks);
     }
 
     public RoutineBuilder setElapsedTime(Integer elapsedTime) {
@@ -25,6 +27,10 @@ public class RoutineBuilder {
 
     public RoutineBuilder setHasStarted(Boolean hasStarted) {
         this.hasStarted = hasStarted;
+        return this;
+    }
+    public RoutineBuilder setHasEnded(Boolean hasEnded) {
+        this.hasEnded = hasEnded;
         return this;
     }
 
@@ -40,6 +46,11 @@ public class RoutineBuilder {
 
     public RoutineBuilder setId(Integer id) {
         this.id = id;
+        return this;
+    }
+
+    public RoutineBuilder setGoalTime(Integer time) {
+        this.goalTime = time;
         return this;
     }
 }

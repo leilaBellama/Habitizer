@@ -95,6 +95,8 @@ public class RepositoryTest {
         assertEquals(4,(int) repository.countTasksWithRoutineId(1));
         assertEquals(2,(int) repository.countTasksWithRoutineId(2));
         assertEquals(3,(int) repository.countTasksWithRoutineId(3));
+        repository.saveTask(new SimpleTask(0, "Morning Task first",0));
+        assertEquals("Morning Task first",repository.findTask(0).getValue().getTaskName());
     }
 
 

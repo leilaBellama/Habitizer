@@ -70,6 +70,8 @@ public class OriginalTask implements Task {
 
     @Override
     public int getRoutineId(){
-        return -1;
+        if(isMorningTask) return 0;
+        return 1;
     }
+
 }
