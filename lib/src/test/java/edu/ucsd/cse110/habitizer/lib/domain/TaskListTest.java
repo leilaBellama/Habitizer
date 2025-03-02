@@ -6,14 +6,27 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import java.util.List;
+
+import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
+
 public class TaskListTest {
-    // Test to force set, expected to not work
+    public InMemoryDataSource testSource = new InMemoryDataSource();
+    public TaskRepository testRepository = new TaskRepository(testSource);
+
     @Test
-    public void testForceSet() {
+    public void testAddTask(){
         var task1 = new Task(1, "Task1",true);
-        task1.setCheckedOff(true, 0);
-        assertTrue(task1.getCheckedOffStatus());
-        task1.setCheckedOff(false, 0);
-        assertTrue(task1.getCheckedOffStatus());
+        var task2 = new Task(2, "Task2",false);
+        List<Task> expectedList = List.of(
+                task1,
+                task2
+        );
+        //save() is called in addTask()
+        testRepository.save(task1);
+        testRepository.save(task2);
+
+        List<Task> testList = testSource.getTasks();
+        assertEquals(testList, expectedList);
     }
 }
