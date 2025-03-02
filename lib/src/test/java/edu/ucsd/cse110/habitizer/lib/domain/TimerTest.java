@@ -44,6 +44,27 @@ public class TimerTest {
         assertEquals(30, (int) routineTimer.getElapsedSeconds());
 
     }
+
+    @Test
+    public void testTimeStops() throws InterruptedException {
+        routineTimer.advanceTime(30);
+        routineTimer.stop();
+
+        Thread.sleep(1000);
+
+        assertEquals(0, (int) routineTimer.getElapsedTime().getValue());
+        assertEquals(30, (int) routineTimer.getElapsedSeconds());
+    }
+
+    @Test
+    public void testTimeEnds() throws InterruptedException {
+        routineTimer.advanceTime(30);
+        routineTimer.end();
+
+        Thread.sleep(1000);
+
+        assertEquals(1, (int) routineTimer.getElapsedTime().getValue());
+    }
 }
 
 

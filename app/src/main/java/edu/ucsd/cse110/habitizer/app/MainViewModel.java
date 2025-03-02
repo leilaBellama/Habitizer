@@ -17,7 +17,6 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 import android.util.Log;
 
 public class MainViewModel extends ViewModel{
-
     private static final String LOG_TAG = "MainViewModel";
     private static final Integer ONE_MINUTE = 60;
     private final Repository repository;
@@ -97,11 +96,7 @@ public class MainViewModel extends ViewModel{
     }
 
     public void startRoutine(){
-        // set start button as disabled (use if needed)
-//        if (goalTime.getValue() == null || goalTime.getValue().isEmpty()) {
-//            //Log.d(LOG_TAG, "Cannot start routine. Goal time is not set.");
-//            return; // Do not start if goal time is not set
-//        }
+
         if (hasStarted.getValue() != null) return;
         var routine = repository.find(routineId.getValue()).getValue();
         if(routine == null) return;
@@ -116,7 +111,9 @@ public class MainViewModel extends ViewModel{
     public void endRoutine() {
         if (hasStarted.getValue() == null) return;
         if (!hasStarted.getValue()) return;
-        //Log.d("end routine", "has started " + hasStarted.getValue());
+        hasStarted.setValue(false);
+        Log.d("MVM", "has started " + hasStarted.getValue());
+
         if (timer.getValue() == null) return;
         timer.getValue().end();
         var routine = repository.find(routineId.getValue()).getValue();
@@ -130,9 +127,9 @@ public class MainViewModel extends ViewModel{
     }
 
     public void stopTimer() {
-        if (hasStarted.getValue() == null) return;
-        if (timer.getValue() == null) return;
-        if (hasStarted.getValue()) {
+        var started = hasStarted.getValue();
+        if (started == null) return;
+        if (started) {
             timer.getValue().stop();
         }
         var routine = repository.find(routineId.getValue()).getValue();
@@ -144,7 +141,7 @@ public class MainViewModel extends ViewModel{
     }
     public void advanceTime() {
         if (timer.getValue() == null) return;
-        timer.getValue().advanceTime(30);
+        timer.getValue().advanceTime(15);
     }
     public void swapRoutine() {
         //Log.d("MVM swap before", routineTitle.getValue() + " hasStarted " + hasStarted.getValue() );
@@ -156,7 +153,6 @@ public class MainViewModel extends ViewModel{
         }
         //Log.d("MVM swap after", routineTitle.getValue() + " hasStarted " + hasStarted.getValue() );
     }
-
 
     public void addTask(Task task){
         if(orderedTasks.getValue() == null) return;

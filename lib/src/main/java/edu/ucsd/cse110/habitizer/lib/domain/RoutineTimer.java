@@ -13,14 +13,11 @@ public class RoutineTimer {
     private Subject<Boolean> hasStarted;
     private Subject<Integer> elapsedMin;
 
-    //private PlainMutableSubject<Integer> elapsedTime;
-
     private Integer interval;
 
     public RoutineTimer(Integer interval) {
         this.hasStarted = new Subject<>();
         this.elapsedMin = new Subject<>();
-        //this.elapsedTime = new PlainMutableSubject<>();
         this.interval = interval;
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
 
@@ -66,10 +63,8 @@ public class RoutineTimer {
     }
 
     public void start() {
-        //Log.d("s","hasStarted " + (this.hasStarted.getValue()));
         if (hasStarted.getValue()) return;
         hasStarted.setValue(true);
-        //Log.d("s","hasStarted " + (hasStarted.getValue()));
         scheduler.scheduleWithFixedDelay(() -> {
             elapsedSeconds++;
             if (elapsedSeconds >= interval) {
@@ -83,13 +78,14 @@ public class RoutineTimer {
 
     public void stop() {
         scheduler.shutdown();
+//        Log.d("m", "Timer stopped at: " + getElapsedTime().getValue() + " minutes");
     }
 
-    //rounds minutes up
     public void end() {
-        scheduler.shutdown();
-        elapsedMin.setValue(elapsedMin.getValue() + 1);
-        //Log.d("m","Elapsed time: " + getElapsedMinutes().getValue() + " minutes,");
-
+        stop();
+        int roundUp = 0;
+        if (elapsedSeconds > 0) { roundUp = 1;}
+        elapsedMin.setValue(elapsedMin.getValue() + roundUp);
+//        Log.d("m","Ended at: " + getElapsedTime().getValue() + " minutes");
     }
 }

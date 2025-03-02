@@ -59,10 +59,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //start button starts routine, removes switch routine and add option
         view.startButton.setOnClickListener(v -> startRoutine());
         view.endButton.setOnClickListener(v -> endRoutine());
-        view.stopTime.setOnClickListener(v -> model.stopTimer());
+        view.stopTime.setOnClickListener(v -> {
+            model.stopTimer();
+            view.stopTime.setVisibility(View.GONE);
+        });
         view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());
         view.addTaskButton.setOnClickListener(v -> {
             if(started){
@@ -80,15 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         setContentView(view.getRoot());
-
-        /*
-        var ld = new MutableLiveData<String>();
-        ld.observe(this, (s) -> {
-            System.out.println(s);
-        });
-
-         */
-
     }
 
     @Override
