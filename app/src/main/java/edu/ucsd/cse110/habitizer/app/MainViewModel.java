@@ -99,6 +99,14 @@ public class MainViewModel extends ViewModel{
 
     }
 
+    public void swapCurrentRoutine(Integer id){
+        var list = Routine.swapCurrentRoutine(getRoutines().getValue(), id);
+        repository.save(list);
+        if (hasStarted.getValue() != null) return;
+
+
+    }
+
     public void newRoutine(){
         repository.save(new Routine());
         Log.d("MVM newRoutine", "has added");

@@ -29,6 +29,14 @@ public class Routine {
         this.tasks = (tasks != null) ? List.copyOf(tasks) : new ArrayList<>();
     }
 
+    public static List<Routine> swapCurrentRoutine(List<Routine> list, Integer id){
+        var copy = new ArrayList<>(List.copyOf(list));
+        var current = copy.get(0).withId(id);
+        var next = copy.get(id).withId(0);
+        copy.set(0,next);
+        copy.set(id,current);
+        return copy;
+    }
 
     public Routine(){
         this.name = "New Routine";

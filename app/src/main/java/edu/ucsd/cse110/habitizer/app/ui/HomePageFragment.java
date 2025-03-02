@@ -121,8 +121,10 @@ public class HomePageFragment extends Fragment {
         // Set an OnClickListener for each button
         button.setOnClickListener(view -> {
             // Perform action when button is clicked
+
+            model.swapCurrentRoutine(routine.getId());
             switchFragment();
-            Collections.swap(model.getRoutines().getValue(),0,routine.getId());
+            //Collections.swap(model.getRoutines().getValue(),0,routine.getId());
             //System.out.println(routine.getId() + "Clicked on: " + routine.getName() );
         });
 
