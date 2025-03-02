@@ -29,6 +29,7 @@ public class MainViewModel extends ViewModel{
     private final Subject<Integer> routineId;
     private final Subject<String> taskName;
     private final Subject<String> goalTime;
+    private final Subject<Routine> curRoutine;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -51,8 +52,11 @@ public class MainViewModel extends ViewModel{
         this.elapsedTime = new Subject<>();
         this.taskName = new Subject<>();
         this.goalTime = new Subject<>();
+        this.curRoutine = new Subject<>();
 
         this.routineId.setValue(0);
+
+
 
         routineId.observe(id -> {
             if(id == null)return;
@@ -75,7 +79,11 @@ public class MainViewModel extends ViewModel{
                     elapsedTime.setValue(val);
 
                 });
-            });
+            });/*
+            var r = repository.find(id).getValue();
+            curRoutine.setValue(repository.find(id).getValue());
+            */
+
         });
 
         // When the ordering changes, update the first task
@@ -95,12 +103,12 @@ public class MainViewModel extends ViewModel{
 //            return; // Do not start if goal time is not set
 //        }
         if (hasStarted.getValue() != null) return;
-
-        Log.d("s", "started");
-        if (timer.getValue() == null) return;
         var routine = repository.find(routineId.getValue()).getValue();
         if(routine == null) return;
         routine.setHasStarted(true);
+        if (timer.getValue() == null) {
+            routine.setTimer(new RoutineTimer(60));
+        }
         repository.save(routine);
         timer.getValue().start();
     }
@@ -116,7 +124,7 @@ public class MainViewModel extends ViewModel{
         routine.setHasStarted(false);
         routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
         routine.setElapsedSeconds(timer.getValue().getElapsedSeconds());
-        Log.d("end routine", "has started " + hasStarted.getValue() + " mins " + routine.getElapsedMinutes() + " sec " + routine.getElapsedSeconds());
+        //Log.d("end routine", "has started " + hasStarted.getValue() + " mins " + routine.getElapsedMinutes() + " sec " + routine.getElapsedSeconds());
 
         repository.save(routine);
     }
@@ -200,6 +208,16 @@ public class MainViewModel extends ViewModel{
         return hasStarted;
     }
 
+    public Subject<Routine> getCurRoutine() {
+        return curRoutine;
+    }
 
+    public Subject<Integer> getRoutineId() {
+        return routineId;
+    }
 
+    //for testing
+    public Repository getRepository() {
+        return repository;
+    }
 }

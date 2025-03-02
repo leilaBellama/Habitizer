@@ -60,7 +60,8 @@ public class InMemoryDataSource {
             new OriginalTask(3, "Evening Task 4",false)
     );
 
-    public final static List<SimpleTask> defaultTasks = List.of(
+    /*
+    public final static List<Task> defaultTasks = List.of(
 
             new SimpleTask(0, "Morning Task 1",0),
             new SimpleTask(1, "Morning Task 2",0),
@@ -73,6 +74,8 @@ public class InMemoryDataSource {
             new SimpleTask(null, "Evening Task 4",1),
             new SimpleTask(null, "Evening Task 5",1)
     );
+
+     */
 
     public final static List<Routine> DEFAULT = List.of(
             new RoutineBuilder()
