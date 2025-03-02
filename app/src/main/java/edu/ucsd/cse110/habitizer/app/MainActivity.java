@@ -1,23 +1,15 @@
 package edu.ucsd.cse110.habitizer.app;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.habitizer.app.ui.dialog.CreateTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.dialog.EditGoalTimeDialogFragment;
-import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,50 +29,32 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.model = modelProvider.get(MainViewModel.class);
 
-        view.stopTime.setVisibility(View.INVISIBLE);
-        view.advanceTimeButton.setVisibility(View.INVISIBLE);
-
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
-
+        model.getHasStarted().observe(hasStarted -> {
+            if (hasStarted == null) return;
+            if (!hasStarted) endRoutine();
+        });
         model.getGoalTime().observe(goalTime -> {
             if(goalTime != null){
                 view.goalTime.setText(goalTime + " min");
             }
         });
 
-        //start button starts routine, removes switch routine and add option
-        view.startButton.setOnClickListener(v -> {
-            view.startButton.setEnabled(false);
-            view.startButton.setVisibility(View.INVISIBLE);
-            view.endButton.setVisibility(View.VISIBLE);
-
-            view.addTaskButton.setVisibility(View.GONE);
-            view.stopTime.setVisibility(View.VISIBLE);
+        view.startButton.setOnClickListener(v -> startRoutine());
+        view.endButton.setOnClickListener(v -> endRoutine());
+        view.stopTime.setOnClickListener(v -> {
+            model.stopTimer();
+            view.stopTime.setVisibility(View.GONE);
             view.advanceTimeButton.setVisibility(View.VISIBLE);
-
-            model.getElapsedTime().observe(time -> {
-                if (time != null) {
-                    view.time.setText(time + " min");
-                }
-            });
-            model.startRoutine();
-            started = true;
-            invalidateOptionsMenu();
         });
-
-        view.endButton.setOnClickListener(v -> {
-            endRoutine();
-        });
-
-        model.getRoutineEnded().observe(this, ended -> {
-            endRoutine();
-        });
-
-        view.stopTime.setOnClickListener(v -> model.stopTimer());
         view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());
-        this.view.addTaskButton.setOnClickListener(v -> {
-            var dialogFragment = CreateTaskDialogFragment.newInstance();
-            dialogFragment.show(getSupportFragmentManager(), "CreateTaskDialogFragment");
+        view.addTaskButton.setOnClickListener(v -> {
+            if(started){
+                view.addTaskButton.setEnabled(false);
+            }else {
+                var dialogFragment = CreateTaskDialogFragment.newInstance();
+                dialogFragment.show(getSupportFragmentManager(), "CreateTaskDialogFragment");
+            }
         });
 
         view.goalTime.setOnClickListener(v -> {
@@ -90,12 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         setContentView(view.getRoot());
-
-        var ld = new MutableLiveData<String>();
-        ld.observe(this, (s) -> {
-            System.out.println(s);
-        });
-
     }
 
     @Override
@@ -122,27 +90,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void endRoutine() {
         view.advanceTimeButton.setVisibility(View.GONE);
-        view.stopTime.setVisibility(View.GONE);
         view.endButton.setEnabled(false);
         view.endButton.setText("Routine Ended");
         view.endButton.requestLayout();
         model.endRoutine();
     }
 
-    /*
-    private void swapFragments() {
-        if (isShowingMorning) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainerView, EveningFragment.newInstance())
-                    .commit();
-        } else {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainerView, MorningFragment.newInstance())
-                    .commit();
-        }
-        isShowingMorning = !isShowingMorning;
+    private void startRoutine() {
+        view.startButton.setEnabled(false);
+        view.startButton.setVisibility(View.INVISIBLE);
+        view.endButton.setVisibility(View.VISIBLE);
+        view.addTaskButton.setVisibility(View.GONE);
+        view.stopTime.setVisibility(View.VISIBLE);
+        model.getElapsedTime().observe(time -> {
+            if (time != null) {
+                runOnUiThread(() -> view.time.setText(time + " min"));
+            }
+        });
+        model.startRoutine();
+        started = true;
+        invalidateOptionsMenu();
     }
-     */
 }

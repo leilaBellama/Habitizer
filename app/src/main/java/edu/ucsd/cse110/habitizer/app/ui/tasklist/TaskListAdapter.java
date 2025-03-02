@@ -124,7 +124,8 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
         }
 
         if (allChecked) {
-            mainViewModel.setRoutineEnded(true);
+            mainViewModel.endRoutine();
+            Log.d("adap", "all checked off");
         }
     }
 
