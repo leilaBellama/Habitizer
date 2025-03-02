@@ -24,6 +24,7 @@ public class InMemoryDataSource {
 
     private final Subject<List<Routine>> allRoutinesSubject
             = new Subject<>();
+    //private final Subject<Integer> count = new Subject<>();
 
 
     private int nextId = 0;
@@ -115,6 +116,9 @@ public class InMemoryDataSource {
         routines.put(fixedRoutine.getId(), fixedRoutine);
         if (routineSubjects.containsKey(fixedRoutine.getId())) {
             routineSubjects.get(fixedRoutine.getId()).setValue(fixedRoutine);
+        } else {
+            //if(count.getValue() == null) count.setValue(1);
+            //else count.setValue(count.getValue() + 1);
         }
         allRoutinesSubject.setValue(new ArrayList<Routine>(getRoutines()));
     }
@@ -157,6 +161,13 @@ public class InMemoryDataSource {
     public Subject<List<Routine>> getAllRoutinesSubject() {
         return allRoutinesSubject;
     }
+
+    /*
+    public Subject<Integer> getCountSubject(){
+        return count;
+    }
+
+     */
 
 
 

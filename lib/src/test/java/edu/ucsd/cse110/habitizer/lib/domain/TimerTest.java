@@ -52,7 +52,7 @@ public class TimerTest {
 
         Thread.sleep(1000);
 
-        assertEquals(0, (int) routineTimer.getElapsedTime().getValue());
+        assertEquals(0, (int) routineTimer.getElapsedMinutes().getValue());
         assertEquals(30, (int) routineTimer.getElapsedSeconds());
     }
 
@@ -63,7 +63,7 @@ public class TimerTest {
 
         Thread.sleep(1000);
 
-        assertEquals(1, (int) routineTimer.getElapsedTime().getValue());
+        assertEquals(1, (int) routineTimer.getElapsedMinutes().getValue());
     }
 }
 

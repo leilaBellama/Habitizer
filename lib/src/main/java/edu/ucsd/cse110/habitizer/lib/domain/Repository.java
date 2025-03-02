@@ -48,8 +48,9 @@ public class Repository {
 
      */
 
-
     public Integer count() {return dataSource.getRoutines().size();}
+
+    //public Subject<Integer> count() {return dataSource.getCountSubject();}
 
     public Subject<Routine> find(int id) {return dataSource.getRoutineSubject(id);}
     public Subject<List<Routine>> findAll() {return dataSource.getAllRoutinesSubject();}

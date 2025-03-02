@@ -30,6 +30,11 @@ public class Routine {
     }
 
 
+    public Routine(){
+        this.name = "New Routine";
+    }
+
+
     public Integer getId() {return id;}
 
     public String getName() {

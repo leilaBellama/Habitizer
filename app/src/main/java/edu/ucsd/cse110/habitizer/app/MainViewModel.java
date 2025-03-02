@@ -28,7 +28,7 @@ public class MainViewModel extends ViewModel{
     private final Subject<Integer> routineId;
     private final Subject<String> taskName;
     private final Subject<String> goalTime;
-    private final Subject<Routine> curRoutine;
+    private final Subject<List<Routine>> routines;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -51,11 +51,15 @@ public class MainViewModel extends ViewModel{
         this.elapsedTime = new Subject<>();
         this.taskName = new Subject<>();
         this.goalTime = new Subject<>();
-        this.curRoutine = new Subject<>();
+        this.routines = new Subject<>();
 
         this.routineId.setValue(0);
 
-
+        repository.findAll().observe(list -> {
+            Log.d("MVM obs routines", String.valueOf(repository.count()));
+            routines.setValue(list);
+        });
+        //repository.findAll().observe(routines::setValue);Log.d("MVM obs routines", String.valueOf(repository.count()));
 
         routineId.observe(id -> {
             if(id == null)return;
@@ -95,6 +99,12 @@ public class MainViewModel extends ViewModel{
 
     }
 
+    public void newRoutine(){
+        repository.save(new Routine());
+        Log.d("MVM newRoutine", "has added");
+
+    }
+
     public void startRoutine(){
 
         if (hasStarted.getValue() != null) return;
@@ -112,7 +122,7 @@ public class MainViewModel extends ViewModel{
         if (hasStarted.getValue() == null) return;
         if (!hasStarted.getValue()) return;
         hasStarted.setValue(false);
-        Log.d("MVM", "has started " + hasStarted.getValue());
+        //Log.d("MVM", "has started " + hasStarted.getValue());
 
         if (timer.getValue() == null) return;
         timer.getValue().end();
@@ -178,6 +188,10 @@ public class MainViewModel extends ViewModel{
         repository.save(newRoutine);
     }
 
+    public void setRoutineId(Integer id){
+        routineId.setValue(id);
+    }
+
     public Subject<String> getTaskName(){
         return this.taskName;
     }
@@ -204,9 +218,11 @@ public class MainViewModel extends ViewModel{
         return hasStarted;
     }
 
-    public Subject<Routine> getCurRoutine() {
-        return curRoutine;
+
+    public Subject<List<Routine>> getRoutines() {
+        return routines;
     }
+
 
     public Subject<Integer> getRoutineId() {
         return routineId;
