@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
+import edu.ucsd.cse110.habitizer.lib.domain.RoutineBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.SimpleTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
@@ -102,19 +103,35 @@ public class MainViewModel extends ViewModel{
 
     }
 
-    /*
+
     public void reset(){
+
+        if(routineId.getValue() == null) return;
         var routine = repository.find(routineId.getValue()).getValue();
         if(routine == null) return;
+        /*
+        //routine = routine.reset();
+        var list = TaskList.resetAll(routine.getTasks());
+        var newRoutine = new RoutineBuilder()
+                .setId(routine.getId())
+                .setName(routine.getName())
+                .setTasks(list)
+                .setGoalTime(routine.getGoalTime())
+                .buildRoutine();
+        //repository.save(newRoutine);
+
+         */
+
         routine.setHasStarted(null);
         routine.setTimer(null);
         routine.setElapsedSeconds(null);
         routine.setElapsedMinutes(null);
-        //routine.setTasks(TaskList.resetAll(routine.getTasks()));
-        repository.save(routine);
+        routine.setTasks(TaskList.resetAll(routine.getTasks()));
+
+
     }
 
-     */
+
 
     public void startRoutine(){
         if (hasStarted.getValue() != null) return;

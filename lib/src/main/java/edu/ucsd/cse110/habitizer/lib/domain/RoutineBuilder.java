@@ -19,7 +19,7 @@ public class RoutineBuilder {
     }
 
     public Routine buildRoutine() {
-        return new Routine(this.id,this.name,this.hasStarted,this.hasEnded, this.elapsedMinutes,this.elapsedSeconds, this.goalTime, this.tasks,this.timer);
+        return new Routine(this.id,this.name,this.hasStarted, this.elapsedMinutes,this.elapsedSeconds, this.goalTime, this.tasks,this.timer);
     }
 
     public RoutineBuilder setElapsedMinutes(Integer elapsedMinutes) {

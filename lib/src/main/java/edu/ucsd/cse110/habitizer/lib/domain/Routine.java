@@ -9,7 +9,6 @@ public class Routine {
     private Integer id;
     private String name;
     private Boolean hasStarted;
-    private Boolean hasEnded;
     private Integer elapsedMinutes;
     private Integer elapsedSeconds;
     private String goalTime;
@@ -17,11 +16,10 @@ public class Routine {
     private RoutineTimer timer;
 
 
-    public Routine(@Nullable Integer id, @Nullable String name, @Nullable Boolean hasStarted, @Nullable Boolean hasEnded, @Nullable Integer elapsedMinutes,@Nullable Integer elapsedSeconds, @Nullable String goalTime,@Nullable List<Task> tasks, @Nullable RoutineTimer timer){
+    public Routine(@Nullable Integer id, @Nullable String name, @Nullable Boolean hasStarted, @Nullable Integer elapsedMinutes,@Nullable Integer elapsedSeconds, @Nullable String goalTime,@Nullable List<Task> tasks, @Nullable RoutineTimer timer){
         this.id = id;
         this.name = name;
         this.hasStarted = hasStarted;
-        this.hasEnded = hasEnded;
         this.elapsedMinutes = elapsedMinutes;
         this.elapsedSeconds = elapsedSeconds;
         this.goalTime = goalTime;
@@ -37,6 +35,16 @@ public class Routine {
         copy.set(id,current);
         return copy;
     }
+
+    /*
+    public Routine reset(){
+
+        return new Routine();
+        //var list = TaskList.resetAll(tasks);
+        //return new Routine(this.getId(),this.getName(),null,null,null, this.getGoalTime(),list,null);
+    }
+
+     */
 
     public Routine(){
         this.name = "New Routine";
@@ -69,7 +77,7 @@ public class Routine {
 
 
     public Routine withId(Integer id){
-        return new Routine(id,this.name,this.hasStarted,this.hasEnded, this.elapsedMinutes,this.elapsedSeconds, this.goalTime, this.tasks,this.timer);
+        return new Routine(id,this.name,this.hasStarted, this.elapsedMinutes,this.elapsedSeconds, this.goalTime, this.tasks,this.timer);
     }
 
     public void setElapsedMinutes(Integer elapsedMinutes) {
@@ -81,9 +89,6 @@ public class Routine {
 
     public void setHasStarted(Boolean hasStarted) {
         this.hasStarted = hasStarted;
-    }
-    public void setHasEnded(Boolean hasEnded) {
-        this.hasEnded = hasEnded;
     }
 
     public void setName(String name) {
