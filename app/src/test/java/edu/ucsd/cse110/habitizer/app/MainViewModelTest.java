@@ -9,7 +9,6 @@ import edu.ucsd.cse110.habitizer.lib.domain.OriginalTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Repository;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineBuilder;
-import edu.ucsd.cse110.habitizer.lib.domain.RoutineTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class MainViewModelTest extends TestCase {
@@ -69,11 +68,9 @@ public class MainViewModelTest extends TestCase {
         var routine = repository.find(id).getValue();
         assertNull(routine.getHasStarted());
         assertNull(routine.getElapsedMinutes());
-        assertNull(routine.getTimer());
 
         mvm.startRoutine();
         assertTrue(routine.getHasStarted().booleanValue());
-        assertNotNull(routine.getTimer());
 
     }
 
@@ -84,7 +81,6 @@ public class MainViewModelTest extends TestCase {
         assertFalse(routine.getHasStarted());
         assertNotNull(routine.getElapsedMinutes());
         assertNotNull(routine.getElapsedSeconds());
-        assertNotNull(routine.getTimer());
 
     }
 
@@ -130,7 +126,6 @@ public class MainViewModelTest extends TestCase {
         mvm.advanceTime();
 
         assertEquals(0,(int)repository.find(id).getValue().getElapsedMinutes());
-        assertEquals(15,(int)repository.find(id).getValue().getTimer().getElapsedSeconds());
         mvm.advanceTime();
         mvm.advanceTime();
         mvm.advanceTime();

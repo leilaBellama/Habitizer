@@ -4,15 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.OriginalTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineBuilder;
-import edu.ucsd.cse110.habitizer.lib.domain.RoutineTimer;
-import edu.ucsd.cse110.habitizer.lib.domain.SimpleTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
-import edu.ucsd.cse110.habitizer.lib.domain.TaskList;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public class InMemoryDataSource {
 
@@ -53,7 +49,6 @@ public class InMemoryDataSource {
                     .setName("Morning")
                     .setTasks(Morning)
                     .setGoalTime("35")
-                    .setTimer(new RoutineTimer(60))
                     .buildRoutine(),
 
             new RoutineBuilder()
@@ -61,7 +56,6 @@ public class InMemoryDataSource {
                     .setName("Evening")
                     .setTasks(Evening)
                     .setGoalTime("30")
-                    .setTimer(new RoutineTimer(60))
                     .buildRoutine()
     );
 

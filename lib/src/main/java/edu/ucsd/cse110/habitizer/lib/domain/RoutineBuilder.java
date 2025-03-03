@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 public class RoutineBuilder {
 
@@ -12,14 +11,13 @@ public class RoutineBuilder {
     private Integer elapsedSeconds;
     private String goalTime;
     private List<Task> tasks;
-    private RoutineTimer timer;
 
     public RoutineBuilder(){
 
     }
 
     public Routine buildRoutine() {
-        return new Routine(this.id,this.name,this.hasStarted, this.elapsedMinutes,this.elapsedSeconds, this.goalTime, this.tasks,this.timer);
+        return new Routine(this.id,this.name,this.hasStarted, this.elapsedMinutes,this.elapsedSeconds, this.goalTime, this.tasks);
     }
 
     public RoutineBuilder setElapsedMinutes(Integer elapsedMinutes) {
@@ -57,10 +55,6 @@ public class RoutineBuilder {
 
     public RoutineBuilder setGoalTime(String time) {
         this.goalTime = time;
-        return this;
-    }
-    public RoutineBuilder setTimer(RoutineTimer timer) {
-        this.timer = timer;
         return this;
     }
 }

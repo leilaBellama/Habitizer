@@ -1,4 +1,6 @@
-package edu.ucsd.cse110.habitizer.lib.domain;
+package edu.ucsd.cse110.habitizer.app;
+
+import android.util.Log;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -19,9 +21,7 @@ public class RoutineTimer {
         this.hasStarted = new Subject<>();
         this.elapsedMin = new Subject<>();
         this.interval = interval;
-        this.scheduler = Executors.newSingleThreadScheduledExecutor();
 
-        elapsedMin.setValue(0);
         hasStarted.setValue(false);
     }
 
@@ -59,26 +59,31 @@ public class RoutineTimer {
             elapsedMin.setValue(elapsedMin.getValue()+1);
             elapsedSeconds -= interval;
         }
-        //Log.d("m","Advanced by 30 seconds minutes: " + getElapsedTime().getValue() + " seconds " + elapsedSeconds);
+        Log.d("m","Advanced by 15 seconds minutes: " + getElapsedMinutes().getValue() + " seconds " + elapsedSeconds);
     }
 
     public void start() {
-        if (hasStarted.getValue()) return;
+        //if (hasStarted.getValue()) return;
+        if (scheduler == null || scheduler.isShutdown()) { // Create a new instance if shutdown
+            scheduler = Executors.newScheduledThreadPool(1);
+        }
+        elapsedMin.setValue(0);
+        elapsedSeconds = 0;
         hasStarted.setValue(true);
         scheduler.scheduleWithFixedDelay(() -> {
             elapsedSeconds++;
             if (elapsedSeconds >= interval) {
                 elapsedMin.setValue(elapsedMin.getValue() + 1);
                 elapsedSeconds = 0;
-                //Log.d("m","Elapsed time: " + getElapsedTime().getValue() + " minutes,");
+                Log.d("m","Elapsed time: " + getElapsedMinutes().getValue() + " minutes,");
             }
-            //Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
+            Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
         }, 0, 1, TimeUnit.SECONDS);
     }
 
     public void stop() {
         scheduler.shutdown();
-//        Log.d("m", "Timer stopped at: " + getElapsedTime().getValue() + " minutes");
+        Log.d("m", "Timer stopped at: " + getElapsedMinutes().getValue() + " minutes");
     }
 
     public void end() {

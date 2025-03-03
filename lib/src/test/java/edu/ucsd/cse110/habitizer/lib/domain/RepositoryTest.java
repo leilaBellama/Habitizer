@@ -68,7 +68,33 @@ public class RepositoryTest {
         assertEquals(repository.find(0).getValue().getName(), "Morning");
         assertEquals(repository.find(2).getValue().getName(), "Monday");
         assertEquals(repository.find(3).getValue().getName(), "Tuesday");
+
+        var routine = repository.find(0).getValue();
+
+        /*
+        var list = TaskList.resetAll(routine.getTasks());
+        var newRoutine = new RoutineBuilder()
+                .setId(routine.getId())
+                .setName(routine.getName())
+                .setTasks(list)
+                .setGoalTime(routine.getGoalTime())
+                .buildRoutine();
+        repository.save(newRoutine);
+        assertNull(repository.find(0).getValue().getHasStarted());
+
+         */
+
+        assertNotNull(repository.find(0).getValue().getHasStarted());
+
+        routine.setHasStarted(null);
+        routine.setElapsedSeconds(null);
+        routine.setElapsedMinutes(null);
+        routine.setTasks(TaskList.resetAll(routine.getTasks()));
+        repository.save(routine);
+        assertNull(repository.find(0).getValue().getHasStarted());
+
     }
+
 
 
     /*

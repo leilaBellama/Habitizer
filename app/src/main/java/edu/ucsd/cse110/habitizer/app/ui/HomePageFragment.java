@@ -59,37 +59,11 @@ public class HomePageFragment extends Fragment {
         setupMVP();
         return view.getRoot();
     }
-    /*
-    public void onCreateMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.action_bar, menu);
-        //super.onCreateOptionsMenu(menu, inflater);
-    }
 
-    public void onPrepareMenu(Menu menu) {
-        //super.onPrepareMenu(menu);
-        var item = menu.findItem(R.id.action_bar_menu_swap_views);
-        item.setVisible(!onHomePage);
-        item.setEnabled(!onHomePage);
-        //return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        var itemId = item.getItemId();
-        if (itemId == R.id.action_bar_menu_swap_views) {
-            onHomePage = false;
-            invalidateOptionsMenu();
-            swapFragments();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-     */
     @Override
     public void onDestroyView(){
         super.onDestroyView();
 
-        //requireActivity().invalidateOptionsMenu();
         model.getRoutines().removeObservers();
     }
 
@@ -115,11 +89,8 @@ public class HomePageFragment extends Fragment {
         ));
 
         button.setOnClickListener(view -> {
-            //model.swapCurrentRoutine(routine.getId());
             model.setRoutineId(routine.getId());
             switchFragment();
-            //((MainActivity) requireActivity()).swapFragments();
-            //Collections.swap(model.getRoutines().getValue(),0,routine.getId());
         });
         view.HomePageButtonsLayout.addView(button);
     }

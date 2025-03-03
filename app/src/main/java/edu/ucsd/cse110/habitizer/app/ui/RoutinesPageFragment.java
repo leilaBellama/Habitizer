@@ -30,9 +30,7 @@ public class RoutinesPageFragment extends Fragment {
 
     private boolean started = false;
 
-
     public RoutinesPageFragment() {
-        // Required empty public constructor
     }
 
     public static RoutinesPageFragment newInstance() {
@@ -50,6 +48,12 @@ public class RoutinesPageFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.model = modelProvider.get(MainViewModel.class);
 
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        model.stopTimer();
     }
 
 
@@ -81,11 +85,10 @@ public class RoutinesPageFragment extends Fragment {
                 view.goalTime.setText(goalTime + " min");
             }
         });
-        model.getElapsedTime().observe(time -> {
+        model.getElapsedTime().observe(getViewLifecycleOwner(),time -> {
             if (time != null) {
-                view.time.setText(time + " min");
-                //runOnUiThread(() -> view.time.setText(time + " min"));
                 Log.d("MA","obs time " + time);
+                view.time.setText(time + " min");
             }
         });
         view.homeButton.setOnClickListener(v -> swapFragments());
