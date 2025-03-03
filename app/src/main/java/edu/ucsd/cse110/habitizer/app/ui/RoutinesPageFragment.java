@@ -2,11 +2,18 @@ package edu.ucsd.cse110.habitizer.app.ui;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,6 +26,9 @@ import edu.ucsd.cse110.habitizer.app.ui.dialog.EditGoalTimeDialogFragment;
 public class RoutinesPageFragment extends Fragment {
     private FragmentRoutinesPageBinding view;
     private MainViewModel model;
+    private MenuProvider menuProvider;
+
+    private boolean started = false;
 
 
     public RoutinesPageFragment() {
@@ -42,12 +52,20 @@ public class RoutinesPageFragment extends Fragment {
 
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = FragmentRoutinesPageBinding.inflate(inflater,container,false);
         setupMVP();
         return view.getRoot();
+    }
+
+    public void swapFragments() {
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.Home_page_fragment_container, new HomePageFragment())
+                .commit();
     }
 
     private void setupMVP() {
@@ -70,6 +88,7 @@ public class RoutinesPageFragment extends Fragment {
                 Log.d("MA","obs time " + time);
             }
         });
+        view.homeButton.setOnClickListener(v -> swapFragments());
         view.startButton.setOnClickListener(v -> startRoutine());
         view.endButton.setOnClickListener(v -> endRoutine());
         view.stopTime.setOnClickListener(v -> {
@@ -78,12 +97,8 @@ public class RoutinesPageFragment extends Fragment {
         });
         view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());
         view.addTaskButton.setOnClickListener(v -> {
-            //if(started){
-                //view.addTaskButton.setEnabled(false);
-            //}else {
-                var dialogFragment = CreateTaskDialogFragment.newInstance();
-                dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
-            //}
+            var dialogFragment = CreateTaskDialogFragment.newInstance();
+            dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
         });
         view.goalTime.setOnClickListener(v -> {
             var dialogFragment = EditGoalTimeDialogFragment.newInstance();
@@ -99,8 +114,7 @@ public class RoutinesPageFragment extends Fragment {
         view.endButton.setEnabled(false);
         view.endButton.requestLayout();
         model.endRoutine();
-        //started = false;
-        //invalidateOptionsMenu();
+        view.homeButton.setVisibility(View.VISIBLE);
     }
 
     private void startRoutine() {
@@ -111,9 +125,8 @@ public class RoutinesPageFragment extends Fragment {
         view.addTaskButton.setVisibility(View.GONE);
         view.stopTime.setVisibility(View.VISIBLE);
         view.advanceTimeButton.setVisibility(View.VISIBLE);
+        view.homeButton.setVisibility(View.GONE);
         model.startRoutine();
-        //started = true;
-        //invalidateOptionsMenu();
     }
     private void reset() {
         view.startButton.setVisibility(View.VISIBLE);
@@ -123,7 +136,6 @@ public class RoutinesPageFragment extends Fragment {
         view.addTaskButton.setEnabled(true);
         view.stopTime.setVisibility(View.GONE);
         view.advanceTimeButton.setVisibility(View.GONE);
-        //started = false;
-        //invalidateOptionsMenu();
+        view.homeButton.setVisibility(View.VISIBLE);
     }
 }

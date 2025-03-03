@@ -5,6 +5,7 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -53,10 +54,10 @@ public class MainViewModel extends ViewModel{
         this.goalTime = new Subject<>();
         this.routines = new Subject<>();
 
-        this.routineId.setValue(0);
+        //this.routineId.setValue(0);
 
         repository.findAll().observe(list -> {
-            Log.d("MVM obs routines", String.valueOf(repository.count()));
+            //Log.d("MVM obs routines", String.valueOf(repository.count()));
             routines.setValue(list);
         });
         //repository.findAll().observe(routines::setValue);
@@ -74,7 +75,6 @@ public class MainViewModel extends ViewModel{
                 timer.setValue(curRoutine.getTimer());
                 //Log.d("MVM obs", routineTitle.getValue() + " hasStarted " + hasStarted.getValue() + " elp time " + elapsedTime.getValue() + " goal time " + goalTime.getValue());
 
-                //when timers elapsedTime updates, update this elapsedTime
                 if(timer.getValue() == null)return;
                 timer.getValue().getElapsedMinutes().observe(val -> {
                     if(val == null) return;
@@ -98,12 +98,11 @@ public class MainViewModel extends ViewModel{
 
     public void newRoutine(){
         repository.save(new Routine());
-        Log.d("MVM newRoutine", "has added");
+        //Log.d("MVM newRoutine", "has added");
 
     }
 
     public void startRoutine(){
-
         if (hasStarted.getValue() != null) return;
         var routine = repository.find(routineId.getValue()).getValue();
         if(routine == null) return;
@@ -136,9 +135,9 @@ public class MainViewModel extends ViewModel{
     public void stopTimer() {
         var started = hasStarted.getValue();
         if (started == null) return;
-        if (started) {
-            timer.getValue().stop();
-        }
+        if (!started) return;
+        timer.getValue().stop();
+
         var routine = repository.find(routineId.getValue()).getValue();
         if(routine == null) return;
         routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
@@ -149,22 +148,18 @@ public class MainViewModel extends ViewModel{
     public void advanceTime() {
         if (timer.getValue() == null) return;
         timer.getValue().advanceTime(15);
-    }
-    public void swapRoutine() {
-        //Log.d("MVM swap before", routineTitle.getValue() + " hasStarted " + hasStarted.getValue() );
-        if (routineId.getValue() == null) return;
-        if (routineId.getValue() == 0){
-            routineId.setValue(1);
-        } else {
-            routineId.setValue(0);
-        }
-        //Log.d("MVM swap after", routineTitle.getValue() + " hasStarted " + hasStarted.getValue() );
+        var routine = repository.find(routineId.getValue()).getValue();
+        if(routine == null) return;
+        routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
+        routine.setElapsedSeconds(timer.getValue().getElapsedSeconds());
+
     }
 
     public void addTask(Task task){
-        if(orderedTasks.getValue() == null) return;
         if(routineId.getValue() == null) return;
-        var newList = TaskList.addTask(orderedTasks.getValue(),new SimpleTask(task.getId(), task.getTaskName(),task.getRoutineId()));
+        var tasks = orderedTasks.getValue();
+        if(tasks == null) tasks = new ArrayList<>();
+        var newList = TaskList.addTask(tasks,new SimpleTask(task.getId(), task.getTaskName(),task.getRoutineId()));
         var newRoutine = repository.find(routineId.getValue()).getValue();
         if(newRoutine == null) return;
         newRoutine.setTasks(newList);
@@ -187,7 +182,7 @@ public class MainViewModel extends ViewModel{
 
     public void setRoutineId(Integer id){
         routineId.setValue(id);
-        Log.d("MVM setID","routine id = " + id);
+        //Log.d("MVM setID","routine id = " + id);
     }
 
     public Subject<String> getTaskName(){

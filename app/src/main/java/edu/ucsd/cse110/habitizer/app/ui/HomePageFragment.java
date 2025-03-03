@@ -59,12 +59,11 @@ public class HomePageFragment extends Fragment {
         setupMVP();
         return view.getRoot();
     }
+    /*
     public void onCreateMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.action_bar, menu);
         //super.onCreateOptionsMenu(menu, inflater);
     }
-
-    /*
 
     public void onPrepareMenu(Menu menu) {
         //super.onPrepareMenu(menu);
@@ -73,7 +72,6 @@ public class HomePageFragment extends Fragment {
         item.setEnabled(!onHomePage);
         //return super.onPrepareOptionsMenu(menu);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -91,7 +89,7 @@ public class HomePageFragment extends Fragment {
     public void onDestroyView(){
         super.onDestroyView();
 
-        requireActivity().invalidateOptionsMenu();
+        //requireActivity().invalidateOptionsMenu();
         model.getRoutines().removeObservers();
     }
 

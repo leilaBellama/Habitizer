@@ -18,6 +18,11 @@ public class MainViewModelTest extends TestCase {
     Repository rep;
     MainViewModel mvm;
 
+    Integer id;
+
+    Repository repository;
+
+
     public final static List<Task> Morning = List.of(
             new OriginalTask(0, "Morning Task 1",true),
             new OriginalTask(1, "Morning Task 2",true),
@@ -36,23 +41,15 @@ public class MainViewModelTest extends TestCase {
             new RoutineBuilder()
                     .setId(null)
                     .setName("Morning")
-                    //.setHasStarted(null)
-                    //.setElapsedMinutes(0)
-                    //.setElapsedSeconds(0)
                     .setTasks(Morning)
                     .setGoalTime("35")
-                    //.setTimer(new RoutineTimer(60))
                     .buildRoutine(),
 
             new RoutineBuilder()
                     .setId(null)
                     .setName("Evening")
-                    //.setHasStarted(null)
-                    //.setElapsedMinutes(0)
-                    //.setElapsedSeconds(0)
                     .setTasks(Evening)
                     .setGoalTime("30")
-                    //.setTimer(new RoutineTimer(60))
                     .buildRoutine()
     );
 
@@ -61,13 +58,14 @@ public class MainViewModelTest extends TestCase {
         rep = new Repository(dataSource);
         rep.save(routines);
         mvm = new MainViewModel(rep);
+        mvm.setRoutineId(0);
+        id = mvm.getRoutineId().getValue();
+        repository = mvm.getRepository();
         super.setUp();
     }
 
+    //before switching routines, after switching, and to new routine
     public void testStartRoutine() {
-
-        var id = mvm.getRoutineId().getValue();
-        var repository = mvm.getRepository();
         var routine = repository.find(id).getValue();
         assertNull(routine.getHasStarted());
         assertNull(routine.getElapsedMinutes());
@@ -80,8 +78,6 @@ public class MainViewModelTest extends TestCase {
     }
 
     public void testEndRoutine() {
-        var id = mvm.getRoutineId().getValue();
-        var repository = mvm.getRepository();
         var routine = repository.find(id).getValue();
         mvm.startRoutine();
         mvm.endRoutine();
@@ -91,34 +87,71 @@ public class MainViewModelTest extends TestCase {
         assertNotNull(routine.getTimer());
 
     }
+
+    public void testNewRoutine(){
+        assertEquals(2,mvm.getRoutines().getValue().size());
+        mvm.newRoutine();
+        assertEquals(3,mvm.getRoutines().getValue().size());
+        assertEquals("New Routine",repository.find(2).getValue().getName());
+
+    }
+
+    //before switching routines, after switching, and to new routine
     public void testAddTask() {
-        var id = mvm.getRoutineId().getValue();
-        var repository = mvm.getRepository();
-        var routine = repository.find(id).getValue();
         assertEquals(5,repository.find(0).getValue().getTasks().size());
         assertEquals(4,repository.find(1).getValue().getTasks().size());
 
         mvm.addTask(new OriginalTask(null,"new morning task",true));
-        mvm.swapRoutine();
+        mvm.setRoutineId(1);
         mvm.addTask(new OriginalTask(null,"new evening task",false));
 
+        mvm.newRoutine();
+        mvm.setRoutineId(2);
+        assertEquals(0,repository.find(2).getValue().getTasks().size());
+
+        mvm.addTask(new OriginalTask(null,"new task",false));
         assertEquals(6,repository.find(0).getValue().getTasks().size());
         assertEquals(5,repository.find(1).getValue().getTasks().size());
+        assertEquals(1,repository.find(2).getValue().getTasks().size());
+
     }
+
     public void testStopTimer() {
+        assertNull(mvm.getElapsedTime().getValue());
+        mvm.startRoutine();
+        mvm.stopTimer();
+        assertEquals(0,(int)mvm.getElapsedTime().getValue());
     }
 
     public void testAdvanceTime() {
+
+        mvm.startRoutine();
+        mvm.stopTimer();
+        mvm.advanceTime();
+
+        assertEquals(0,(int)repository.find(id).getValue().getElapsedMinutes());
+        assertEquals(15,(int)repository.find(id).getValue().getTimer().getElapsedSeconds());
+        mvm.advanceTime();
+        mvm.advanceTime();
+        mvm.advanceTime();
+        mvm.advanceTime();
+        assertEquals(1,(int)repository.find(id).getValue().getElapsedMinutes());
+        assertEquals(15,(int)repository.find(id).getValue().getElapsedSeconds());
+
     }
-
-    public void testSwapRoutine() {
-    }
-
-
 
     public void testSetTaskName() {
+        assertEquals("Morning Task 1",repository.find(id).getValue().getTasks().get(0).getTaskName());
+
+        mvm.setTaskName(0, "new name");
+        assertEquals("new name",repository.find(id).getValue().getTasks().get(0).getTaskName());
     }
 
     public void testSetGoalTime() {
+        assertEquals("35",repository.find(id).getValue().getGoalTime());
+
+        mvm.setGoalTime("5");
+        assertEquals("5",repository.find(id).getValue().getGoalTime());
+
     }
 }

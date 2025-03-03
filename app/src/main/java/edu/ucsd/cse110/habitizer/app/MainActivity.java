@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(view.getRoot());
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar, menu);
@@ -59,5 +60,7 @@ public class MainActivity extends AppCompatActivity {
         invalidateOptionsMenu();
 
     }
+
+     */
 
 }
