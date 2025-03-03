@@ -12,8 +12,6 @@ import edu.ucsd.cse110.habitizer.app.ui.HomePageFragment;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
-    //private MainViewModel model;
-    private boolean isShowingMorning = true;
     private boolean onHomePage = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,14 +19,6 @@ public class MainActivity extends AppCompatActivity {
         setTitle(R.string.app_name);
 
         this.view = ActivityMainBinding.inflate(getLayoutInflater());
-
-        /*
-        var modelOwner = this;
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        this.model = modelProvider.get(MainViewModel.class);
-
-         */
 
         setContentView(view.getRoot());
     }
@@ -65,21 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.Home_page_fragment_container, HomePageFragment.newInstance())
                 .commit();
-        /*
-        if(onHomePage){
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.Home_page_fragment_container, HomePageFragment.newInstance())
-                    .commit();
-        } else {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, HomePageFragment.newInstance())
-                    .commit();
-        }
-        //onHomePage = !onHomePage;
 
-         */
         invalidateOptionsMenu();
 
     }

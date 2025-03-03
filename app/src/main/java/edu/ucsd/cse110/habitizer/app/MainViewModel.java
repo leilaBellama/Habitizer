@@ -59,7 +59,7 @@ public class MainViewModel extends ViewModel{
             Log.d("MVM obs routines", String.valueOf(repository.count()));
             routines.setValue(list);
         });
-        //repository.findAll().observe(routines::setValue);Log.d("MVM obs routines", String.valueOf(repository.count()));
+        //repository.findAll().observe(routines::setValue);
 
         routineId.observe(id -> {
             if(id == null)return;
@@ -82,10 +82,7 @@ public class MainViewModel extends ViewModel{
                     elapsedTime.setValue(val);
 
                 });
-            });/*
-            var r = repository.find(id).getValue();
-            curRoutine.setValue(repository.find(id).getValue());
-            */
+            });
 
         });
 
@@ -96,12 +93,6 @@ public class MainViewModel extends ViewModel{
 //            var task = tasks.get(0);
 //            this.topTask.setValue(task);
 //        });
-
-    }
-
-    public void swapCurrentRoutine(Integer id){
-        var list = Routine.swapCurrentRoutine(getRoutines().getValue(), id);
-        repository.save(list);
 
     }
 

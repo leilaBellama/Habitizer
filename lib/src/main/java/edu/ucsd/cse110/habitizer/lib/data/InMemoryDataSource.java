@@ -24,23 +24,8 @@ public class InMemoryDataSource {
 
     private final Subject<List<Routine>> allRoutinesSubject
             = new Subject<>();
-    //private final Subject<Integer> count = new Subject<>();
-
 
     private int nextId = 0;
-
-    /*
-    private int nextTaskId = 0;
-
-    private final Map<Integer, Task> tasks
-            = new HashMap<>();
-    private final Map<Integer, Subject<Task>> taskSubjects
-            = new HashMap<>();
-    private final Subject<List<Task>> allTasksSubject
-            = new Subject<>();
-
-     */
-
 
     public InMemoryDataSource() {
 
@@ -94,9 +79,6 @@ public class InMemoryDataSource {
         routines.put(fixedRoutine.getId(), fixedRoutine);
         if (routineSubjects.containsKey(fixedRoutine.getId())) {
             routineSubjects.get(fixedRoutine.getId()).setValue(fixedRoutine);
-        } else {
-            //if(count.getValue() == null) count.setValue(1);
-            //else count.setValue(count.getValue() + 1);
         }
         allRoutinesSubject.setValue(new ArrayList<Routine>(getRoutines()));
     }
@@ -105,7 +87,6 @@ public class InMemoryDataSource {
         var id = routine.getId();
         if (id == null) {
             routine = routine.withId(nextId++);
-            //nextId += 1;
         } else if (id >= nextId) {
             nextId = id + 1;
         }
@@ -139,82 +120,6 @@ public class InMemoryDataSource {
     public Subject<List<Routine>> getAllRoutinesSubject() {
         return allRoutinesSubject;
     }
-
-    /*
-    public Subject<Integer> getCountSubject(){
-        return count;
-    }
-
-     */
-
-
-
-    /*
-
-    public void putTask(Task task) {
-        var fixedCard = preInsertTask(task);
-        tasks.put(fixedCard.getId(), fixedCard);
-        if (taskSubjects.containsKey(fixedCard.getId())) {
-            taskSubjects.get(fixedCard.getId()).setValue(fixedCard);
-        }
-        allTasksSubject.setValue(new ArrayList<Task>(getTasks()));
-    }
-    private Task preInsertTask(Task task) {
-        var id = task.getId();
-        if (id == null) {
-
-            //nextTaskId += 1;
-            task = task.withId(nextTaskId++);
-        } else if (id >= nextTaskId) {
-            nextTaskId = id + 1;
-        }
-        return task;
-    }
-    public void removeTask(int id) {
-        tasks.remove(id);
-        if (taskSubjects.containsKey(id)) {
-            taskSubjects.get(id).setValue(null);
-        }
-        allTasksSubject.setValue(getTasks());
-    }
-
-    /*
-    public void editTask(int id, String name){
-        tasks.get(id).setName(name);
-    }
-
-
-
-    public List<Task> getTasks(){
-        return List.copyOf(tasks.values());
-    }
-
-    public List<Task> getTasksWithRoutineId(int routineId){
-        return tasks.values().stream()
-                .filter(task -> task.getRoutineId() == routineId) // Filter tasks by routineID
-                .collect(Collectors.toList());
-    }
-
-    public Task getTask(int id){
-        return tasks.get(id);
-    }
-
-
-    public Subject<Task> getTaskSubject(int id){
-        if(!taskSubjects.containsKey(id)){
-            var subject = new Subject<Task>();
-            subject.setValue(getTask(id));
-            taskSubjects.put(id, subject);
-        }
-        return taskSubjects.get(id);
-    }
-
-    public Subject<List<Task>> getAllTasksSubject() {
-        return allTasksSubject;
-    }
-
-     */
-
 
 }
 

@@ -47,15 +47,6 @@ public class CreateTaskDialogFragment extends DialogFragment{
 
         var task = new OriginalTask(null, taskName, true);
 
-        if (view.morningRadioButton.isChecked()) {
-            task.setMorningTask(true);
-        }
-        else if (view.eveningRadioButton.isChecked()) {
-            task.setMorningTask(false);
-        } else {
-            throw new IllegalStateException("No radio button is checked.");
-        }
-
         activityModel.addTask(task);
         dialog.dismiss();
     }
