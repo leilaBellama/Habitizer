@@ -2,11 +2,15 @@ package edu.ucsd.cse110.habitizer.app.ui;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,50 +19,24 @@ import android.widget.LinearLayout;
 import java.util.Collections;
 import java.util.List;
 
+import edu.ucsd.cse110.habitizer.app.MainActivity;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentHomePageBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutinesPageBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomePageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class HomePageFragment extends Fragment {
     private FragmentHomePageBinding view;
     private MainViewModel model;
 
-    private List<Routine> routineList;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public HomePageFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomePageFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomePageFragment newInstance(String param1, String param2) {
+    public static HomePageFragment newInstance() {
         HomePageFragment fragment = new HomePageFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,10 +49,6 @@ public class HomePageFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.model = modelProvider.get(MainViewModel.class);
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -85,12 +59,40 @@ public class HomePageFragment extends Fragment {
         setupMVP();
         return view.getRoot();
     }
+    public void onCreateMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.action_bar, menu);
+        //super.onCreateOptionsMenu(menu, inflater);
+    }
 
+    /*
+
+    public void onPrepareMenu(Menu menu) {
+        //super.onPrepareMenu(menu);
+        var item = menu.findItem(R.id.action_bar_menu_swap_views);
+        item.setVisible(!onHomePage);
+        item.setEnabled(!onHomePage);
+        //return super.onPrepareOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        var itemId = item.getItemId();
+        if (itemId == R.id.action_bar_menu_swap_views) {
+            onHomePage = false;
+            invalidateOptionsMenu();
+            swapFragments();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+     */
     @Override
     public void onDestroyView(){
         super.onDestroyView();
+
+        requireActivity().invalidateOptionsMenu();
         model.getRoutines().removeObservers();
-        Log.d("HPF", "destroyed");
     }
 
     private void setupMVP(){
@@ -101,16 +103,12 @@ public class HomePageFragment extends Fragment {
         view.newRoutineButton.setOnClickListener(v -> model.newRoutine());
     }
     private void updateRoutineButtons(List<Routine> routines) {
-        // Clear existing buttons to avoid duplication
         view.HomePageButtonsLayout.removeAllViews();
-
-        // Add a button for each routine
         for (Routine routine : routines) {
             addRoutineButton(routine);
         }
     }
     private void addRoutineButton(Routine routine) {
-        // Create a new button
         Button button = new Button(requireActivity());
         button.setText(routine.getName());
         button.setLayoutParams(new LinearLayout.LayoutParams(
@@ -118,24 +116,19 @@ public class HomePageFragment extends Fragment {
                 LinearLayout.LayoutParams.WRAP_CONTENT
         ));
 
-        // Set an OnClickListener for each button
         button.setOnClickListener(view -> {
-            // Perform action when button is clicked
-
-            model.swapCurrentRoutine(routine.getId());
+            //model.swapCurrentRoutine(routine.getId());
+            model.setRoutineId(routine.getId());
             switchFragment();
+            //((MainActivity) requireActivity()).swapFragments();
             //Collections.swap(model.getRoutines().getValue(),0,routine.getId());
-            //System.out.println(routine.getId() + "Clicked on: " + routine.getName() );
         });
-
-        // Add button to the layout
         view.HomePageButtonsLayout.addView(button);
     }
     private void switchFragment() {
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.Home_page_fragment_container, new RoutinesPageFragment()) // Swap to the new Fragment
-                //.addToBackStack(null) // Enables back navigation
+                .replace(R.id.Home_page_fragment_container, new RoutinesPageFragment())
                 .commit();
     }
 }

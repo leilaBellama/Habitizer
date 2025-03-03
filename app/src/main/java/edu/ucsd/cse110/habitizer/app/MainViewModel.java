@@ -102,8 +102,6 @@ public class MainViewModel extends ViewModel{
     public void swapCurrentRoutine(Integer id){
         var list = Routine.swapCurrentRoutine(getRoutines().getValue(), id);
         repository.save(list);
-        if (hasStarted.getValue() != null) return;
-
 
     }
 
@@ -198,6 +196,7 @@ public class MainViewModel extends ViewModel{
 
     public void setRoutineId(Integer id){
         routineId.setValue(id);
+        Log.d("MVM setID","routine id = " + id);
     }
 
     public Subject<String> getTaskName(){

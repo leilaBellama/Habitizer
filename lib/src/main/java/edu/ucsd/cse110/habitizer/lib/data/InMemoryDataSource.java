@@ -61,30 +61,11 @@ public class InMemoryDataSource {
             new OriginalTask(3, "Evening Task 4",false)
     );
 
-    /*
-    public final static List<Task> defaultTasks = List.of(
-
-            new SimpleTask(0, "Morning Task 1",0),
-            new SimpleTask(1, "Morning Task 2",0),
-            new SimpleTask(2, "Morning Task 3",0),
-            new SimpleTask(null, "Morning Task 4",0),
-            new SimpleTask(null, "Morning Task 5",0),
-            new SimpleTask(null, "Evening Task 1",1),
-            new SimpleTask(null, "Evening Task 2",1),
-            new SimpleTask(null, "Evening Task 3",1),
-            new SimpleTask(null, "Evening Task 4",1),
-            new SimpleTask(null, "Evening Task 5",1)
-    );
-
-     */
 
     public final static List<Routine> DEFAULT = List.of(
             new RoutineBuilder()
                     .setId(null)
                     .setName("Morning")
-                    //.setHasStarted(null)
-                    //.setElapsedMinutes(0)
-                    //.setElapsedSeconds(0)
                     .setTasks(Morning)
                     .setGoalTime("35")
                     .setTimer(new RoutineTimer(60))
@@ -93,9 +74,6 @@ public class InMemoryDataSource {
             new RoutineBuilder()
                     .setId(null)
                     .setName("Evening")
-                    //.setHasStarted(null)
-                    //.setElapsedMinutes(0)
-                    //.setElapsedSeconds(0)
                     .setTasks(Evening)
                     .setGoalTime("30")
                     .setTimer(new RoutineTimer(60))

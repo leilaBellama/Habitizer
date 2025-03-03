@@ -4,21 +4,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
-import edu.ucsd.cse110.habitizer.app.ui.RoutinesPageFragment;
-import edu.ucsd.cse110.habitizer.app.ui.dialog.CreateTaskDialogFragment;
-import edu.ucsd.cse110.habitizer.app.ui.dialog.EditGoalTimeDialogFragment;
-
-import androidx.lifecycle.ViewModelProvider;
+import edu.ucsd.cse110.habitizer.app.ui.HomePageFragment;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
     //private MainViewModel model;
     private boolean isShowingMorning = true;
-    private boolean started = false;
+    private boolean onHomePage = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,31 +39,48 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    /*
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         var item = menu.findItem(R.id.action_bar_menu_swap_views);
-        item.setVisible(!started);
-        item.setEnabled(!started);
+        Log.d("MA","menu " + onHomePage);
+        item.setVisible(!onHomePage);
+        item.setEnabled(!onHomePage);
+        onHomePage = !onHomePage;
         return super.onPrepareOptionsMenu(menu);
     }
 
-     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         var itemId = item.getItemId();
         if (itemId == R.id.action_bar_menu_swap_views) {
+
             swapFragments();
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    private void swapFragments() {
+    public void swapFragments() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.Home_page_fragment_container, RoutinesPageFragment.newInstance())
+                .replace(R.id.Home_page_fragment_container, HomePageFragment.newInstance())
                 .commit();
+        /*
+        if(onHomePage){
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.Home_page_fragment_container, HomePageFragment.newInstance())
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, HomePageFragment.newInstance())
+                    .commit();
+        }
+        //onHomePage = !onHomePage;
+
+         */
+        invalidateOptionsMenu();
 
     }
 

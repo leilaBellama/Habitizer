@@ -40,6 +40,7 @@ public class Routine {
 
     public Routine(){
         this.name = "New Routine";
+        this.goalTime = "---";
     }
 
 
