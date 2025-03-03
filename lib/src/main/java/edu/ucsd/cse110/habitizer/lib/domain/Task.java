@@ -28,6 +28,5 @@ public interface Task {
     //for testing purpose
     Task withId(int id);
 
-    int getRoutineId();
 
 }

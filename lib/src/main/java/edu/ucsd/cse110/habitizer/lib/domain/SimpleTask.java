@@ -6,17 +6,15 @@ import androidx.annotation.Nullable;
 public class SimpleTask implements Task {
     //Added Id here, might not be useful now, but good for later when we need to insert our task
     private @Nullable Integer id;
-    private Integer routineId;
     private @NonNull String taskName;
     private boolean checkedOff;
     private Integer checkedOffTime;
 
 
-    public SimpleTask(@Nullable Integer id, @NonNull String taskName, @Nullable Integer routineId ){
+    public SimpleTask(@Nullable Integer id, @NonNull String taskName){
         this.id = id;
         this.taskName = taskName;
         this.checkedOff = false;
-        this.routineId = routineId;
 
         this.checkedOffTime = 0;
     }
@@ -27,10 +25,6 @@ public class SimpleTask implements Task {
 
     @Override
     public void setId(int id){this.id = id;}
-
-    public int getRoutineId(){return routineId;}
-
-    public void setRoutineId(int id){this.routineId = id;}
 
     @NonNull
     @Override
@@ -60,11 +54,11 @@ public class SimpleTask implements Task {
 
     // Use this function for resetting after end routine
     @Override
-    public void reset() { this.checkedOff = false; }
+    public void reset() { this.checkedOff = false; this.checkedOffTime = 0;}
 
     //for testing purpose
     @Override
-    public Task withId(int id){ return new SimpleTask(id, this.taskName, this.routineId); }
+    public Task withId(int id){ return new SimpleTask(id, this.taskName); }
 
 
 }

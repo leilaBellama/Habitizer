@@ -11,6 +11,7 @@ public class TaskList {
     }
 
     public static List<Task> addTask(List<Task> list, Task task){
+        if(list == null) return null;
         var size = list.size();
         var newTask = task.withId(size);
         var copy = new ArrayList<>(List.copyOf(list));
@@ -18,7 +19,16 @@ public class TaskList {
         return copy;
     }
 
+    public static List<Task> resetAll(List<Task> list){
+        if(list == null) return null;
+        var copy = new ArrayList<>(List.copyOf(list));
+        for(var task : copy){
+            task.reset();
+        }
+        return copy;
+    }
     public static List<Task> removeTask(List<Task> list, int id){
+        if(list == null) return null;
         var copy = new ArrayList<>(List.copyOf(list));
         copy.remove(id);
         for (int i = id; i < copy.size(); i++) {
@@ -27,6 +37,7 @@ public class TaskList {
         return copy;
     }
     public static List<Task> editTaskName(List<Task> list, int id, String newName) {
+        if(list == null) return null;
         var copy = new ArrayList<>(List.copyOf(list));
         copy.get(id).setName(newName);
         return copy;

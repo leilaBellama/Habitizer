@@ -62,16 +62,10 @@ public class OriginalTask implements Task {
 
     // Use this function for resetting after end routine
     @Override
-    public void reset() { this.checkedOff = false; }
+    public void reset() { this.checkedOff = false; this.checkedOffTime = 0;}
 
     //for testing purpose
     @Override
     public Task withId(int id){ return new OriginalTask(id, this.taskName, this.isMorningTask); }
-
-    @Override
-    public int getRoutineId(){
-        if(isMorningTask) return 0;
-        return 1;
-    }
 
 }
