@@ -91,6 +91,7 @@ public class RoutinesPageFragment extends Fragment {
         view.homeButton.setOnClickListener(v -> swapFragments());
         view.startButton.setOnClickListener(v -> startRoutine());
         view.endButton.setOnClickListener(v -> endRoutine());
+        //view.resetButton.setOnClickListener(v -> reset());
         view.stopTime.setOnClickListener(v -> {
             model.stopTimer();
             view.stopTime.setVisibility(View.GONE);
@@ -137,5 +138,6 @@ public class RoutinesPageFragment extends Fragment {
         view.stopTime.setVisibility(View.GONE);
         view.advanceTimeButton.setVisibility(View.GONE);
         view.homeButton.setVisibility(View.VISIBLE);
+        //model.reset();
     }
 }

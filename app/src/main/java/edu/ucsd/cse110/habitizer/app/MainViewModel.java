@@ -102,6 +102,20 @@ public class MainViewModel extends ViewModel{
 
     }
 
+    /*
+    public void reset(){
+        var routine = repository.find(routineId.getValue()).getValue();
+        if(routine == null) return;
+        routine.setHasStarted(null);
+        routine.setTimer(null);
+        routine.setElapsedSeconds(null);
+        routine.setElapsedMinutes(null);
+        //routine.setTasks(TaskList.resetAll(routine.getTasks()));
+        repository.save(routine);
+    }
+
+     */
+
     public void startRoutine(){
         if (hasStarted.getValue() != null) return;
         var routine = repository.find(routineId.getValue()).getValue();
@@ -159,7 +173,7 @@ public class MainViewModel extends ViewModel{
         if(routineId.getValue() == null) return;
         var tasks = orderedTasks.getValue();
         if(tasks == null) tasks = new ArrayList<>();
-        var newList = TaskList.addTask(tasks,new SimpleTask(task.getId(), task.getTaskName(),task.getRoutineId()));
+        var newList = TaskList.addTask(tasks,new SimpleTask(task.getId(), task.getTaskName()));
         var newRoutine = repository.find(routineId.getValue()).getValue();
         if(newRoutine == null) return;
         newRoutine.setTasks(newList);
