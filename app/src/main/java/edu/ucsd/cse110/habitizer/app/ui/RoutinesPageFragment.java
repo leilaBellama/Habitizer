@@ -114,6 +114,7 @@ public class RoutinesPageFragment extends Fragment {
     }
     private void endRoutine() {
         view.advanceTimeButton.setVisibility(View.GONE);
+        view.startButton.setVisibility(View.GONE);
         view.stopTime.setVisibility(View.GONE);
         view.endButton.setText("Routine Ended");
         view.endButton.setEnabled(false);
