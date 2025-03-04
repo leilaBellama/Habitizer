@@ -59,11 +59,10 @@ public class RoutineTimer {
             elapsedMin.setValue(elapsedMin.getValue()+1);
             elapsedSeconds -= interval;
         }
-        Log.d("m","Advanced by 15 seconds minutes: " + getElapsedMinutes().getValue() + " seconds " + elapsedSeconds);
+//        Log.d("m","Advanced by 15 seconds minutes: " + getElapsedMinutes().getValue() + " seconds " + elapsedSeconds);
     }
 
     public void start() {
-        //if (hasStarted.getValue()) return;
         if (scheduler == null || scheduler.isShutdown()) { // Create a new instance if shutdown
             scheduler = Executors.newScheduledThreadPool(1);
         }
@@ -75,15 +74,15 @@ public class RoutineTimer {
             if (elapsedSeconds >= interval) {
                 elapsedMin.setValue(elapsedMin.getValue() + 1);
                 elapsedSeconds = 0;
-                Log.d("m","Elapsed time: " + getElapsedMinutes().getValue() + " minutes,");
+//                Log.d("m","Elapsed time: " + getElapsedMinutes().getValue() + " minutes,");
             }
-            Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
+//            Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
         }, 0, 1, TimeUnit.SECONDS);
     }
 
     public void stop() {
         scheduler.shutdown();
-        Log.d("m", "Timer stopped at: " + getElapsedMinutes().getValue() + " minutes");
+//        Log.d("m", "Timer stopped at: " + getElapsedMinutes().getValue() + " minutes");
     }
 
     public void end() {

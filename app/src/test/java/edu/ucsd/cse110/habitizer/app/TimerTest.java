@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.concurrent.Executors;
+
 @RunWith(MockitoJUnitRunner.class)
 public class TimerTest {
 
@@ -16,7 +18,7 @@ public class TimerTest {
     @Before
     public void setUp() {
 
-        routineTimer = new RoutineTimer(60);
+        routineTimer = new RoutineTimer(60, Executors.newScheduledThreadPool(1));
         routineTimer.getHasStarted().setValue(true);
         routineTimer.getElapsedMinutes().setValue(0);
     }
