@@ -19,28 +19,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RadioGroup
-        android:id="@+id/routine_mode_radio_button_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:checkedButton="@id/morning_radio_button"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/create_task_name_text">
-
-        <RadioButton
-            android:id="@+id/morning_radio_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Morning" />
-
-        <RadioButton
-            android:id="@+id/evening_radio_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Evening" />
-    </RadioGroup>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
