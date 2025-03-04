@@ -36,15 +36,9 @@ public class Routine {
         return copy;
     }
 
-    /*
     public Routine reset(){
-
-        return new Routine();
-        //var list = TaskList.resetAll(tasks);
-        //return new Routine(this.getId(),this.getName(),null,null,null, this.getGoalTime(),list,null);
+        return new Routine(this.getId(),this.getName(),false,0,0,this.getGoalTime(),new ArrayList<>());
     }
-
-     */
 
     public Routine(){
         this.name = "New Routine";
