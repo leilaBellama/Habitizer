@@ -29,7 +29,6 @@ public class MainViewModel extends ViewModel{
     private final Subject<Boolean> hasStarted;
     private final Subject<RoutineTimer> timer;
     private final MutableLiveData<Integer> elapsedTime;
-    //private final Subject<Integer> elapsedTime;
     private final Subject<Integer> routineId;
     private final Subject<String> taskName;
     private final Subject<String> goalTime;
@@ -54,21 +53,12 @@ public class MainViewModel extends ViewModel{
         this.hasStarted = new Subject<>();
         this.timer = new Subject<>();
         this.elapsedTime = new MutableLiveData<>();
-        //this.elapsedTime = new Subject<>();
         this.taskName = new Subject<>();
         this.goalTime = new Subject<>();
         this.routines = new Subject<>();
 
         this.timer.setValue(new RoutineTimer(60));
 
-        /*
-        repository.findAll().observe(list -> {
-            if(list == null) return;
-            //Log.d("MVM obs routines", String.valueOf(repository.count()));
-            routines.setValue(list);
-        });
-
-         */
         repository.findAll().observe(routines::setValue);
 
         routineId.observe(id -> {
@@ -88,7 +78,6 @@ public class MainViewModel extends ViewModel{
 
         timer.getValue().getElapsedMinutes().observe(val -> {
             if(val == null) return;
-            //Log.d("MVM timer", "time received: " + val);
             elapsedTime.postValue(val);
         });
 
@@ -104,7 +93,6 @@ public class MainViewModel extends ViewModel{
 
     public void newRoutine(){
         repository.save(new Routine());
-        //Log.d("MVM newRoutine", "has added");
     }
 
 

@@ -98,6 +98,7 @@ public class RoutinesPageFragment extends Fragment {
         view.stopTime.setOnClickListener(v -> {
             model.stopTimer();
             view.stopTime.setVisibility(View.GONE);
+            view.advanceTimeButton.setVisibility(View.VISIBLE);
         });
         view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());
         view.addTaskButton.setOnClickListener(v -> {
@@ -112,9 +113,7 @@ public class RoutinesPageFragment extends Fragment {
     private void endRoutine() {
         view.advanceTimeButton.setVisibility(View.GONE);
         view.stopTime.setVisibility(View.GONE);
-        view.startButton.setVisibility(View.GONE);
         view.endButton.setText("Routine Ended");
-        view.endButton.setVisibility(View.VISIBLE);
         view.endButton.setEnabled(false);
         view.endButton.requestLayout();
         view.resetButton.setVisibility(View.VISIBLE);
@@ -123,13 +122,12 @@ public class RoutinesPageFragment extends Fragment {
     }
 
     private void startRoutine() {
-        view.startButton.setVisibility(View.GONE);
+        view.startButton.setVisibility(View.INVISIBLE);
         view.endButton.setText("End");
         view.endButton.setVisibility(View.VISIBLE);
         view.endButton.setEnabled(true);
         view.addTaskButton.setVisibility(View.GONE);
         view.stopTime.setVisibility(View.VISIBLE);
-        view.advanceTimeButton.setVisibility(View.VISIBLE);
         view.homeButton.setVisibility(View.GONE);
         model.startRoutine();
     }
