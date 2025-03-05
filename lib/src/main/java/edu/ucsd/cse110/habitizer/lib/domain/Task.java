@@ -8,6 +8,9 @@ public interface Task {
     Integer getId();
 
     void setId(int id);
+    Integer getRoutineId();
+
+    void setRoutineId(int id);
 
     @NonNull
     String getTaskName();

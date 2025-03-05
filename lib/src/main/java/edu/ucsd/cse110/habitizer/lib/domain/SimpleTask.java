@@ -9,7 +9,18 @@ public class SimpleTask implements Task {
     private @NonNull String taskName;
     private boolean checkedOff;
     private Integer checkedOffTime;
+    private Integer routineId;
 
+
+
+    public SimpleTask(@Nullable Integer id, @NonNull String taskName, Integer routineId){
+        this.id = id;
+        this.taskName = taskName;
+        this.checkedOff = false;
+        this.routineId = routineId;
+
+        this.checkedOffTime = 0;
+    }
 
     public SimpleTask(@Nullable Integer id, @NonNull String taskName){
         this.id = id;
@@ -25,6 +36,12 @@ public class SimpleTask implements Task {
 
     @Override
     public void setId(int id){this.id = id;}
+
+    @Override
+    public Integer getRoutineId(){return routineId;}
+
+    @Override
+    public void setRoutineId(int id){this.routineId = id;}
 
     @NonNull
     @Override
@@ -58,7 +75,7 @@ public class SimpleTask implements Task {
 
     //for testing purpose
     @Override
-    public Task withId(int id){ return new SimpleTask(id, this.taskName); }
+    public Task withId(int id){ return new SimpleTask(id, this.taskName,this.routineId); }
 
 
 }

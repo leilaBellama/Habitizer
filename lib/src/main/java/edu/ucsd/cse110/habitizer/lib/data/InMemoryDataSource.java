@@ -23,6 +23,15 @@ public class InMemoryDataSource {
 
     private int nextId = 0;
 
+    private int nextTaskId = 0;
+
+    private final Map<Integer, Task> tasks
+            = new HashMap<>();
+    private final Map<Integer, Subject<Task>> taskSubjects
+            = new HashMap<>();
+    private final Subject<List<Task>> allTasksSubject
+            = new Subject<>();
+
     public InMemoryDataSource() {
 
     }
@@ -42,19 +51,29 @@ public class InMemoryDataSource {
             new OriginalTask(3, "Evening Task 4",false)
     );
 
+    public final static List<Task> defaultTasks = List.of(
+            new OriginalTask(0, "Morning Task 1",true),
+            new OriginalTask(1, "Morning Task 2",true),
+            new OriginalTask(2, "Morning Task 3",true),
+            new OriginalTask(3, "Evening Task 1",false),
+            new OriginalTask(4, "Evening Task 2",false),
+            new OriginalTask(5, "Evening Task 3",false),
+            new OriginalTask(null, "Evening Task 4",false)
+    );
+
 
     public final static List<Routine> DEFAULT = List.of(
             new RoutineBuilder()
                     .setId(null)
                     .setName("Morning")
-                    .setTasks(Morning)
+                    //.setTasks(Morning)
                     .setGoalTime("35")
                     .buildRoutine(),
 
             new RoutineBuilder()
                     .setId(null)
                     .setName("Evening")
-                    .setTasks(Evening)
+                    //.setTasks(Evening)
                     .setGoalTime("30")
                     .buildRoutine()
     );
@@ -64,7 +83,63 @@ public class InMemoryDataSource {
         for(Routine routine : DEFAULT){
             data.putRoutine(routine);
         }
+        for(Task task : defaultTasks){
+            data.putTask(task);
+        }
         return data;
+    }
+    public void putTask(Task task) {
+        var fixedCard = preInsert(task);
+        tasks.put(fixedCard.getId(), fixedCard);
+        if (taskSubjects.containsKey(fixedCard.getId())) {
+            taskSubjects.get(fixedCard.getId()).setValue(fixedCard);
+        }
+        allTasksSubject.setValue(new ArrayList<Task>(getTasks()));
+    }
+
+    //if task to insert has null id, create new task with next id
+    private Task preInsert(Task task) {
+        var id = task.getId();
+        if (id == null) {
+            //nextId++;
+            task = task.withId(nextTaskId++);
+            task.setRoutineId(task.getRoutineId());
+        } else if (id >= nextTaskId) {
+            nextTaskId = id + 1;
+        }
+        return task;
+    }
+
+    public void removeTask(int id) {
+        tasks.remove(id);
+        if (taskSubjects.containsKey(id)) {
+            taskSubjects.get(id).setValue(null);
+        }
+        allTasksSubject.setValue(getTasks());
+    }
+
+    public void editTask(int id, String name){
+        tasks.get(id).setName(name);
+    }
+    public List<Task> getTasks(){
+        return List.copyOf(tasks.values());
+    }
+
+    public Task getTask(int id){
+        return tasks.get(id);
+    }
+
+    public Subject<Task> getTaskSubject(int id){
+        if(!taskSubjects.containsKey(id)){
+            var subject = new Subject<Task>();
+            subject.setValue(getTask(id));
+            taskSubjects.put(id, subject);
+        }
+        return taskSubjects.get(id);
+    }
+
+    public Subject<List<Task>> getAllTasksSubject() {
+        return allTasksSubject;
     }
 
 

@@ -67,6 +67,13 @@ public class TaskListTest {
         assertEquals("Task 3", tasks.get(3).getTaskName());
         assertEquals(4, tasks.size());
 
+        tasks = TaskList.editTaskName(tasks,1,"new task name 2");
+        assertEquals("new task name", tasks.get(0).getTaskName());
+        assertEquals("new task name 2", tasks.get(1).getTaskName());
+        assertEquals("Task 2", tasks.get(2).getTaskName());
+        assertEquals("Task 3", tasks.get(3).getTaskName());
+        assertEquals(4, tasks.size());
+
     }
 
     @Test
@@ -90,10 +97,6 @@ public class TaskListTest {
         // Check that task with ID 2 is gone
         assertFalse(updatedTasks.stream().anyMatch(task -> task.getTaskName().equals("Task 2")));
 
-        // Check that IDs are sequential
-        assertEquals(0,(int) updatedTasks.get(0).getId());
-        assertEquals(1, (int) updatedTasks.get(1).getId());
-        assertEquals(2, (int) updatedTasks.get(2).getId());
 
         assertEquals("Task 0", updatedTasks.get(0).getTaskName());
         assertEquals("Task 1", updatedTasks.get(1).getTaskName());

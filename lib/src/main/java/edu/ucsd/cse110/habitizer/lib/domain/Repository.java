@@ -21,6 +21,8 @@ public class Repository {
         return dataSource.getAllTasksSubjectWithRoutineId(routineID);
     }
 
+     */
+
 
     public Integer countTasks() {
         return dataSource.getTasks().size();
@@ -40,28 +42,24 @@ public class Repository {
             dataSource.putTask(task);
         }
     }
-    //
 
     public void removeTask(int id) {dataSource.removeTask(id);}
 
     //public void editTaskName(int id, String name) {dataSource.editTask(id, name);}
 
-     */
 
-    public Integer count() {return dataSource.getRoutines().size();}
+    public Integer countRoutines() {return dataSource.getRoutines().size();}
 
-    //public Subject<Integer> count() {return dataSource.getCountSubject();}
+    public Subject<Routine> findRoutines(int id) {return dataSource.getRoutineSubject(id);}
+    public Subject<List<Routine>> findAllRoutines() {return dataSource.getAllRoutinesSubject();}
 
-    public Subject<Routine> find(int id) {return dataSource.getRoutineSubject(id);}
-    public Subject<List<Routine>> findAll() {return dataSource.getAllRoutinesSubject();}
-
-    public void save(Routine routine) {dataSource.putRoutine(routine);}
-    public void save(List<Routine> routines) {
+    public void saveRoutine(Routine routine) {dataSource.putRoutine(routine);}
+    public void saveRoutine(List<Routine> routines) {
         for(var routine : routines){
             dataSource.putRoutine(routine);
         }
     }
 
-    public void remove(int id) {dataSource.removeRoutine(id);}
+    public void removeRoutine(int id) {dataSource.removeRoutine(id);}
 
 }

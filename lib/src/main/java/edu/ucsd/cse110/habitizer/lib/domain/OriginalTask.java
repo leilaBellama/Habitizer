@@ -9,6 +9,7 @@ public class OriginalTask implements Task {
     private @NonNull String taskName;
     private boolean checkedOff;
     private Integer checkedOffTime;
+    private Integer routineId;
 
     private boolean isMorningTask;
 
@@ -18,6 +19,8 @@ public class OriginalTask implements Task {
         this.taskName = taskName;
         this.checkedOff = false;
         this.isMorningTask = isMorningTask;
+        if(isMorningTask) this.routineId = 0;
+        else this.routineId = 1;
 
         this.checkedOffTime = 0;
     }
@@ -28,6 +31,12 @@ public class OriginalTask implements Task {
 
     @Override
     public void setId(int id){this.id = id;}
+
+    @Override
+    public Integer getRoutineId(){return routineId;}
+
+    @Override
+    public void setRoutineId(int id){this.routineId = id;}
 
     @NonNull
     @Override

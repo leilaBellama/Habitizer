@@ -30,16 +30,21 @@ public class TaskList {
     public static List<Task> removeTask(List<Task> list, int id){
         if(list == null) return null;
         var copy = new ArrayList<>(List.copyOf(list));
-        copy.remove(id);
-        for (int i = id; i < copy.size(); i++) {
-            copy.get(i).setId(i); // Renumber IDs starting from 1
+        for (var task : copy) {
+            if(task.getId() == id){
+                copy.remove(task);
+            }
         }
         return copy;
     }
     public static List<Task> editTaskName(List<Task> list, int id, String newName) {
         if(list == null) return null;
         var copy = new ArrayList<>(List.copyOf(list));
-        copy.get(id).setName(newName);
+        for (int i = 0; i < copy.size(); i++) {
+            if(copy.get(i).getId() == id){
+                copy.get(i).setName(newName);
+            }
+        }
         return copy;
     }
 }

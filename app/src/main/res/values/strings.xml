@@ -21,4 +21,5 @@
     <string name="routines">Routines</string>
     <string name="home">Home</string>
     <string name="add_task">Add Task</string>
+    <string name="minutes">%d mins</string>
 </resources>

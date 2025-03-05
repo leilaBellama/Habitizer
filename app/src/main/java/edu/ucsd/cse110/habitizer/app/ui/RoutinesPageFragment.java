@@ -75,9 +75,15 @@ public class RoutinesPageFragment extends Fragment {
     private void setupMVP() {
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
         model.getHasStarted().observe(hasStarted -> {
+            if(hasStarted == null)return;
+            if(hasStarted) startRoutine();
+            else endRoutine();
+            /*
             if (hasStarted == null) reset();
             else if (!hasStarted) endRoutine();
             else startRoutine();
+
+             */
 
         });
         model.getGoalTime().observe(goalTime -> {
@@ -89,14 +95,18 @@ public class RoutinesPageFragment extends Fragment {
             if (time != null) {
                 Log.d("MA","obs time " + time);
                 view.time.setText(time + " min");
+            } else {
+                view.time.setText(R.string.dashes);
+                Log.d("MA","obs null time ");
+
             }
         });
         view.homeButton.setOnClickListener(v -> swapFragments());
         view.startButton.setOnClickListener(v -> startRoutine());
         view.endButton.setOnClickListener(v -> endRoutine());
-//        view.resetButton.setOnClickListener(v -> {
-//            reset();
-//        });
+        view.resetButton.setOnClickListener(v -> {
+            reset();
+        });
         view.stopTime.setOnClickListener(v -> {
             model.stopTimer();
             view.stopTime.setVisibility(View.GONE);
