@@ -18,12 +18,14 @@ import edu.ucsd.cse110.habitizer.app.databinding.FragmentDialogEditRoutineBindin
 
 public class EditRoutineDialogFragment extends DialogFragment{
 
+
     private FragmentDialogEditRoutineBinding view;
     private MainViewModel activityModel;
 
     public EditRoutineDialogFragment(){}
 
     public static EditRoutineDialogFragment newInstance(){
+
         var fragment = new EditRoutineDialogFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -32,8 +34,8 @@ public class EditRoutineDialogFragment extends DialogFragment{
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+        super.onCreate(savedInstanceState);
         var modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
@@ -57,8 +59,8 @@ public class EditRoutineDialogFragment extends DialogFragment{
     private void onPositiveButtonClick(DialogInterface dialog, int which){
         var name = view.editRoutineName.getText().toString();
 
-        if (name.isEmpty()) {
-            Toast.makeText(getActivity(), "Routine Name Cannot Be Empty", Toast.LENGTH_SHORT).show();
+        if (name == null || name.isEmpty()) {
+            Toast.makeText(requireContext(), "Routine name cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 

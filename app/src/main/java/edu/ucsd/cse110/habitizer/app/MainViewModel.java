@@ -204,7 +204,10 @@ public class MainViewModel extends ViewModel{
     }
 
     public void setRoutineName(String name){
-        routineName.setValue(name);
+        var newRoutine = repository.find(routineId.getValue()).getValue();
+        if(newRoutine == null) return;
+        newRoutine.setName(name);
+        repository.save(newRoutine);
     }
     public Subject<String> getTaskName(){
         return this.taskName;

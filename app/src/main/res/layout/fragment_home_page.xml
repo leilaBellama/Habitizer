@@ -32,6 +32,8 @@
         android:id="@+id/Home_page_buttons_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="50dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
