@@ -13,7 +13,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Task"
+        android:text="@string/task"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/checkBox"
@@ -33,11 +33,11 @@
 
     <TextView
         android:id="@+id/taskTime"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:gravity="center_vertical"
-        android:text="Time taken: --"
+        android:text="@string/time_taken"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/taskName"
         app:layout_constraintEnd_toEndOf="@+id/taskName"
