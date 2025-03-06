@@ -34,6 +34,8 @@ public class MainViewModel extends ViewModel{
     private final Subject<String> goalTime;
     private final Subject<List<Routine>> routines;
 
+    private final Subject<String> routineName;
+
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -57,7 +59,7 @@ public class MainViewModel extends ViewModel{
         this.taskName = new Subject<>();
         this.goalTime = new Subject<>();
         this.routines = new Subject<>();
-
+        this.routineName = new Subject<>();
         this.timer.setValue(new RoutineTimer(60));
 
         repository.findAllTasks().observe(tasks -> {
@@ -225,6 +227,12 @@ public class MainViewModel extends ViewModel{
         routineId.setValue(id);
     }
 
+    public void setRoutineName(String name){
+        var newRoutine = repository.find(routineId.getValue()).getValue();
+        if(newRoutine == null) return;
+        newRoutine.setName(name);
+        repository.save(newRoutine);
+    }
     public Subject<String> getTaskName(){
         return this.taskName;
     }
@@ -264,5 +272,9 @@ public class MainViewModel extends ViewModel{
     //for testing
     public Repository getRepository() {
         return repository;
+    }
+
+    public Subject<String> getRoutineName(){
+        return routineName;
     }
 }

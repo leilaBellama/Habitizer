@@ -22,6 +22,7 @@ import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutinesPageBinding;
 import edu.ucsd.cse110.habitizer.app.ui.dialog.CreateTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.dialog.EditGoalTimeDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.dialog.EditRoutineDialogFragment;
 
 public class RoutinesPageFragment extends Fragment {
     private FragmentRoutinesPageBinding view;
@@ -120,6 +121,12 @@ public class RoutinesPageFragment extends Fragment {
         view.goalTime.setOnClickListener(v -> {
             var dialogFragment = EditGoalTimeDialogFragment.newInstance();
             dialogFragment.show(getParentFragmentManager(), "EditGoalTimeDialogFragment");
+        });
+
+        //For changing routine name at the routine page
+        view.routine.setOnClickListener(v -> {
+            var dialogFragment = EditRoutineDialogFragment.newInstance();
+            dialogFragment.show(getParentFragmentManager(), "EditRoutineDialogFragment");
         });
     }
     private void endRoutine() {
