@@ -23,7 +23,6 @@ public class Repository {
 
      */
 
-
     public Integer countTasks() {
         return dataSource.getTasks().size();
     }
@@ -45,16 +44,13 @@ public class Repository {
 
     public void removeTask(int id) {dataSource.removeTask(id);}
 
-    //public void editTaskName(int id, String name) {dataSource.editTask(id, name);}
-
-
     public Integer countRoutines() {return dataSource.getRoutines().size();}
 
-    public Subject<Routine> findRoutines(int id) {return dataSource.getRoutineSubject(id);}
+    public Subject<Routine> findRoutine(int id) {return dataSource.getRoutineSubject(id);}
     public Subject<List<Routine>> findAllRoutines() {return dataSource.getAllRoutinesSubject();}
 
     public void saveRoutine(Routine routine) {dataSource.putRoutine(routine);}
-    public void saveRoutine(List<Routine> routines) {
+    public void saveRoutines(List<Routine> routines) {
         for(var routine : routines){
             dataSource.putRoutine(routine);
         }

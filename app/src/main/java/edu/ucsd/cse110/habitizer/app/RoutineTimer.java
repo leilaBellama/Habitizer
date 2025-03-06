@@ -1,25 +1,24 @@
 package edu.ucsd.cse110.habitizer.app;
 
-import android.util.Log;
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 
-import edu.ucsd.cse110.habitizer.lib.util.Subject;
+import edu.ucsd.cse110.habitizer.lib.util.MutableSubject;
+import edu.ucsd.cse110.habitizer.lib.util.SimpleSubject;
 
 public class RoutineTimer {
     private ScheduledExecutorService scheduler;
     private int elapsedSeconds;
-    private Subject<Boolean> hasStarted;
-    private Subject<Integer> elapsedMin;
+    private MutableSubject<Boolean> hasStarted;
+    private MutableSubject<Integer> elapsedMin;
 
     private Integer interval;
 
     public RoutineTimer(Integer interval) {
-        this.hasStarted = new Subject<>();
-        this.elapsedMin = new Subject<>();
+        this.hasStarted = new SimpleSubject<>();
+        this.elapsedMin = new SimpleSubject<>();
         this.interval = interval;
 
         hasStarted.setValue(false);
@@ -27,15 +26,15 @@ public class RoutineTimer {
 
     public RoutineTimer(Integer interval,ScheduledExecutorService scheduler) {
         this.scheduler = scheduler;
-        this.hasStarted = new Subject<>();
-        this.elapsedMin = new Subject<>();
+        this.hasStarted = new SimpleSubject<>();
+        this.elapsedMin = new SimpleSubject<>();
         this.interval = interval;
         this.elapsedMin.setValue(0);
         this.elapsedSeconds = 0;
         this.hasStarted.setValue(false);
     }
 
-    public Subject<Integer> getElapsedMinutes() {
+    public MutableSubject<Integer> getElapsedMinutes() {
         return elapsedMin;
     }
 
@@ -43,7 +42,7 @@ public class RoutineTimer {
         return elapsedSeconds;
     }
 
-    public Subject<Boolean> getHasStarted() {
+    public MutableSubject<Boolean> getHasStarted() {
         return hasStarted;
     }
 

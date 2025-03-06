@@ -72,7 +72,7 @@ public class RepositoryTest {
     @Test
     public void testSaveRoutineAndRemoveRoutine(){
         var data = new InMemoryDataSource();
-        repository.saveRoutine(routines);
+        repository.saveRoutines(routines);
         repository.saveRoutine(new RoutineBuilder()
                 .setId(null)
                 .setName("Tuesday")
@@ -83,11 +83,11 @@ public class RepositoryTest {
         repository.removeRoutine(1);
         assertEquals(3,(int) repository.countRoutines());
 
-        assertEquals(repository.findRoutines(0).getValue().getName(), "Morning");
-        assertEquals(repository.findRoutines(2).getValue().getName(), "Monday");
-        assertEquals(repository.findRoutines(3).getValue().getName(), "Tuesday");
+        assertEquals(repository.findRoutine(0).getValue().getName(), "Morning");
+        assertEquals(repository.findRoutine(2).getValue().getName(), "Monday");
+        assertEquals(repository.findRoutine(3).getValue().getName(), "Tuesday");
 
-        var routine = repository.findRoutines(0).getValue();
+        var routine = repository.findRoutine(0).getValue();
 
         /*
         var list = TaskList.resetAll(routine.getTasks());
@@ -98,18 +98,18 @@ public class RepositoryTest {
                 .setGoalTime(routine.getGoalTime())
                 .buildRoutine();
         repository.saveRoutine(newRoutine);
-        assertNull(repository.findRoutines(0).getValue().getHasStarted());
+        assertNull(repository.findRoutine(0).getValue().getHasStarted());
 
          */
 
-        assertNotNull(repository.findRoutines(0).getValue().getHasStarted());
+        assertNotNull(repository.findRoutine(0).getValue().getHasStarted());
 
         routine.setHasStarted(null);
         routine.setElapsedSeconds(null);
         routine.setElapsedMinutes(null);
         routine.setTasks(TaskList.resetAll(routine.getTasks()));
         repository.saveRoutine(routine);
-        assertNull(repository.findRoutines(0).getValue().getHasStarted());
+        assertNull(repository.findRoutine(0).getValue().getHasStarted());
 
     }
 

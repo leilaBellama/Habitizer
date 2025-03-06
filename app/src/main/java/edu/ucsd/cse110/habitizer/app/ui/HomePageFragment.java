@@ -2,34 +2,32 @@ package edu.ucsd.cse110.habitizer.app.ui;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import java.util.Collections;
 import java.util.List;
 
-import edu.ucsd.cse110.habitizer.app.MainActivity;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentHomePageBinding;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutinesPageBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
+import edu.ucsd.cse110.habitizer.lib.util.Observer;
 
 
 public class HomePageFragment extends Fragment {
     private FragmentHomePageBinding view;
     private MainViewModel model;
+    private final Observer<List<Routine>> routineObserver = routines -> {
+        if (routines != null) {
+            updateRoutineButtons(routines);
+        }
+    };
 
     public HomePageFragment() {
     }
@@ -63,15 +61,11 @@ public class HomePageFragment extends Fragment {
     @Override
     public void onDestroyView(){
         super.onDestroyView();
-
-        model.getRoutines().removeObservers();
+        model.getRoutines().removeObserver(routineObserver);
     }
 
     private void setupMVP(){
-        model.getRoutines().observe(routines -> {
-            if (routines == null) return;
-            updateRoutineButtons(routines);
-        });
+        model.getRoutines().observe(routineObserver);
         view.newRoutineButton.setOnClickListener(v -> model.newRoutine());
     }
     private void updateRoutineButtons(List<Routine> routines) {

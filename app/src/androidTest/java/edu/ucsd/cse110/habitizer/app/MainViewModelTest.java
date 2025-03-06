@@ -76,7 +76,7 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 //    @Test
 //    //before switching routines, after switching, and to new routine
 //    public void testStartRoutine() {
-//        var routine = repository.findRoutines(id).getValue();
+//        var routine = repository.findRoutine(id).getValue();
 //        assertNull(routine.getHasStarted());
 //        assertNull(routine.getElapsedMinutes());
 //
@@ -87,7 +87,7 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 //
 //    @Test
 //    public void testEndRoutine() {
-//        var routine = repository.findRoutines(id).getValue();
+//        var routine = repository.findRoutine(id).getValue();
 //        mvm.startRoutine();
 //        mvm.endRoutine();
 //        assertFalse(routine.getHasStarted());
@@ -101,15 +101,15 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 //        assertEquals(2,mvm.getRoutines().getValue().size());
 //        mvm.newRoutine();
 //        assertEquals(3,mvm.getRoutines().getValue().size());
-//        assertEquals("New Routine",repository.findRoutines(2).getValue().getName());
+//        assertEquals("New Routine",repository.findRoutine(2).getValue().getName());
 //
 //    }
 //
 //    @Test
 //    //before switching routines, after switching, and to new routine
 //    public void testAddTask() {
-//        assertEquals(5,repository.findRoutines(0).getValue().getTasks().size());
-//        assertEquals(4,repository.findRoutines(1).getValue().getTasks().size());
+//        assertEquals(5,repository.findRoutine(0).getValue().getTasks().size());
+//        assertEquals(4,repository.findRoutine(1).getValue().getTasks().size());
 //
 //        mvm.addTask(new OriginalTask(null,"new morning task",true));
 //        mvm.setRoutineId(1);
@@ -117,12 +117,12 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 //
 //        mvm.newRoutine();
 //        mvm.setRoutineId(2);
-//        assertEquals(0,repository.findRoutines(2).getValue().getTasks().size());
+//        assertEquals(0,repository.findRoutine(2).getValue().getTasks().size());
 //
 //        mvm.addTask(new OriginalTask(null,"new task",false));
-//        assertEquals(6,repository.findRoutines(0).getValue().getTasks().size());
-//        assertEquals(5,repository.findRoutines(1).getValue().getTasks().size());
-//        assertEquals(1,repository.findRoutines(2).getValue().getTasks().size());
+//        assertEquals(6,repository.findRoutine(0).getValue().getTasks().size());
+//        assertEquals(5,repository.findRoutine(1).getValue().getTasks().size());
+//        assertEquals(1,repository.findRoutine(2).getValue().getTasks().size());
 //
 //    }
 //
@@ -141,30 +141,30 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 //        mvm.stopTimer();
 //        mvm.advanceTime();
 //
-//        assertEquals(0,(int)repository.findRoutines(id).getValue().getElapsedMinutes());
+//        assertEquals(0,(int)repository.findRoutine(id).getValue().getElapsedMinutes());
 //        mvm.advanceTime();
 //        mvm.advanceTime();
 //        mvm.advanceTime();
 //        mvm.advanceTime();
-//        assertEquals(1,(int)repository.findRoutines(id).getValue().getElapsedMinutes());
-//        assertEquals(15,(int)repository.findRoutines(id).getValue().getElapsedSeconds());
+//        assertEquals(1,(int)repository.findRoutine(id).getValue().getElapsedMinutes());
+//        assertEquals(15,(int)repository.findRoutine(id).getValue().getElapsedSeconds());
 //
 //    }
 //
 //    @Test
 //    public void testSetTaskName() {
-//        assertEquals("Morning Task 1",repository.findRoutines(id).getValue().getTasks().get(0).getTaskName());
+//        assertEquals("Morning Task 1",repository.findRoutine(id).getValue().getTasks().get(0).getTaskName());
 //
 //        mvm.setTaskName(0, "new name");
-//        assertEquals("new name",repository.findRoutines(id).getValue().getTasks().get(0).getTaskName());
+//        assertEquals("new name",repository.findRoutine(id).getValue().getTasks().get(0).getTaskName());
 //    }
 //
 //    @Test
 //    public void testSetGoalTime() {
-//        assertEquals("35",repository.findRoutines(id).getValue().getGoalTime());
+//        assertEquals("35",repository.findRoutine(id).getValue().getGoalTime());
 //
 //        mvm.setGoalTime("5");
-//        assertEquals("5",repository.findRoutines(id).getValue().getGoalTime());
+//        assertEquals("5",repository.findRoutine(id).getValue().getGoalTime());
 //
 //    }
 //}

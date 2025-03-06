@@ -9,17 +9,19 @@ import edu.ucsd.cse110.habitizer.lib.domain.OriginalTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import edu.ucsd.cse110.habitizer.lib.util.MutableSubject;
+import edu.ucsd.cse110.habitizer.lib.util.SimpleSubject;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public class InMemoryDataSource {
 
     private final Map<Integer, Routine> routines
             = new HashMap<>();
 
-    private final Map<Integer, Subject<Routine>> routineSubjects
+    private final Map<Integer, MutableSubject<Routine>> routineSubjects
             = new HashMap<>();
 
-    private final Subject<List<Routine>> allRoutinesSubject
-            = new Subject<>();
+    private final MutableSubject<List<Routine>> allRoutinesSubject
+            = new SimpleSubject<>();
 
     private int nextId = 0;
 
@@ -27,10 +29,10 @@ public class InMemoryDataSource {
 
     private final Map<Integer, Task> tasks
             = new HashMap<>();
-    private final Map<Integer, Subject<Task>> taskSubjects
+    private final Map<Integer, MutableSubject<Task>> taskSubjects
             = new HashMap<>();
-    private final Subject<List<Task>> allTasksSubject
-            = new Subject<>();
+    private final MutableSubject<List<Task>> allTasksSubject
+            = new SimpleSubject<>();
 
     public InMemoryDataSource() {
 
@@ -131,7 +133,7 @@ public class InMemoryDataSource {
 
     public Subject<Task> getTaskSubject(int id){
         if(!taskSubjects.containsKey(id)){
-            var subject = new Subject<Task>();
+            var subject = new SimpleSubject<Task>();
             subject.setValue(getTask(id));
             taskSubjects.put(id, subject);
         }
@@ -179,7 +181,7 @@ public class InMemoryDataSource {
     }
     public Subject<Routine> getRoutineSubject(int id){
         if(!routineSubjects.containsKey(id)){
-            var subject = new Subject<Routine>();
+            var subject = new SimpleSubject<Routine>();
             subject.setValue(getRoutine(id));
             routineSubjects.put(id, subject);
         }

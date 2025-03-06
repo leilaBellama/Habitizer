@@ -17,22 +17,24 @@ import edu.ucsd.cse110.habitizer.lib.domain.SimpleTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.Repository;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskList;
+import edu.ucsd.cse110.habitizer.lib.util.MutableSubject;
+import edu.ucsd.cse110.habitizer.lib.util.SimpleSubject;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 
 public class MainViewModel extends ViewModel{
     private static final String LOG_TAG = "MainViewModel";
     private static final Integer ONE_MINUTE = 60;
     private final Repository repository;
-    private final Subject<List<Task>> orderedTasks;
-    private final Subject<List<Integer>> taskOrdering;
-    private final Subject<String> routineTitle;
-    private final Subject<Boolean> hasStarted;
-    private final Subject<RoutineTimer> timer;
+    private final MutableSubject<List<Task>> orderedTasks;
+    private final MutableSubject<List<Integer>> taskOrdering;
+    private final MutableSubject<String> routineTitle;
+    private final MutableSubject<Boolean> hasStarted;
+    private final MutableSubject<RoutineTimer> timer;
     private final MutableLiveData<Integer> elapsedTime;
-    private final Subject<Integer> routineId;
+    private final MutableSubject<Integer> routineId;
     private final Subject<String> taskName;
-    private final Subject<String> goalTime;
-    private final Subject<List<Routine>> routines;
+    private final MutableSubject<String> goalTime;
+    private final MutableSubject<List<Routine>> routines;
 
     private final Subject<String> routineName;
 
@@ -48,18 +50,18 @@ public class MainViewModel extends ViewModel{
     public MainViewModel(Repository repository){
         this.repository = repository;
 
-        this.orderedTasks = new Subject<>();
-        this.taskOrdering = new Subject<>();
-        this.routineId = new Subject<>();
+        this.orderedTasks = new SimpleSubject<>();
+        this.taskOrdering = new SimpleSubject<>();
+        this.routineId = new SimpleSubject<>();
 
-        this.routineTitle = new Subject<>();
-        this.hasStarted = new Subject<>();
-        this.timer = new Subject<>();
+        this.routineTitle = new SimpleSubject<>();
+        this.hasStarted = new SimpleSubject<>();
+        this.timer = new SimpleSubject<>();
         this.elapsedTime = new MutableLiveData<>();
-        this.taskName = new Subject<>();
-        this.goalTime = new Subject<>();
-        this.routines = new Subject<>();
-        this.routineName = new Subject<>();
+        this.taskName = new SimpleSubject<>();
+        this.goalTime = new SimpleSubject<>();
+        this.routines = new SimpleSubject<>();
+        this.routineName = new SimpleSubject<>();
         this.timer.setValue(new RoutineTimer(60));
 
         repository.findAllTasks().observe(tasks -> {
@@ -80,7 +82,7 @@ public class MainViewModel extends ViewModel{
 
         routineId.observe(id -> {
             if(id == null)return;
-            repository.findRoutines(id).observe(curRoutine -> {
+            repository.findRoutine(id).observe(curRoutine -> {
                 if(curRoutine == null)return;
 
                 routineTitle.setValue(curRoutine.getName());
@@ -129,7 +131,7 @@ public class MainViewModel extends ViewModel{
     public void reset(){
 
         if(routineId.getValue() == null) return;
-        var routine = repository.findRoutines(routineId.getValue()).getValue();
+        var routine = repository.findRoutine(routineId.getValue()).getValue();
         if(routine == null) return;
 
 
@@ -162,7 +164,7 @@ public class MainViewModel extends ViewModel{
     public void startRoutine(){
         if (hasStarted.getValue() != null) return;
 
-        var routine = repository.findRoutines(routineId.getValue()).getValue();
+        var routine = repository.findRoutine(routineId.getValue()).getValue();
         if(routine == null) return;
         routine.setHasStarted(true);
         repository.saveRoutine(routine);
@@ -176,7 +178,7 @@ public class MainViewModel extends ViewModel{
 
         if (timer.getValue() == null) return;
         timer.getValue().end();
-        var routine = repository.findRoutines(routineId.getValue()).getValue();
+        var routine = repository.findRoutine(routineId.getValue()).getValue();
         if(routine == null) return;
         routine.setHasStarted(false);
         routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
@@ -191,7 +193,7 @@ public class MainViewModel extends ViewModel{
         if(timer.getValue() == null) return;
         timer.getValue().stop();
 
-        var routine = repository.findRoutines(routineId.getValue()).getValue();
+        var routine = repository.findRoutine(routineId.getValue()).getValue();
         if(routine == null) return;
         routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
         routine.setElapsedSeconds(timer.getValue().getElapsedSeconds());
@@ -200,7 +202,7 @@ public class MainViewModel extends ViewModel{
     public void advanceTime() {
         if (timer.getValue() == null) return;
         timer.getValue().advanceTime(15);
-        var routine = repository.findRoutines(routineId.getValue()).getValue();
+        var routine = repository.findRoutine(routineId.getValue()).getValue();
         if(routine == null) return;
         routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
         routine.setElapsedSeconds(timer.getValue().getElapsedSeconds());
@@ -217,7 +219,7 @@ public class MainViewModel extends ViewModel{
         repository.saveTasks(newList);
     }
     public void setGoalTime(String goalTime){
-        var newRoutine = repository.findRoutines(routineId.getValue()).getValue();
+        var newRoutine = repository.findRoutine(routineId.getValue()).getValue();
         if(newRoutine == null) return;
         newRoutine.setGoalTime(goalTime);
         repository.saveRoutine(newRoutine);
@@ -228,10 +230,10 @@ public class MainViewModel extends ViewModel{
     }
 
     public void setRoutineName(String name){
-        var newRoutine = repository.find(routineId.getValue()).getValue();
+        var newRoutine = repository.findRoutine(routineId.getValue()).getValue();
         if(newRoutine == null) return;
         newRoutine.setName(name);
-        repository.save(newRoutine);
+        repository.saveRoutine(newRoutine);
     }
     public Subject<String> getTaskName(){
         return this.taskName;
