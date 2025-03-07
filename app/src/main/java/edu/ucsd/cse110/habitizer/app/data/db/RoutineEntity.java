@@ -35,7 +35,7 @@ public class RoutineEntity {
     }
 
     public static RoutineEntity fromRoutine(@NonNull Routine routine){
-        var newRoutine = new RoutineEntity(routine.getName(),routine.getHasStarted(), routine.getElapsedMinutes(), routine.getElapsedMinutes(), routine.getGoalTime());
+        var newRoutine = new RoutineEntity(routine.getName(),routine.getHasStarted(), routine.getElapsedMinutes(), routine.getElapsedSeconds(), routine.getGoalTime());
 
         newRoutine.id = routine.getId();
         return newRoutine;

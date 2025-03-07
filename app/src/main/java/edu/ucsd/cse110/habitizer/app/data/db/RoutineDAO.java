@@ -36,14 +36,14 @@ public interface RoutineDAO {
     void deleteRoutine(int id);
 
     @Update
-    int updateRoutines(RoutineEntity routine);
+    int updateRoutine(RoutineEntity routine);
 
     //task functions
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Long insertTask(TaskEntity routine);
+    Long insertTask(TaskEntity task);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insertTasks(List<TaskEntity> routines);
+    List<Long> insertTasks(List<TaskEntity> tasks);
 
     @Query("SELECT COUNT(*) FROM tasks_table")
     int countTasks();
@@ -64,6 +64,6 @@ public interface RoutineDAO {
     void deleteTask(int id);
 
     @Update
-    int updateTasks(TaskEntity task);
+    int updateTask(TaskEntity task);
 
 }

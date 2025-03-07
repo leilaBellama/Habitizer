@@ -8,6 +8,7 @@ import java.util.List;
 import edu.ucsd.cse110.habitizer.lib.domain.OriginalTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineBuilder;
+import edu.ucsd.cse110.habitizer.lib.domain.SimpleTaskBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.util.MutableSubject;
 import edu.ucsd.cse110.habitizer.lib.util.SimpleSubject;
@@ -53,7 +54,7 @@ public class InMemoryDataSource {
             new OriginalTask(3, "Evening Task 4",false)
     );
 
-    public final static List<Task> defaultTasks = List.of(
+    public final static List<Task> DEFAULT_TASKS = List.of(
             new OriginalTask(0, "Morning Task 1",true),
             new OriginalTask(1, "Morning Task 2",true),
             new OriginalTask(2, "Morning Task 3",true),
@@ -64,28 +65,26 @@ public class InMemoryDataSource {
     );
 
 
-    public final static List<Routine> DEFAULT = List.of(
+    public final static List<Routine> DEFAULT_ROUTINES = List.of(
             new RoutineBuilder()
                     .setId(null)
                     .setName("Morning")
-                    //.setTasks(Morning)
                     .setGoalTime("35")
                     .buildRoutine(),
 
             new RoutineBuilder()
                     .setId(null)
                     .setName("Evening")
-                    //.setTasks(Evening)
                     .setGoalTime("30")
                     .buildRoutine()
     );
 
     public static InMemoryDataSource DEFAULT(){
         var data = new InMemoryDataSource();
-        for(Routine routine : DEFAULT){
+        for(Routine routine : DEFAULT_ROUTINES){
             data.putRoutine(routine);
         }
-        for(Task task : defaultTasks){
+        for(Task task : DEFAULT_TASKS){
             data.putTask(task);
         }
         return data;
@@ -103,9 +102,7 @@ public class InMemoryDataSource {
     private Task preInsert(Task task) {
         var id = task.getId();
         if (id == null) {
-            //nextId++;
-            task = task.withId(nextTaskId++);
-            task.setRoutineId(task.getRoutineId());
+            task.setId(nextTaskId++);
         } else if (id >= nextTaskId) {
             nextTaskId = id + 1;
         }
@@ -157,7 +154,7 @@ public class InMemoryDataSource {
     private Routine preInsertRoutine(Routine routine) {
         var id = routine.getId();
         if (id == null) {
-            routine = routine.withId(nextId++);
+            routine.setId(nextId++);
         } else if (id >= nextId) {
             nextId = id + 1;
         }

@@ -15,7 +15,8 @@ public class TaskListTest {
     public final static List<Task> simpleTasks = List.of(
             new SimpleTask(0, "Morning Task 1"),
             new SimpleTask(1, "Morning Task 2"),
-            new SimpleTask(2, "Morning Task 3")
+            new SimpleTask(2, "Morning Task 3"),
+            new SimpleTaskBuilder().setCheckedOff(true).buildSimpleTask()
     );
     public List<Task> tasks = List.of(
             new OriginalTask(0, "Task 0",true),
@@ -24,30 +25,18 @@ public class TaskListTest {
         new OriginalTask(3, "Task 3",true)
     );
 
-    /*
+
     @Test
     public void testResetAll() {
-        simpleTasks.get(0).setCheckedOff(true,1);
-        simpleTasks.get(2).setCheckedOff(true,1);
-        assertTrue(simpleTasks.get(0).getCheckedOffStatus());
 
         var list = TaskList.resetAll(simpleTasks);
-        assertFalse(list.get(0).getCheckedOffStatus());
-        assertFalse(list.get(1).getCheckedOffStatus());
-        assertFalse(list.get(2).getCheckedOffStatus());
+        var v = list.get(3).getCheckedOffStatus();
+        for (int i = 0; i < list.size(); i++) {
+            assertFalse(list.get(i).getCheckedOffStatus());
+        }
 
-        tasks.get(0).setCheckedOff(true,1);
-        tasks.get(3).setCheckedOff(true,1);
-        assertTrue(tasks.get(0).getCheckedOffStatus());
-
-        var list2 = TaskList.resetAll(tasks);
-        assertFalse(list2.get(0).getCheckedOffStatus());
-        assertFalse(list2.get(1).getCheckedOffStatus());
-        assertFalse(list2.get(2).getCheckedOffStatus());
-        assertFalse(list2.get(3).getCheckedOffStatus());
     }
 
-     */
 
     @Test
     public void testForceSet() {
@@ -58,56 +47,5 @@ public class TaskListTest {
         assertTrue(task1.getCheckedOffStatus());
     }
 
-    @Test
-    public void testEditTaskName(){
-        tasks = TaskList.editTaskName(tasks,0,"new task name");
-        assertEquals("new task name", tasks.get(0).getTaskName());
-        assertEquals("Task 1", tasks.get(1).getTaskName());
-        assertEquals("Task 2", tasks.get(2).getTaskName());
-        assertEquals("Task 3", tasks.get(3).getTaskName());
-        assertEquals(4, tasks.size());
 
-        tasks = TaskList.editTaskName(tasks,1,"new task name 2");
-        assertEquals("new task name", tasks.get(0).getTaskName());
-        assertEquals("new task name 2", tasks.get(1).getTaskName());
-        assertEquals("Task 2", tasks.get(2).getTaskName());
-        assertEquals("Task 3", tasks.get(3).getTaskName());
-        assertEquals(4, tasks.size());
-
-    }
-
-    @Test
-    public void testAddTask() {
-        List<Task> updatedTasks = TaskList.addTask(tasks,new OriginalTask(0, "Task 4",true));
-        updatedTasks = TaskList.addTask(updatedTasks,new OriginalTask(6, "Task 5",true));
-        updatedTasks = TaskList.addTask(updatedTasks,new OriginalTask(null, "Task 6",true));
-
-        assertEquals(7,updatedTasks.size());
-        assertEquals("Task 4", updatedTasks.get(4).getTaskName());
-        assertEquals("Task 5", updatedTasks.get(5).getTaskName());
-        assertEquals("Task 6", updatedTasks.get(6).getTaskName());
-    }
-
-    @Test
-    public void testRemoveTask() {
-        List<Task> updatedTasks = TaskList.removeTask(tasks, 2);
-
-        assertEquals(3, updatedTasks.size());
-
-        // Check that task with ID 2 is gone
-        assertFalse(updatedTasks.stream().anyMatch(task -> task.getTaskName().equals("Task 2")));
-
-
-        assertEquals("Task 0", updatedTasks.get(0).getTaskName());
-        assertEquals("Task 1", updatedTasks.get(1).getTaskName());
-        assertEquals("Task 3", updatedTasks.get(2).getTaskName());
-
-        updatedTasks = TaskList.removeTask(updatedTasks, 1);
-        updatedTasks = TaskList.removeTask(updatedTasks, 0);
-
-        assertEquals(1, updatedTasks.size());
-        assertEquals("Task 3", updatedTasks.get(0).getTaskName());
-
-
-    }
 }

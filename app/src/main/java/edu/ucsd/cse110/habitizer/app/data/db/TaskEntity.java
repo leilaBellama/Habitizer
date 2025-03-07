@@ -39,7 +39,7 @@ public class TaskEntity {
 
     public static TaskEntity fromTask(@NonNull Task task) {
         var taskEntity = new TaskEntity(
-                task.getTaskName(),
+                task.getName(),
                 task.getCheckedOffStatus(),
                 task.getCheckedOffTime(),
                 task.getRoutineId()

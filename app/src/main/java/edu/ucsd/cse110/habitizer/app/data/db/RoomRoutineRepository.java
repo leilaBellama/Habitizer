@@ -19,32 +19,57 @@ public class RoomRoutineRepository implements Repository {
     }
     @Override
     public Integer countTasks() {
-        return 0;
+        return routineDao.countTasks();
     }
 
     @Override
     public Subject<Task> findTask(int id) {
-        return null;
+        var entityLiveData = routineDao.findTaskAsLiveData(id);
+        var taskLiveData = Transformations.map(entityLiveData, TaskEntity::toTask);
+        return new LiveDataSubjectAdapter<>(taskLiveData);
     }
 
     @Override
     public Subject<List<Task>> findAllTasks() {
-        return null;
+        var entitiesLiveData = routineDao.findAllTasksAsLiveData();
+        var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(TaskEntity::toTask)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(tasksLiveData);
     }
 
     @Override
     public void saveTask(Task task) {
-
+        TaskEntity entity = TaskEntity.fromTask(task);
+        if (entity.id == null) {
+            long id = routineDao.insertTask(entity);
+            task.setId((int) id);
+        } else {
+            int result = routineDao.updateTask(entity);
+            // Add this log to debug update operations
+            android.util.Log.d("RoomTaskRepository", "Updated task " + entity.id + ", result: " + result);
+        }
     }
 
     @Override
     public void saveTasks(List<Task> tasks) {
-
+        if (tasks == null || tasks.isEmpty()) return;
+        var entities = tasks.stream()
+                .map(TaskEntity::fromTask)
+                .collect(Collectors.toList());
+        List<Long> insertedIds = routineDao.insertTasks(entities);
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getId() == null) {
+                tasks.get(i).setId(insertedIds.get(i).intValue());
+            }
+        }
     }
 
     @Override
     public void removeTask(int id) {
-
+        routineDao.deleteTask(id);
     }
 
     @Override
@@ -77,7 +102,7 @@ public class RoomRoutineRepository implements Repository {
             long id = routineDao.insertRoutine(entity);
             routine.setId((int) id);
         } else {
-            int result = routineDao.updateRoutines(entity);
+            int result = routineDao.updateRoutine(entity);
             // Add this log to debug update operations
             android.util.Log.d("RoomRoutineRepository", "Updated routine " + entity.id + ", result: " + result);
         }

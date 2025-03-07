@@ -77,7 +77,6 @@ public class RepositoryTest {
                 .setId(null)
                 .setName("Tuesday")
                 .setHasStarted(false)
-                .setTasks(tasks)
                 .buildRoutine());
         assertEquals(4,(int) repository.countRoutines());
         repository.removeRoutine(1);
@@ -89,25 +88,20 @@ public class RepositoryTest {
 
         var routine = repository.findRoutine(0).getValue();
 
+        assertNotNull(repository.findRoutine(0).getValue().getHasStarted());
+        assertNotNull(routine);
+        routine.setHasStarted(null);
+        routine.setElapsedMinutes(null);
+        routine.setElapsedSeconds(null);
+
         /*
-        var list = TaskList.resetAll(routine.getTasks());
-        var newRoutine = new RoutineBuilder()
-                .setId(routine.getId())
-                .setName(routine.getName())
-                .setTasks(list)
-                .setGoalTime(routine.getGoalTime())
+        routine = new RoutineBuilder(routine)
+                .setHasStarted(null)
+                .setElapsedSeconds(null)
+                .setElapsedMinutes(null)
                 .buildRoutine();
-        repository.saveRoutine(newRoutine);
-        assertNull(repository.findRoutine(0).getValue().getHasStarted());
 
          */
-
-        assertNotNull(repository.findRoutine(0).getValue().getHasStarted());
-
-        routine.setHasStarted(null);
-        routine.setElapsedSeconds(null);
-        routine.setElapsedMinutes(null);
-        routine.setTasks(TaskList.resetAll(routine.getTasks()));
         repository.saveRoutine(routine);
         assertNull(repository.findRoutine(0).getValue().getHasStarted());
 

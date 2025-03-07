@@ -22,6 +22,8 @@ import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.TaskItemBinding;
 import edu.ucsd.cse110.habitizer.app.ui.dialog.EditTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.lib.domain.SimpleTask;
+import edu.ucsd.cse110.habitizer.lib.domain.SimpleTaskBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class TaskListAdapter extends ArrayAdapter<Task>{
@@ -51,7 +53,7 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
             binding = TaskItemBinding.inflate(layoutInflater, parent, false);
         }
 
-        binding.taskName.setText(task.getTaskName());
+        binding.taskName.setText(task.getName());
         binding.checkBox.setChecked(task.getCheckedOffStatus());
         binding.checkBox.setEnabled(!task.getCheckedOffStatus());   //enable checkbox after set
 
@@ -80,9 +82,12 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
                 binding.checkBox.setEnabled(false); //disable it so we cannot check it off
 
                 timeTaken = currentTime - (int)lastCheckedOffTime + 1;
-                task.setCheckedOff(true, (int)timeTaken);
+                //task = new SimpleTaskBuilder(task).setCheckedOff(true).setCheckedOffTime(timeTaken).buildSimpleTask();
+                //task.setCheckedOff(true, (int)timeTaken);
+                task.setCheckedOff(true);
+                task.setCheckedOffTime((int)timeTaken);
 
-                Log.d("TaskListAdapter", "Task: " + task.getTaskName() + " time: " + task.getCheckedOffTime());
+                Log.d("TaskListAdapter", "Task: " + task.getName() + " time: " + task.getCheckedOffTime());
 
                 binding.taskTime.setText(timeTaken + " mins");
                 lastCheckedOffTime = currentTime;

@@ -29,14 +29,12 @@ public class InMemoryDataSourceTest {
                     .setId(null)
                     .setName("Morning")
                     .setHasStarted(false)
-                    .setTasks(tasks)
                     .buildRoutine(),
 
             new RoutineBuilder()
                     .setId(null)
                     .setName("Evening")
                     .setHasStarted(false)
-                    .setTasks(tasks)
                     .buildRoutine()
     );
 
@@ -52,7 +50,6 @@ public class InMemoryDataSourceTest {
                 .setId(null)
                 .setName("Monday")
                 .setHasStarted(false)
-                .setTasks(tasks)
                 .buildRoutine());
         assertEquals(data.getRoutines().size(),3);
         assertEquals(data.getRoutine(2).getName(),"Monday");

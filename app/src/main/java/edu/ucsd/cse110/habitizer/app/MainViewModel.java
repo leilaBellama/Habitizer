@@ -126,10 +126,7 @@ public class MainViewModel extends ViewModel{
     }
 
     public void newRoutine(){
-        var newRoutine = new RoutineBuilder()
-                .setName("New Routine")
-                        .buildRoutine();
-
+        var newRoutine = new RoutineBuilder().makeNewRoutine().buildRoutine();
         repository.saveRoutine(newRoutine);
     }
 
@@ -137,42 +134,34 @@ public class MainViewModel extends ViewModel{
     public void reset(){
 
         if(routineId.getValue() == null) return;
-        var routine = repository.findRoutine(routineId.getValue()).getValue();
-        if(routine == null) return;
-
-
         var resetList = TaskList.resetAll(orderedTasks.getValue());
         repository.saveTasks(resetList);
+
+        var routine = repository.findRoutine(routineId.getValue()).getValue();
+        if(routine == null) return;
         routine.setHasStarted(null);
-        routine.setElapsedSeconds(null);
         routine.setElapsedMinutes(null);
-        //routine.setTasks(TaskList.resetAll(routine.getTasks()));
-        routine.setHasStarted(null);
-
-        repository.saveRoutine(routine);
-
-
-        //repository.saveRoutine(routine);/////LINE CAUSES ISSUE
-
-        /*
-        var list = TaskList.resetAll(routine.getTasks());
-        var newRoutine = new RoutineBuilder()
-                .setId(routine.getId())
-                .setName(routine.getName())
-                .setTasks(list)
-                .setGoalTime(routine.getGoalTime())
+        routine.setElapsedSeconds(null);
+                /*
+                new RoutineBuilder(routine)
+                .setHasStarted(null)
+                .setElapsedSeconds(null)
+                .setElapsedMinutes(null)
                 .buildRoutine();
 
-         */
+                 */
 
+        repository.saveRoutine(routine);
     }
 
     public void startRoutine(){
         if (hasStarted.getValue() != null) return;
+        if (timer.getValue() == null) return;
 
         var routine = repository.findRoutine(routineId.getValue()).getValue();
         if(routine == null) return;
         routine.setHasStarted(true);
+                //= new RoutineBuilder(routine).setHasStarted(true).buildRoutine();
         repository.saveRoutine(routine);
         timer.getValue().start();
     }
@@ -186,6 +175,16 @@ public class MainViewModel extends ViewModel{
         timer.getValue().end();
         var routine = repository.findRoutine(routineId.getValue()).getValue();
         if(routine == null) return;
+        /*
+        routine = new RoutineBuilder(routine)
+                .setHasStarted(false)
+                .setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue())
+                .setElapsedSeconds(timer.getValue().getElapsedSeconds())
+                .buildRoutine();
+
+         */
+
+
         routine.setHasStarted(false);
         routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
         routine.setElapsedSeconds(timer.getValue().getElapsedSeconds());
@@ -201,6 +200,13 @@ public class MainViewModel extends ViewModel{
 
         var routine = repository.findRoutine(routineId.getValue()).getValue();
         if(routine == null) return;
+        /*
+        routine = new RoutineBuilder(routine)
+                .setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue())
+                .setElapsedSeconds(timer.getValue().getElapsedSeconds())
+                .buildRoutine();
+
+         */
         routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
         routine.setElapsedSeconds(timer.getValue().getElapsedSeconds());
         repository.saveRoutine(routine);
@@ -208,31 +214,49 @@ public class MainViewModel extends ViewModel{
     public void advanceTime() {
         if (timer.getValue() == null) return;
         timer.getValue().advanceTime(15);
+        /*
         var routine = repository.findRoutine(routineId.getValue()).getValue();
         if(routine == null) return;
         routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
         routine.setElapsedSeconds(timer.getValue().getElapsedSeconds());
+        /*
+        routine = new RoutineBuilder(routine)
+                .setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue())
+                .setElapsedSeconds(timer.getValue().getElapsedSeconds())
+                .buildRoutine();
+
+         */
+        //repository.saveRoutine(routine);
 
     }
 
     public void addTask(Task task){
-        var newTask = new SimpleTaskBuilder()
-                .setTaskName(task.getTaskName())
+        var newTask = new SimpleTaskBuilder(task)
                 .setRoutineId(routineId.getValue())
                 .buildSimpleTask();
                 //new SimpleTask(null,task.getTaskName(),routineId.getValue());
+
         repository.saveTask(newTask);
     }
 
     public void setTaskName(int taskId, String taskName){
-        var newList = TaskList.editTaskName(orderedTasks.getValue(),taskId,taskName);
-        repository.saveTasks(newList);
+        //var newList = TaskList.editTaskName(orderedTasks.getValue(),taskId,taskName);
+        var task = repository.findTask(taskId).getValue();
+        if(task == null) return;
+        task.setName(taskName);
+        /*
+        task = new SimpleTaskBuilder(task)
+                .setTaskName(taskName)
+                .buildSimpleTask();
+
+         */
+        repository.saveTask(task);
     }
     public void setGoalTime(String goalTime){
-        var newRoutine = repository.findRoutine(routineId.getValue()).getValue();
-        if(newRoutine == null) return;
-        newRoutine.setGoalTime(goalTime);
-        repository.saveRoutine(newRoutine);
+        var routine = repository.findRoutine(routineId.getValue()).getValue();
+        if(routine == null) return;
+        routine.setGoalTime(goalTime);
+        repository.saveRoutine(routine);
     }
 
     public void setRoutineId(Integer id){
@@ -240,20 +264,18 @@ public class MainViewModel extends ViewModel{
     }
 
     public void setRoutineName(String name){
-        var newRoutine = repository.findRoutine(routineId.getValue()).getValue();
-        if(newRoutine == null) return;
-        newRoutine.setName(name);
-        repository.saveRoutine(newRoutine);
+        var routine = repository.findRoutine(routineId.getValue()).getValue();
+        if(routine == null) return;
+        routine.setName(name);
+        repository.saveRoutine(routine);
     }
     public Subject<String> getTaskName(){
         return this.taskName;
     }
 
-
     public Subject<String> getGoalTime(){
         return this.goalTime;
     }
-
 
     public Subject<String> getRoutineTitle(){
         return routineTitle;
@@ -271,17 +293,13 @@ public class MainViewModel extends ViewModel{
         return hasStarted;
     }
 
-
     public Subject<List<Routine>> getRoutines() {
         return routines;
     }
 
-
-    public Subject<Integer> getRoutineId() {
-        return routineId;
-    }
-
     //for testing
+    public Subject<Integer> getRoutineId() {return routineId;}
+
     public Repository getRepository() {
         return repository;
     }

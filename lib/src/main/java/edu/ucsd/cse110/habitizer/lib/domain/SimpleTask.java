@@ -18,18 +18,6 @@ public class SimpleTask implements Task {
         this.routineId = routineId;
     }
 
-    /*
-    public SimpleTask(@Nullable Integer id, @NonNull String taskName, Integer routineId){
-        this.id = id;
-        this.taskName = taskName;
-        this.checkedOff = false;
-        this.routineId = routineId;
-
-        this.checkedOffTime = 0;
-    }
-
-     */
-
     //for existing tests
     public SimpleTask(@Nullable Integer id, @NonNull String taskName){
         this.id = id;
@@ -54,20 +42,31 @@ public class SimpleTask implements Task {
 
     @NonNull
     @Override
-    public String getTaskName(){return taskName;}
+    public String getName(){return taskName;}
 
+    @Override
+    public void setName(@NonNull String taskName){
+        this.taskName = taskName;
+    }
     @Override
     public boolean getCheckedOffStatus() {return checkedOff;}
 
+    @Override
+    public void setCheckedOff(boolean isChecked){
+        this.checkedOff = isChecked;
+    }
 
     @Override
     public Integer getCheckedOffTime() { return checkedOffTime; }
 
     @Override
-    public void setName(String taskName){
-        this.taskName = taskName;
+    public void setCheckedOffTime(Integer time){
+        this.checkedOffTime = time;
     }
 
+
+
+    /*
     // Does not support unchecking, adds another if statement
     // to prevent checkoff
     @Override
@@ -84,15 +83,13 @@ public class SimpleTask implements Task {
 
     //for testing purpose
     @Override
-    public Task withId(int id){
-        return new SimpleTaskBuilder()
+    public Task setId(int id){
+        return new SimpleTaskBuilder(this)
                 .setId(id)
-                .setTaskName(taskName)
-                .setCheckedOff(checkedOff)
-                .setCheckedOffTime(checkedOffTime)
-                .setRoutineId(routineId)
                 .buildSimpleTask();
     }
+
+     */
 
 
 }
