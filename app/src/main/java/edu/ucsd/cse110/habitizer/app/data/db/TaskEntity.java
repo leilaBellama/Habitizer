@@ -3,12 +3,19 @@ package edu.ucsd.cse110.habitizer.app.data.db;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
+import edu.ucsd.cse110.habitizer.lib.domain.SimpleTask;
+import edu.ucsd.cse110.habitizer.lib.domain.SimpleTaskBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
-@Entity(tableName = "Routines")
+@Entity(tableName = "tasks_table",
+foreignKeys = @ForeignKey(entity = RoutineEntity.class,
+        parentColumns = "id",
+        childColumns = "routineId",
+        onDelete = ForeignKey.CASCADE))
 public class TaskEntity {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -41,12 +48,14 @@ public class TaskEntity {
         return taskEntity;
     }
 
-    /*
-    public @NonNull Routine toRoutine(){
-        return new Routine(id,name,hasStarted,elapsedMinutes,elapsedSeconds,goalTime);
+    public @NonNull Task toTask(){
+        return new SimpleTaskBuilder()
+                .setId(id)
+                .setTaskName(taskName)
+                .setCheckedOff(checkedOff)
+                .setCheckedOffTime(checkedOffTime)
+                .setRoutineId(routineId)
+                .buildSimpleTask();
     }
-
-     */
-
 
 }

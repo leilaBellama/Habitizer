@@ -74,10 +74,10 @@ public class RoomRoutineRepository implements Repository {
     public void saveRoutine(Routine routine) {
         RoutineEntity entity = RoutineEntity.fromRoutine(routine);
         if (entity.id == null) {
-            long id = routineDao.insert(entity);
+            long id = routineDao.insertRoutine(entity);
             routine.setId((int) id);
         } else {
-            int result = routineDao.update(entity);
+            int result = routineDao.updateRoutines(entity);
             // Add this log to debug update operations
             android.util.Log.d("RoomRoutineRepository", "Updated routine " + entity.id + ", result: " + result);
         }
@@ -89,7 +89,7 @@ public class RoomRoutineRepository implements Repository {
         var entities = routines.stream()
                 .map(RoutineEntity::fromRoutine)
                 .collect(Collectors.toList());
-        List<Long> insertedIds = routineDao.insert(entities);
+        List<Long> insertedIds = routineDao.insertRoutines(entities);
         for (int i = 0; i < routines.size(); i++) {
             if (routines.get(i).getId() == null) {
                 routines.get(i).setId(insertedIds.get(i).intValue());

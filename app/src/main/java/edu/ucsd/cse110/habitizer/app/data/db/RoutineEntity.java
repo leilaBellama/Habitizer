@@ -6,8 +6,9 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
+import edu.ucsd.cse110.habitizer.lib.domain.RoutineBuilder;
 
-@Entity(tableName = "Routines")
+@Entity(tableName = "routines_table")
 public class RoutineEntity {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -41,7 +42,14 @@ public class RoutineEntity {
     }
 
     public @NonNull Routine toRoutine(){
-        return new Routine(id,name,hasStarted,elapsedMinutes,elapsedSeconds,goalTime);
+        return new RoutineBuilder()
+                .setId(id)
+                .setName(name)
+                .setHasStarted(hasStarted)
+                .setElapsedMinutes(elapsedMinutes)
+                .setElapsedSeconds(elapsedSeconds)
+                .setGoalTime(goalTime)
+                .buildRoutine();
     }
 
 
