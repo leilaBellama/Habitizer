@@ -38,6 +38,9 @@ public interface RoutineDAO {
     @Update
     int updateRoutine(RoutineEntity routine);
 
+    @Query("SELECT COUNT(*) FROM routines_table WHERE id = :routineId")
+    int containsRoutine(int routineId);
+
     //task functions
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertTask(TaskEntity task);

@@ -39,11 +39,11 @@ public class SimpleRepository implements Repository {
     }
 
     @Override
-    public void saveTask(Task task) {dataSource.putTask(task);}
+    public void saveTask(Task task) {dataSource.addTask(task);}
     @Override
     public void saveTasks(List<Task> tasks) {
         for(var task : tasks){
-            dataSource.putTask(task);
+            dataSource.addTask(task);
         }
     }
 

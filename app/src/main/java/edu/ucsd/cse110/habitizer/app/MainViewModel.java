@@ -66,9 +66,13 @@ public class MainViewModel extends ViewModel{
         this.routineName = new SimpleSubject<>();
         this.timer.setValue(new RoutineTimer(60));
 
+        var count = repository.countRoutines();
+        var countTasks = repository.countTasks();
+        Log.d("MVM before","routines num " + count + " tasks num " + countTasks);
+
         repository.findAllTasks().observe(tasks -> {
             if(tasks == null) return;
-            Log.d("MVM","obs tasks order");
+            Log.d("MVM","obs tasks order " + tasks.size());
 
             var ordering = new ArrayList<Integer>();
             for(Task task : tasks){
@@ -92,14 +96,16 @@ public class MainViewModel extends ViewModel{
                 elapsedTime.setValue(curRoutine.getElapsedMinutes());
                 goalTime.setValue(String.valueOf(curRoutine.getGoalTime()));
                 taskOrdering.observe(ordering -> {
-                    Log.d("MVM","obs tasks");
-
                     if(ordering == null) return;
+
+                    Log.d("MVM","obs tasks " + ordering.size());
+
                     var tasks = new ArrayList<Task>();
                     for(var taskId : ordering){
                         var task = repository.findTask(taskId).getValue();
                         if(task == null) return;
                         if(Objects.equals(task.getRoutineId(), id)) {
+                            Log.d("MVM","obs tasks " + task.getName());
                             tasks.add(task);
                         }
                     }

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -12,10 +13,13 @@ import edu.ucsd.cse110.habitizer.lib.domain.SimpleTaskBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 @Entity(tableName = "tasks_table",
-foreignKeys = @ForeignKey(entity = RoutineEntity.class,
+foreignKeys = @ForeignKey(
+        entity = RoutineEntity.class,
         parentColumns = "id",
         childColumns = "routineId",
-        onDelete = ForeignKey.CASCADE))
+        onDelete = ForeignKey.CASCADE),
+        indices = {@Index(value = "routineId")}
+)
 public class TaskEntity {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -30,7 +34,7 @@ public class TaskEntity {
     @ColumnInfo(name = "checkedOffTime")
     public Integer checkedOffTime;
 
-    TaskEntity(@NonNull String taskName, Boolean checkedOff, Integer checkedOffTime,Integer routineId){
+    public TaskEntity(@NonNull String taskName, Boolean checkedOff, Integer checkedOffTime, Integer routineId){
         this.taskName = taskName;
         this.checkedOff = checkedOff;
         this.checkedOffTime = checkedOffTime;

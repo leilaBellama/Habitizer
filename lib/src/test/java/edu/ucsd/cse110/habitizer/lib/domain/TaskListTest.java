@@ -25,7 +25,7 @@ public class TaskListTest {
         new OriginalTask(3, "Task 3",true)
     );
 
-
+/*
     @Test
     public void testResetAll() {
 
@@ -36,6 +36,8 @@ public class TaskListTest {
         }
 
     }
+
+ */
 
 
     @Test

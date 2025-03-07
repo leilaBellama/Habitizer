@@ -8,7 +8,6 @@ import java.util.List;
 import edu.ucsd.cse110.habitizer.lib.domain.OriginalTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineBuilder;
-import edu.ucsd.cse110.habitizer.lib.domain.SimpleTaskBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.util.MutableSubject;
 import edu.ucsd.cse110.habitizer.lib.util.SimpleSubject;
@@ -55,25 +54,25 @@ public class InMemoryDataSource {
     );
 
     public final static List<Task> DEFAULT_TASKS = List.of(
-            new OriginalTask(0, "Morning Task 1",true),
-            new OriginalTask(1, "Morning Task 2",true),
-            new OriginalTask(2, "Morning Task 3",true),
-            new OriginalTask(3, "Evening Task 1",false),
-            new OriginalTask(4, "Evening Task 2",false),
-            new OriginalTask(5, "Evening Task 3",false),
+            new OriginalTask(null, "Morning Task 1",true),
+            new OriginalTask(null, "Morning Task 2",true),
+            new OriginalTask(null, "Morning Task 3",true),
+            new OriginalTask(null, "Evening Task 1",false),
+            new OriginalTask(null, "Evening Task 2",false),
+            new OriginalTask(null, "Evening Task 3",false),
             new OriginalTask(null, "Evening Task 4",false)
     );
 
 
     public final static List<Routine> DEFAULT_ROUTINES = List.of(
             new RoutineBuilder()
-                    .setId(null)
+                    .setId(0)
                     .setName("Morning")
                     .setGoalTime("35")
                     .buildRoutine(),
 
             new RoutineBuilder()
-                    .setId(null)
+                    .setId(1)
                     .setName("Evening")
                     .setGoalTime("30")
                     .buildRoutine()
@@ -85,11 +84,11 @@ public class InMemoryDataSource {
             data.putRoutine(routine);
         }
         for(Task task : DEFAULT_TASKS){
-            data.putTask(task);
+            data.addTask(task);
         }
         return data;
     }
-    public void putTask(Task task) {
+    public void addTask(Task task) {
         var fixedCard = preInsert(task);
         tasks.put(fixedCard.getId(), fixedCard);
         if (taskSubjects.containsKey(fixedCard.getId())) {
@@ -117,9 +116,6 @@ public class InMemoryDataSource {
         allTasksSubject.setValue(getTasks());
     }
 
-    public void editTask(int id, String name){
-        tasks.get(id).setName(name);
-    }
     public List<Task> getTasks(){
         return List.copyOf(tasks.values());
     }

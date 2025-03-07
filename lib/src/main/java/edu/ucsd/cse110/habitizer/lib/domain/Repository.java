@@ -15,6 +15,9 @@ public interface Repository {
 
     void saveTasks(List<Task> tasks);
 
+    void addTask(Task task);
+
+
     void removeTask(int id);
 
     Integer countRoutines();
@@ -26,6 +29,9 @@ public interface Repository {
     void saveRoutine(Routine routine);
 
     void saveRoutines(List<Routine> routines);
+
+    void addRoutine(Routine routine);
+
 
     void removeRoutine(int id);
 }

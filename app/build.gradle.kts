@@ -37,6 +37,35 @@ android {
 
 dependencies {
     implementation(project(":lib"))
+    implementation(libs.android.material)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
+    implementation("androidx.room:room-runtime:2.6.1")
+
+    implementation("androidx.fragment:fragment:1.6.2")
+    implementation(project(":observables"))
+
+    // Unit Testing
+    testImplementation("junit:junit:4.13.2")
+    testImplementation(libs.androidx.core)
+    testImplementation(libs.androidx.rules)
+    testImplementation(libs.androidx.test.ext.junit)
+    testImplementation(libs.androidx.test.ext.espresso.core)
+    testImplementation("androidx.room:room-testing:2.6.1")
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.junit.jupiter)
+
+    // Instrumented Testing
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.ext.espresso.core)
+    androidTestImplementation(libs.androidx.core)
+    androidTestImplementation("androidx.room:room-testing:2.6.1")
+
+    // Room Annotation Processor
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    /*
+    implementation(project(":lib"))
 
     implementation(libs.android.material)
     implementation(libs.androidx.appcompat)
@@ -49,21 +78,28 @@ dependencies {
     //implementation(libs.androidx.fragment)
     implementation(project(":observables"))
 
-    testImplementation(libs.junit4)
+    //testImplementation(libs.junit4)
     testImplementation(libs.androidx.core)
     testImplementation(libs.androidx.rules)
     testImplementation(libs.androidx.test.ext.junit)
     testImplementation(libs.androidx.test.ext.espresso.core)
+    testImplementation("junit:junit:4.13.2")
 
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.ext.espresso.core)
-    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation(libs.androidx.core)
+
 //    androidTestImplementation("androidx.test:runner:1.6.2")
 //    androidTestImplementation("androidx.test:rules:1.6.1u")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
 //    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
+
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.junit.jupiter)
+    androidTestImplementation("androidx.room:room-testing:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
+
+     */
+
 }

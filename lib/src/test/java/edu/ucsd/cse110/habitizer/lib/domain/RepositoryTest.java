@@ -94,20 +94,10 @@ public class RepositoryTest {
         routine.setElapsedMinutes(null);
         routine.setElapsedSeconds(null);
 
-        /*
-        routine = new RoutineBuilder(routine)
-                .setHasStarted(null)
-                .setElapsedSeconds(null)
-                .setElapsedMinutes(null)
-                .buildRoutine();
-
-         */
         repository.saveRoutine(routine);
         assertNull(repository.findRoutine(0).getValue().getHasStarted());
 
     }
-
-
 
 
     @Test
