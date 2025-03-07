@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation("androidx.room:room-runtime:2.6.1")
 
 
     implementation("androidx.fragment:fragment:1.6.2")
@@ -64,4 +65,5 @@ dependencies {
 
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.junit.jupiter)
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
 }

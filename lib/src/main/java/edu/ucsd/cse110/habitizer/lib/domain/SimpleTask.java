@@ -11,8 +11,14 @@ public class SimpleTask implements Task {
     private Integer checkedOffTime;
     private Integer routineId;
 
+    public SimpleTask(@Nullable Integer id, @NonNull String taskName,Boolean checkedOff, Integer checkedOffTime, Integer routineId){
+        this.taskName = taskName;
+        this.checkedOff = checkedOff;
+        this.checkedOffTime = checkedOffTime;
+        this.routineId = routineId;
+    }
 
-
+    /*
     public SimpleTask(@Nullable Integer id, @NonNull String taskName, Integer routineId){
         this.id = id;
         this.taskName = taskName;
@@ -22,6 +28,9 @@ public class SimpleTask implements Task {
         this.checkedOffTime = 0;
     }
 
+     */
+
+    //for existing tests
     public SimpleTask(@Nullable Integer id, @NonNull String taskName){
         this.id = id;
         this.taskName = taskName;
@@ -75,7 +84,15 @@ public class SimpleTask implements Task {
 
     //for testing purpose
     @Override
-    public Task withId(int id){ return new SimpleTask(id, this.taskName,this.routineId); }
+    public Task withId(int id){
+        return new SimpleTaskBuilder()
+                .setId(id)
+                .setTaskName(taskName)
+                .setCheckedOff(checkedOff)
+                .setCheckedOffTime(checkedOffTime)
+                .setRoutineId(routineId)
+                .buildSimpleTask();
+    }
 
 
 }

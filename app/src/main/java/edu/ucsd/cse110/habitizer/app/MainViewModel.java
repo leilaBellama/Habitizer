@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
+import edu.ucsd.cse110.habitizer.lib.domain.RoutineBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.SimpleTask;
+import edu.ucsd.cse110.habitizer.lib.domain.SimpleTaskBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.Repository;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskList;
@@ -124,7 +126,11 @@ public class MainViewModel extends ViewModel{
     }
 
     public void newRoutine(){
-        repository.saveRoutine(new Routine());
+        var newRoutine = new RoutineBuilder()
+                .setName("New Routine")
+                        .buildRoutine();
+
+        repository.saveRoutine(newRoutine);
     }
 
 
@@ -210,7 +216,11 @@ public class MainViewModel extends ViewModel{
     }
 
     public void addTask(Task task){
-        var newTask = new SimpleTask(null,task.getTaskName(),routineId.getValue());
+        var newTask = new SimpleTaskBuilder()
+                .setTaskName(task.getTaskName())
+                .setRoutineId(routineId.getValue())
+                .buildSimpleTask();
+                //new SimpleTask(null,task.getTaskName(),routineId.getValue());
         repository.saveTask(newTask);
     }
 

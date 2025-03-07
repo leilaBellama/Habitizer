@@ -4,6 +4,8 @@ import android.app.Application;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Repository;
+import edu.ucsd.cse110.habitizer.lib.domain.SimpleRepository;
+
 public class HabitizerApplication extends Application {
     private InMemoryDataSource dataSource;
     private Repository repository;
@@ -13,7 +15,7 @@ public class HabitizerApplication extends Application {
         super.onCreate();
 
         this.dataSource = InMemoryDataSource.DEFAULT();
-        this.repository = new Repository(dataSource);
+        this.repository = new SimpleRepository(dataSource);
     }
 
     public Repository getTaskRepository() {

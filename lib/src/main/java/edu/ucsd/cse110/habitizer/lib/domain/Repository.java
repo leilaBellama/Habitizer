@@ -2,60 +2,30 @@ package edu.ucsd.cse110.habitizer.lib.domain;
 
 import java.util.List;
 
-import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
-public class Repository {
-    private final InMemoryDataSource dataSource;
 
-    public Repository(InMemoryDataSource dataSource){
-        this.dataSource = dataSource;
-    }
+public interface Repository {
+    Integer countTasks();
 
-    /*
+    Subject<Task> findTask(int id);
 
-    public Integer countTasksWithRoutineId(Integer routineId) {
-        return dataSource.getTasksWithRoutineId(routineId).size();
-    }
+    Subject<List<Task>> findAllTasks();
 
-    public Subject<List<Task>> findAllTasksWithRoutineID(Integer routineID){
-        return dataSource.getAllTasksSubjectWithRoutineId(routineID);
-    }
+    void saveTask(Task task);
 
-     */
+    void saveTasks(List<Task> tasks);
 
-    public Integer countTasks() {
-        return dataSource.getTasks().size();
-    }
+    void removeTask(int id);
 
-    public Subject<Task> findTask(int id){
-        return dataSource.getTaskSubject(id);
-    }
+    Integer countRoutines();
 
-    public Subject<List<Task>> findAllTasks(){
-        return dataSource.getAllTasksSubject();
-    }
+    Subject<Routine> findRoutine(int id);
 
-    public void saveTask(Task task) {dataSource.putTask(task);}
-    public void saveTasks(List<Task> tasks) {
-        for(var task : tasks){
-            dataSource.putTask(task);
-        }
-    }
+    Subject<List<Routine>> findAllRoutines();
 
-    public void removeTask(int id) {dataSource.removeTask(id);}
+    void saveRoutine(Routine routine);
 
-    public Integer countRoutines() {return dataSource.getRoutines().size();}
+    void saveRoutines(List<Routine> routines);
 
-    public Subject<Routine> findRoutine(int id) {return dataSource.getRoutineSubject(id);}
-    public Subject<List<Routine>> findAllRoutines() {return dataSource.getAllRoutinesSubject();}
-
-    public void saveRoutine(Routine routine) {dataSource.putRoutine(routine);}
-    public void saveRoutines(List<Routine> routines) {
-        for(var routine : routines){
-            dataSource.putRoutine(routine);
-        }
-    }
-
-    public void removeRoutine(int id) {dataSource.removeRoutine(id);}
-
+    void removeRoutine(int id);
 }

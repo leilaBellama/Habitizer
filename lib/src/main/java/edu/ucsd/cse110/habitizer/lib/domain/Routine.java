@@ -13,9 +13,9 @@ public class Routine {
     private Integer elapsedSeconds;
     private String goalTime;
     private List<Task> tasks;
-    //private RoutineTimer timer;
 
 
+    //for existing tests
     public Routine(@Nullable Integer id, @Nullable String name, @Nullable Boolean hasStarted, @Nullable Integer elapsedMinutes,@Nullable Integer elapsedSeconds, @Nullable String goalTime,@Nullable List<Task> tasks){
         this.id = id;
         this.name = name;
@@ -23,10 +23,22 @@ public class Routine {
         this.elapsedMinutes = elapsedMinutes;
         this.elapsedSeconds = elapsedSeconds;
         this.goalTime = goalTime;
-        //this.timer = timer;
         this.tasks = (tasks != null) ? List.copyOf(tasks) : new ArrayList<>();
     }
 
+    /*
+    public Routine(@Nullable Integer id, @Nullable String name, @Nullable Boolean hasStarted, @Nullable Integer elapsedMinutes,@Nullable Integer elapsedSeconds, @Nullable String goalTime){
+        this.id = id;
+        this.name = name;
+        this.hasStarted = hasStarted;
+        this.elapsedMinutes = elapsedMinutes;
+        this.elapsedSeconds = elapsedSeconds;
+        this.goalTime = goalTime;
+    }
+
+     */
+
+    /*
     public static List<Routine> swapCurrentRoutine(List<Routine> list, Integer id){
         var copy = new ArrayList<>(List.copyOf(list));
         var current = copy.get(0).withId(id);
@@ -44,6 +56,8 @@ public class Routine {
         this.name = "New Routine";
         this.goalTime = "---";
     }
+
+     */
 
 
     public Integer getId() {return id;}

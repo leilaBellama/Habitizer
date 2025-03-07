@@ -89,16 +89,22 @@ public class RoutinesPageFragment extends Fragment {
         });
         model.getGoalTime().observe(goalTime -> {
             if(goalTime != null){
-                view.goalTime.setText(goalTime + " min");
+                if(!goalTime.equals("null")){
+                    view.goalTime.setText(goalTime + " min");
+                    Log.d("MA","obs time " + goalTime);
+                }else {
+                    Log.d("MA","obs time is null");
+                    view.goalTime.setText(R.string.dashes);
+                }
             }
         });
         model.getElapsedTime().observe(getViewLifecycleOwner(),time -> {
             if (time != null) {
-                Log.d("MA","obs time " + time);
+                //Log.d("MA","obs time " + time);
                 view.time.setText(time + " min");
             } else {
                 view.time.setText(R.string.dashes);
-                Log.d("MA","obs null time ");
+                //Log.d("MA","obs null time ");
 
             }
         });
