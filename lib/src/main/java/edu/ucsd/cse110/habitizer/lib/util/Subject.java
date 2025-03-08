@@ -28,6 +28,12 @@ public class Subject<T> {
         observer.onChange(value);
     }
 
+    public List<Observer<T>> getObservers() {
+        return observers;
+    }
+
+
+
     public void removeObserver(Observer<T> observer){
         observers.remove(observer);
     }

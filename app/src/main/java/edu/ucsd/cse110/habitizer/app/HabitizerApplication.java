@@ -3,20 +3,20 @@ package edu.ucsd.cse110.habitizer.app;
 import android.app.Application;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
-import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
+import edu.ucsd.cse110.habitizer.lib.domain.Repository;
 public class HabitizerApplication extends Application {
     private InMemoryDataSource dataSource;
-    private TaskRepository taskRepository;
+    private Repository repository;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         this.dataSource = InMemoryDataSource.DEFAULT();
-        this.taskRepository = new TaskRepository(dataSource);
+        this.repository = new Repository(dataSource);
     }
 
-    public TaskRepository getTaskRepository() {
-        return taskRepository;
+    public Repository getTaskRepository() {
+        return repository;
     }
 }

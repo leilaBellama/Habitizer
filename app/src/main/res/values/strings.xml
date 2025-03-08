@@ -12,9 +12,13 @@
     <string name="swap_views">Swap Views</string>
     <string name="time_elapsed">Time Elapsed:</string>
     <string name="out_of">Out Of:</string>
-    <string name="stop_time">Stop Time</string>
-    <string name="advance_time">Advance Time</string>
+    <string name="stop_time">Stop</string>
+    <string name="advance_time">Advance</string>
     <string name="nothing">---</string>
     <string name="input_name">Input Name</string>
     <string name="dashes">---</string>
+    <string name="reset">Reset</string>
+    <string name="routines">Routines</string>
+    <string name="home">Home</string>
+    <string name="add_task">Add Task</string>
 </resources>

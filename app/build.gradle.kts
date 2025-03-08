@@ -42,6 +42,10 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
+
+    implementation("androidx.fragment:fragment:1.6.2")
+    //implementation(libs.androidx.fragment)
     implementation(project(":observables"))
 
     testImplementation(libs.junit4)

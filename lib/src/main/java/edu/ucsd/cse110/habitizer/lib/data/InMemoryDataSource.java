@@ -4,95 +4,117 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.habitizer.lib.domain.OriginalTask;
+import edu.ucsd.cse110.habitizer.lib.domain.Routine;
+import edu.ucsd.cse110.habitizer.lib.domain.RoutineBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public class InMemoryDataSource {
 
-    private int nextId = 0;
+    private final Map<Integer, Routine> routines
+            = new HashMap<>();
 
-    private final Map<Integer, Task> tasks
+    private final Map<Integer, Subject<Routine>> routineSubjects
             = new HashMap<>();
-    private final Map<Integer, Subject<Task>> taskSubjects
-            = new HashMap<>();
-    private final Subject<List<Task>> allTasksSubject
+
+    private final Subject<List<Routine>> allRoutinesSubject
             = new Subject<>();
 
-    public InMemoryDataSource(){
+    private int nextId = 0;
+
+    public InMemoryDataSource() {
 
     }
 
-    public final static List<Task> DEFAULT = List.of(
-            new Task(0, "Morning Task 1",true),
-            new Task(1, "Morning Task 2",true),
-            new Task(2, "Morning Task 3",true),
-            new Task(3, "Evening Task 1",false),
-            new Task(4, "Evening Task 2",false),
-            new Task(5, "Evening Task 3",false),
-            new Task(null, "Evening Task 4",false),
-            new Task(null, "Evening Task 5",false)
+    public final static List<Task> Morning = List.of(
+            new OriginalTask(0, "Morning Task 1",true),
+            new OriginalTask(1, "Morning Task 2",true),
+            new OriginalTask(2, "Morning Task 3",true),
+            new OriginalTask(3, "Morning Task 4",true),
+            new OriginalTask(4, "Morning Task 5",true)
+    );
+
+    public final static List<Task> Evening = List.of(
+            new OriginalTask(0, "Evening Task 1",false),
+            new OriginalTask(1, "Evening Task 2",false),
+            new OriginalTask(2, "Evening Task 3",false),
+            new OriginalTask(3, "Evening Task 4",false)
+    );
+
+
+    public final static List<Routine> DEFAULT = List.of(
+            new RoutineBuilder()
+                    .setId(null)
+                    .setName("Morning")
+                    .setTasks(Morning)
+                    .setGoalTime("35")
+                    .buildRoutine(),
+
+            new RoutineBuilder()
+                    .setId(null)
+                    .setName("Evening")
+                    .setTasks(Evening)
+                    .setGoalTime("30")
+                    .buildRoutine()
     );
 
     public static InMemoryDataSource DEFAULT(){
         var data = new InMemoryDataSource();
-        for(Task task : DEFAULT){
-            data.putTask(task);
+        for(Routine routine : DEFAULT){
+            data.putRoutine(routine);
         }
         return data;
     }
 
-    public void putTask(Task task) {
-        var fixedCard = preInsert(task);
-        tasks.put(fixedCard.getId(), fixedCard);
-        if (taskSubjects.containsKey(fixedCard.getId())) {
-            taskSubjects.get(fixedCard.getId()).setValue(fixedCard);
+
+    public void putRoutine(Routine routine) {
+        var fixedRoutine = preInsertRoutine(routine);
+        routines.put(fixedRoutine.getId(), fixedRoutine);
+        if (routineSubjects.containsKey(fixedRoutine.getId())) {
+            routineSubjects.get(fixedRoutine.getId()).setValue(fixedRoutine);
         }
-        allTasksSubject.setValue(new ArrayList<Task>(getTasks()));
+        allRoutinesSubject.setValue(new ArrayList<Routine>(getRoutines()));
     }
 
-    //if task to insert has null id, create new task with next id
-    private Task preInsert(Task task) {
-        var id = task.getId();
+    private Routine preInsertRoutine(Routine routine) {
+        var id = routine.getId();
         if (id == null) {
-            //nextId++;
-            task = task.withId(nextId++);
-        } else if (id > nextId) {
+            routine = routine.withId(nextId++);
+        } else if (id >= nextId) {
             nextId = id + 1;
         }
-        return task;
+        return routine;
     }
 
-    public void removeTask(int id) {
-        tasks.remove(id);
-        if (taskSubjects.containsKey(id)) {
-            taskSubjects.get(id).setValue(null);
+    public void removeRoutine(int id) {
+        routines.remove(id);
+        if (routineSubjects.containsKey(id)) {
+            routineSubjects.get(id).setValue(null);
         }
-        allTasksSubject.setValue(getTasks());
+        allRoutinesSubject.setValue(getRoutines());
     }
 
-    public void editTask(int id, String name){
-        tasks.get(id).setName(name);
-    }
-    public List<Task> getTasks(){
-        return List.copyOf(tasks.values());
+    public List<Routine> getRoutines(){
+        return List.copyOf(routines.values());
     }
 
-    public Task getTask(int id){
-        return tasks.get(id);
+    public Routine getRoutine(int id){
+        return routines.get(id);
     }
-
-    public Subject<Task> getTaskSubject(int id){
-        if(!taskSubjects.containsKey(id)){
-            var subject = new Subject<Task>();
-            subject.setValue(getTask(id));
-            taskSubjects.put(id, subject);
+    public Subject<Routine> getRoutineSubject(int id){
+        if(!routineSubjects.containsKey(id)){
+            var subject = new Subject<Routine>();
+            subject.setValue(getRoutine(id));
+            routineSubjects.put(id, subject);
         }
-        return taskSubjects.get(id);
+        return routineSubjects.get(id);
     }
 
-    public Subject<List<Task>> getAllTasksSubject() {
-        return allTasksSubject;
+    public Subject<List<Routine>> getAllRoutinesSubject() {
+        return allRoutinesSubject;
     }
 
 }
+
+

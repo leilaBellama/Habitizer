@@ -43,6 +43,7 @@ public class EditGoalTimeDialogFragment extends DialogFragment{
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentEditGoalTimeDialogBinding.inflate(getLayoutInflater());
 
+        /*
         if (activityModel.getHasStarted().getValue()) {
             AlertDialog dialog = new AlertDialog.Builder(getActivity())
                     .setTitle("Warning")
@@ -53,6 +54,8 @@ public class EditGoalTimeDialogFragment extends DialogFragment{
             dialog.getWindow().getDecorView().postDelayed(dialog::dismiss, 1500);
             return dialog;
         }
+
+         */
 
 
         return new AlertDialog.Builder(getActivity())
