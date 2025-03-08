@@ -71,19 +71,6 @@ public class RepositoryTest {
 
         var routine = repository.find(0).getValue();
 
-        /*
-        var list = TaskList.resetAll(routine.getTasks());
-        var newRoutine = new RoutineBuilder()
-                .setId(routine.getId())
-                .setName(routine.getName())
-                .setTasks(list)
-                .setGoalTime(routine.getGoalTime())
-                .buildRoutine();
-        repository.save(newRoutine);
-        assertNull(repository.find(0).getValue().getHasStarted());
-
-         */
-
         assertNotNull(repository.find(0).getValue().getHasStarted());
 
         routine.setHasStarted(null);
@@ -94,35 +81,5 @@ public class RepositoryTest {
         assertNull(repository.find(0).getValue().getHasStarted());
 
     }
-
-
-
-    /*
-    @Test
-    public void testSaveAndRemoveTask(){
-        for(Task task : tasks){
-            repository.saveTask(task);
-        }
-        assertEquals(14,(int) repository.countTasks());
-        repository.removeTask(4);
-        assertEquals(13,(int) repository.countTasks());
-
-    }
-
-    @Test
-    public void testGetRoutinesTasks(){
-        for(Task task : tasks){
-            repository.saveTask(task);
-        }
-        assertEquals(5,(int) repository.countTasksWithRoutineId(0));
-        assertEquals(4,(int) repository.countTasksWithRoutineId(1));
-        assertEquals(2,(int) repository.countTasksWithRoutineId(2));
-        assertEquals(3,(int) repository.countTasksWithRoutineId(3));
-        repository.saveTask(new SimpleTask(0, "Morning Task first",0));
-        assertEquals("Morning Task first",repository.findTask(0).getValue().getTaskName());
-    }
-
-     */
-
 
 }
