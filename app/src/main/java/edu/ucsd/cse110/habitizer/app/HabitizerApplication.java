@@ -18,10 +18,9 @@ public class HabitizerApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        //this.dataSource = InMemoryDataSource.DEFAULT();
-        //this.repository = new SimpleRepository(dataSource);
-
-
+        this.dataSource = InMemoryDataSource.DEFAULT();
+        this.repository = new SimpleRepository(dataSource);
+/*
         var database = Room.databaseBuilder(
                 getApplicationContext(),
                 HabitizerDatabase.class,
@@ -43,6 +42,8 @@ public class HabitizerApplication extends Application {
                     .putBoolean("isFirstRun", false)
                     .apply();
         }
+
+ */
 
     }
 

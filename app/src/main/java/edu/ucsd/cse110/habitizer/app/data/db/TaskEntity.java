@@ -16,8 +16,7 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 foreignKeys = @ForeignKey(
         entity = RoutineEntity.class,
         parentColumns = "id",
-        childColumns = "routineId",
-        onDelete = ForeignKey.CASCADE),
+        childColumns = "routineId"),
         indices = {@Index(value = "routineId")}
 )
 public class TaskEntity {
@@ -25,8 +24,8 @@ public class TaskEntity {
     @ColumnInfo(name = "id")
     public Integer id = null;
 
-    @ColumnInfo(name = "taskName")
-    public String taskName;
+    @ColumnInfo(name = "name")
+    public String name;
     @ColumnInfo(name = "checkedOff")
     public Boolean checkedOff;
     @ColumnInfo(name = "routineId")
@@ -34,8 +33,8 @@ public class TaskEntity {
     @ColumnInfo(name = "checkedOffTime")
     public Integer checkedOffTime;
 
-    public TaskEntity(@NonNull String taskName, Boolean checkedOff, Integer checkedOffTime, Integer routineId){
-        this.taskName = taskName;
+    public TaskEntity(@NonNull String name, Boolean checkedOff, Integer checkedOffTime, Integer routineId){
+        this.name = name;
         this.checkedOff = checkedOff;
         this.checkedOffTime = checkedOffTime;
         this.routineId = routineId;
@@ -55,7 +54,7 @@ public class TaskEntity {
     public @NonNull Task toTask(){
         return new SimpleTaskBuilder()
                 .setId(id)
-                .setTaskName(taskName)
+                .setTaskName(name)
                 .setCheckedOff(checkedOff)
                 .setCheckedOffTime(checkedOffTime)
                 .setRoutineId(routineId)

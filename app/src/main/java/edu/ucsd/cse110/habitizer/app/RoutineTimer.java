@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.habitizer.app;
 
+import android.util.Log;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -19,9 +21,12 @@ public class RoutineTimer {
     public RoutineTimer(Integer interval) {
         this.hasStarted = new SimpleSubject<>();
         this.elapsedMin = new SimpleSubject<>();
+        //this.elapsedMin.setValue(0);
+        //Log.d("timer", "initializing elapsedMin");
+
         this.interval = interval;
 
-        hasStarted.setValue(false);
+        //hasStarted.setValue(false);
     }
 
     public RoutineTimer(Integer interval,ScheduledExecutorService scheduler) {
@@ -29,9 +34,9 @@ public class RoutineTimer {
         this.hasStarted = new SimpleSubject<>();
         this.elapsedMin = new SimpleSubject<>();
         this.interval = interval;
-        this.elapsedMin.setValue(0);
+        //this.elapsedMin.setValue(0);
         this.elapsedSeconds = 0;
-        this.hasStarted.setValue(false);
+        //this.hasStarted.setValue(false);
     }
 
     public MutableSubject<Integer> getElapsedMinutes() {
@@ -52,13 +57,13 @@ public class RoutineTimer {
     }
 
     public void advanceTime(Integer advance) {
-        if (!hasStarted.getValue()) return;
+        //if (!hasStarted.getValue()) return;
         elapsedSeconds += advance;
         if (elapsedSeconds >= interval) {
             elapsedMin.setValue(elapsedMin.getValue()+1);
             elapsedSeconds -= interval;
         }
-//        Log.d("m","Advanced by 15 seconds minutes: " + getElapsedMinutes().getValue() + " seconds " + elapsedSeconds);
+        Log.d("m","Advanced by 15 seconds minutes: " + getElapsedMinutes().getValue() + " seconds " + elapsedSeconds);
     }
 
     public void start() {
@@ -66,22 +71,25 @@ public class RoutineTimer {
             scheduler = Executors.newScheduledThreadPool(1);
         }
         elapsedMin.setValue(0);
+        Log.d("timer", "setting time 0");
         elapsedSeconds = 0;
-        hasStarted.setValue(true);
         scheduler.scheduleWithFixedDelay(() -> {
             elapsedSeconds++;
             if (elapsedSeconds >= interval) {
                 elapsedMin.setValue(elapsedMin.getValue() + 1);
+
                 elapsedSeconds = 0;
-//                Log.d("m","Elapsed time: " + getElapsedMinutes().getValue() + " minutes,");
+                Log.d("m","Elapsed time: " + getElapsedMinutes().getValue() + " minutes,");
             }
-//            Log.d("s","Elapsed time: " + elapsedSeconds  + " seconds");
+            Log.d("s", elapsedSeconds  + " seconds");
         }, 0, 1, TimeUnit.SECONDS);
     }
 
     public void stop() {
-        scheduler.shutdown();
-//        Log.d("m", "Timer stopped at: " + getElapsedMinutes().getValue() + " minutes");
+        if(scheduler != null && !scheduler.isShutdown()){
+            scheduler.shutdown();
+        }
+        Log.d("m", "Timer stopped at: " + getElapsedMinutes().getValue() + " minutes");
     }
 
     public void end() {
@@ -89,6 +97,6 @@ public class RoutineTimer {
         int roundUp = 0;
         if (elapsedSeconds > 0) { roundUp = 1;}
         elapsedMin.setValue(elapsedMin.getValue() + roundUp);
-//        Log.d("m","Ended at: " + getElapsedTime().getValue() + " minutes");
+        Log.d("m","Ended at: " + getElapsedMinutes().getValue() + " minutes");
     }
 }

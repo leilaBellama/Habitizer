@@ -76,44 +76,37 @@ public class RoutinesPageFragment extends Fragment {
     private void setupMVP() {
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
         model.getHasStarted().observe(hasStarted -> {
-            if(hasStarted == null)return;
-            if(hasStarted) startRoutine();
+            if(hasStarted == null) reset();
+            else if(hasStarted) startRoutine();
             else endRoutine();
-            /*
-            if (hasStarted == null) reset();
-            else if (!hasStarted) endRoutine();
-            else startRoutine();
-
-             */
 
         });
         model.getGoalTime().observe(goalTime -> {
             if(goalTime != null){
                 if(!goalTime.equals("null")){
                     view.goalTime.setText(goalTime + " min");
-                    Log.d("MA","obs time " + goalTime);
+                    Log.d("MA","obs goal time " + goalTime);
                 }else {
-                    Log.d("MA","obs time is null");
+                    Log.d("MA","obs goal time is null");
                     view.goalTime.setText(R.string.dashes);
                 }
             }
         });
         model.getElapsedTime().observe(getViewLifecycleOwner(),time -> {
             if (time != null) {
-                //Log.d("MA","obs time " + time);
+
+                Log.d("MA obs timer","obs time " + time);
                 view.time.setText(time + " min");
             } else {
                 view.time.setText(R.string.dashes);
-                //Log.d("MA","obs null time ");
+                Log.d("MA obs timer","obs null time ");
 
             }
         });
         view.homeButton.setOnClickListener(v -> swapFragments());
         view.startButton.setOnClickListener(v -> startRoutine());
         view.endButton.setOnClickListener(v -> endRoutine());
-        view.resetButton.setOnClickListener(v -> {
-            reset();
-        });
+        view.resetButton.setOnClickListener(v -> reset());
         view.stopTime.setOnClickListener(v -> {
             model.stopTimer();
             view.stopTime.setVisibility(View.GONE);
@@ -136,9 +129,9 @@ public class RoutinesPageFragment extends Fragment {
         });
     }
     private void endRoutine() {
-        view.advanceTimeButton.setVisibility(View.GONE);
-        view.startButton.setVisibility(View.GONE);
-        view.stopTime.setVisibility(View.GONE);
+        view.advanceTimeButton.setVisibility(View.INVISIBLE);
+        view.startButton.setVisibility(View.INVISIBLE);
+        view.stopTime.setVisibility(View.INVISIBLE);
         view.endButton.setText("Routine Ended");
         view.endButton.setEnabled(false);
         view.endButton.requestLayout();
@@ -152,21 +145,22 @@ public class RoutinesPageFragment extends Fragment {
         view.endButton.setText("End");
         view.endButton.setVisibility(View.VISIBLE);
         view.endButton.setEnabled(true);
-        view.addTaskButton.setVisibility(View.GONE);
+        view.addTaskButton.setVisibility(View.INVISIBLE);
         view.stopTime.setVisibility(View.VISIBLE);
-        view.homeButton.setVisibility(View.GONE);
+        view.advanceTimeButton.setVisibility(View.VISIBLE);
+        view.homeButton.setVisibility(View.INVISIBLE);
         model.startRoutine();
     }
     private void reset() {
         view.startButton.setVisibility(View.VISIBLE);
-        view.startButton.setEnabled(true);
-        view.endButton.setVisibility(View.GONE);
+        //view.startButton.setEnabled(true);
+        view.endButton.setVisibility(View.INVISIBLE);
         view.addTaskButton.setVisibility(View.VISIBLE);
-        view.addTaskButton.setEnabled(true);
-        view.stopTime.setVisibility(View.GONE);
-        view.advanceTimeButton.setVisibility(View.GONE);
+        //view.addTaskButton.setEnabled(true);
+        view.stopTime.setVisibility(View.INVISIBLE);
+        view.advanceTimeButton.setVisibility(View.INVISIBLE);
         view.homeButton.setVisibility(View.VISIBLE);
-        view.resetButton.setVisibility(View.GONE);
+        view.resetButton.setVisibility(View.INVISIBLE);
         model.reset();
     }
 }

@@ -12,6 +12,7 @@ public class SimpleTask implements Task {
     private Integer routineId;
 
     public SimpleTask(@Nullable Integer id, @NonNull String taskName,Boolean checkedOff, Integer checkedOffTime, Integer routineId){
+        this.id = id;
         this.taskName = taskName;
         this.checkedOff = checkedOff;
         this.checkedOffTime = checkedOffTime;

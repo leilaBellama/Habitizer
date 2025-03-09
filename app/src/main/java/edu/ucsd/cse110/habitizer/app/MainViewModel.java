@@ -9,8 +9,10 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineBuilder;
@@ -34,11 +36,12 @@ public class MainViewModel extends ViewModel{
     private final MutableSubject<RoutineTimer> timer;
     private final MutableLiveData<Integer> elapsedTime;
     private final MutableSubject<Integer> routineId;
-    private final Subject<String> taskName;
+    private final MutableSubject<String> taskName;
     private final MutableSubject<String> goalTime;
     private final MutableSubject<List<Routine>> routines;
+    private final MutableSubject<Routine> currentRoutine;
 
-    private final Subject<String> routineName;
+    private final MutableSubject<String> routineName;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -55,6 +58,7 @@ public class MainViewModel extends ViewModel{
         this.orderedTasks = new SimpleSubject<>();
         this.taskOrdering = new SimpleSubject<>();
         this.routineId = new SimpleSubject<>();
+        this.currentRoutine = new SimpleSubject<>();
 
         this.routineTitle = new SimpleSubject<>();
         this.hasStarted = new SimpleSubject<>();
@@ -66,59 +70,56 @@ public class MainViewModel extends ViewModel{
         this.routineName = new SimpleSubject<>();
         this.timer.setValue(new RoutineTimer(60));
 
-        var count = repository.countRoutines();
-        var countTasks = repository.countTasks();
-        Log.d("MVM before","routines num " + count + " tasks num " + countTasks);
-
+        /*
         repository.findAllTasks().observe(tasks -> {
             if(tasks == null) return;
-            Log.d("MVM","obs tasks order " + tasks.size());
-
+            Log.d("MVM","obs tasks order, num tasks" + tasks.size());
             var ordering = new ArrayList<Integer>();
             for(Task task : tasks){
+                Log.d("MVM","obs tasks order " + task.getId() + " routine id " + task.getRoutineId());
                 if(task.getId() != null) {
                     ordering.add(task.getId());
+                    var temp = repository.findTask(task.getId()).getValue();
+                    Boolean b = (temp == null);
+                    Log.d("MVM","obs tasks order, find task id " + task.getId() + temp);
                 }
             }
             taskOrdering.setValue(ordering);
-
         });
-
+         */
         repository.findAllRoutines().observe(routines::setValue);
 
         routineId.observe(id -> {
             if(id == null)return;
+            //Log.d("MVM obs id","obs id " + id);
             repository.findRoutine(id).observe(curRoutine -> {
                 if(curRoutine == null)return;
-
+                //Log.d("MVM obs CR","obs curRoutine " + curRoutine.getId() + curRoutine.getName());
                 routineTitle.setValue(curRoutine.getName());
                 hasStarted.setValue(curRoutine.getHasStarted());
                 elapsedTime.setValue(curRoutine.getElapsedMinutes());
                 goalTime.setValue(String.valueOf(curRoutine.getGoalTime()));
-                taskOrdering.observe(ordering -> {
-                    if(ordering == null) return;
-
-                    Log.d("MVM","obs tasks " + ordering.size());
-
-                    var tasks = new ArrayList<Task>();
-                    for(var taskId : ordering){
-                        var task = repository.findTask(taskId).getValue();
-                        if(task == null) return;
-                        if(Objects.equals(task.getRoutineId(), id)) {
-                            Log.d("MVM","obs tasks " + task.getName());
-                            tasks.add(task);
-                        }
-                    }
-                    this.orderedTasks.setValue(tasks);
+                repository.findAllTasks().observe(tasks -> {
+                    //Log.d("MVM obs CR","obs findTasks ");
+                    if(tasks == null) return;
+                    //Log.d("MVM obs CR","obs findTasks " + tasks.size());
+                    var newOrderedTasks = tasks.stream()
+                            .filter(task -> Objects.equals(task.getRoutineId(), curRoutine.getId()))
+                            .toList();
+                    if(orderedTasks.getValue() == newOrderedTasks) return;
+                    orderedTasks.setValue(newOrderedTasks);
+                    //Log.d("MVM obs tasks","new ordered tasks size " + newOrderedTasks.size());
                 });
-
             });
-
         });
 
-        timer.getValue().getElapsedMinutes().observe(val -> {
-            //if(val == null) return;
-            elapsedTime.postValue(val);
+        timer.getValue().getElapsedMinutes().observe(time -> {
+            if(time == null){
+                Log.d("MVM obs timer", "null time");
+            }else{
+                Log.d("MVM obs timer", time.toString());
+                elapsedTime.postValue(time);
+            }
         });
 
         // When the ordering changes, update the first task
@@ -138,59 +139,37 @@ public class MainViewModel extends ViewModel{
 
 
     public void reset(){
-
-        if(routineId.getValue() == null) return;
+        if(routineId.getValue() == null || hasStarted.getValue() == null) return;
         var resetList = TaskList.resetAll(orderedTasks.getValue());
         repository.saveTasks(resetList);
-
         var routine = repository.findRoutine(routineId.getValue()).getValue();
         if(routine == null) return;
         routine.setHasStarted(null);
         routine.setElapsedMinutes(null);
         routine.setElapsedSeconds(null);
-                /*
-                new RoutineBuilder(routine)
-                .setHasStarted(null)
-                .setElapsedSeconds(null)
-                .setElapsedMinutes(null)
-                .buildRoutine();
-
-                 */
-
         repository.saveRoutine(routine);
+        Log.d("MVM start", "cur routine id " + routineId.getValue());
+
     }
 
     public void startRoutine(){
-        if (hasStarted.getValue() != null) return;
         if (timer.getValue() == null) return;
-
+        if(hasStarted.getValue() != null) return;
         var routine = repository.findRoutine(routineId.getValue()).getValue();
         if(routine == null) return;
+        Log.d("MVM start", "cur routine id " + routineId.getValue());
         routine.setHasStarted(true);
-                //= new RoutineBuilder(routine).setHasStarted(true).buildRoutine();
         repository.saveRoutine(routine);
         timer.getValue().start();
     }
 
     public void endRoutine() {
-        if (hasStarted.getValue() == null) return;
-        if (!hasStarted.getValue()) return;
-        hasStarted.setValue(false);
-
+        if (hasStarted.getValue() == null || !hasStarted.getValue()) return;
         if (timer.getValue() == null) return;
         timer.getValue().end();
+        Log.d("MVM end","ending");
         var routine = repository.findRoutine(routineId.getValue()).getValue();
         if(routine == null) return;
-        /*
-        routine = new RoutineBuilder(routine)
-                .setHasStarted(false)
-                .setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue())
-                .setElapsedSeconds(timer.getValue().getElapsedSeconds())
-                .buildRoutine();
-
-         */
-
-
         routine.setHasStarted(false);
         routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
         routine.setElapsedSeconds(timer.getValue().getElapsedSeconds());
@@ -198,64 +177,25 @@ public class MainViewModel extends ViewModel{
     }
 
     public void stopTimer() {
-        var started = hasStarted.getValue();
-        if (started == null) return;
-        if (!started) return;
         if(timer.getValue() == null) return;
         timer.getValue().stop();
 
-        var routine = repository.findRoutine(routineId.getValue()).getValue();
-        if(routine == null) return;
-        /*
-        routine = new RoutineBuilder(routine)
-                .setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue())
-                .setElapsedSeconds(timer.getValue().getElapsedSeconds())
-                .buildRoutine();
-
-         */
-        routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
-        routine.setElapsedSeconds(timer.getValue().getElapsedSeconds());
-        repository.saveRoutine(routine);
+        Log.d("MVM stop","stopping");
     }
     public void advanceTime() {
         if (timer.getValue() == null) return;
         timer.getValue().advanceTime(15);
-        /*
-        var routine = repository.findRoutine(routineId.getValue()).getValue();
-        if(routine == null) return;
-        routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
-        routine.setElapsedSeconds(timer.getValue().getElapsedSeconds());
-        /*
-        routine = new RoutineBuilder(routine)
-                .setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue())
-                .setElapsedSeconds(timer.getValue().getElapsedSeconds())
-                .buildRoutine();
-
-         */
-        //repository.saveRoutine(routine);
-
     }
 
     public void addTask(Task task){
-        var newTask = new SimpleTaskBuilder(task)
-                .setRoutineId(routineId.getValue())
-                .buildSimpleTask();
-                //new SimpleTask(null,task.getTaskName(),routineId.getValue());
-
-        repository.saveTask(newTask);
+        task.setRoutineId(routineId.getValue());
+        repository.saveTask(task);
     }
 
     public void setTaskName(int taskId, String taskName){
-        //var newList = TaskList.editTaskName(orderedTasks.getValue(),taskId,taskName);
         var task = repository.findTask(taskId).getValue();
         if(task == null) return;
         task.setName(taskName);
-        /*
-        task = new SimpleTaskBuilder(task)
-                .setTaskName(taskName)
-                .buildSimpleTask();
-
-         */
         repository.saveTask(task);
     }
     public void setGoalTime(String goalTime){

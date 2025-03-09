@@ -28,8 +28,16 @@ public class TaskList {
         if(list == null) return null;
         var copy = new ArrayList<Task>();
         for (int i = 0; i < list.size(); i++) {
-            Task task = new SimpleTaskBuilder(list.get(i)).setCheckedOff(false).setCheckedOffTime(null).buildSimpleTask();
-            copy.add(task);
+            Task task = list.get(i);
+            Task newTask = new SimpleTaskBuilder()
+                    .setId(task.getId())
+                    .setTaskName(task.getName())
+                    .setRoutineId(task.getRoutineId())
+                    .setCheckedOff(false)
+                    .setCheckedOffTime(null)
+                    .buildSimpleTask();
+            //Task task = new SimpleTaskBuilder(list.get(i)).setCheckedOff(false).setCheckedOffTime(null).buildSimpleTask();
+            copy.add(newTask);
         }
         return copy;
     }

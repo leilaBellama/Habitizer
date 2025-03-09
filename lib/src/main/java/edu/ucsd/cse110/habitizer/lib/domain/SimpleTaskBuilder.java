@@ -17,15 +17,7 @@ public class SimpleTaskBuilder {
 
     }
 
-    public SimpleTaskBuilder(Task task){
-        this.id = task.getId();
-        this.taskName = task.getName();
-        this.checkedOff = task.getCheckedOffStatus();
-        this.checkedOffTime = task.getCheckedOffTime();
-        this.routineId = task.getRoutineId();
-    }
-
-    public Task buildSimpleTask() {
+    public SimpleTask buildSimpleTask() {
         return new SimpleTask(this.id,this.taskName,this.checkedOff, this.checkedOffTime,this.routineId);
     }
 

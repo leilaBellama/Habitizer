@@ -13,13 +13,13 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="RoomRepositoryTest">
+      <SelectionState runConfigName="testFindAsLiveData()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testSaveRoutineAndRemoveRoutine()">
+      <SelectionState runConfigName="testFind()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testSaveAndRemove()">
+      <SelectionState runConfigName="testSave()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

@@ -40,46 +40,37 @@ public class RoomRoutineRepository implements Repository {
         return new LiveDataSubjectAdapter<>(tasksLiveData);
     }
 
+
+    //check that routineId exists first
     @Override
     public void saveTask(Task task) {
-        android.util.Log.d("RoomRep ST", "task rout id: " + task.getRoutineId() + " contains " + containsRoutine(task.getRoutineId()));
-
+        //android.util.Log.d("RoomRep ST", " contains " + containsRoutine(task.getRoutineId()));
         if(containsRoutine(task.getRoutineId())){
+            android.util.Log.d("RoomRep ST", task.getId() + task.getName()+  " contains routine id " + task.getRoutineId() + containsRoutine(task.getRoutineId()));
             TaskEntity entity = TaskEntity.fromTask(task);
+            long id = routineDao.insertTask(entity);
+//            task.setId((int) id);
+            android.util.Log.d("RoomRep ST", "new task id: " + id);
+            /*
             if (entity.id == null) {
                 long id = routineDao.insertTask(entity);
                 task.setId((int) id);
-                android.util.Log.d("RoomRep ST", "Updated task new id: " + task.getId());
-
+                android.util.Log.d("RoomRep ST", "new task null id: " + task.getId());
             } else {
                 int result = routineDao.updateTask(entity);
-                android.util.Log.d("RoomRep ST", "Updated task same id " + task.getId() + ", result: " + result);
+                    android.util.Log.d("RoomRep ST","added new task old id");
             }
-        }
 
+             */
+        }
     }
 
     @Override
     public void saveTasks(List<Task> tasks) {
-
         if (tasks == null) return;
         for (int i = 0; i < tasks.size(); i++) {
             saveTask(tasks.get(i));
         }
-        /*
-        var entities = tasks.stream()
-                .map(TaskEntity::fromTask)
-                .collect(Collectors.toList());
-        List<Long> insertedIds = routineDao.insertTasks(entities);
-        for (int i = 0; i < tasks.size(); i++) {
-            if (tasks.get(i).getId() == null) {
-                tasks.get(i).setId(insertedIds.get(i).intValue());
-            }
-        }
-
-         */
-
-
     }
 
     @Override
@@ -97,16 +88,6 @@ public class RoomRoutineRepository implements Repository {
         var entityLiveData = routineDao.findRoutineAsLiveData(id);
         var routineLiveData = Transformations.map(entityLiveData, RoutineEntity::toRoutine);
         return new LiveDataSubjectAdapter<>(routineLiveData);
-        /*
-        var entity = routineDao.findRoutine(id);
-
-        android.util.Log.d("RoomRep find", id + " find routine " + entity.name);
-        android.util.Log.d("RoomRep find ld", id + " find routine ld " + entityLiveData.getValue());
-        //android.util.Log.d("RoomRep find", id + " find routine " + entity.name);
-        //android.util.Log.d("RoomRep find", id + " find routine " + entityLiveData.getValue().id);
-
-
-         */
     }
 
     @Override
@@ -123,46 +104,39 @@ public class RoomRoutineRepository implements Repository {
     @Override
     public void saveRoutine(Routine routine) {
         RoutineEntity entity = RoutineEntity.fromRoutine(routine);
+        routineDao.insertRoutine(entity);
+
         /*
-        long id = routineDao.insertRoutine(entity);
-        entity.id = (int) id;
-        routine.setId((int) id);
-        android.util.Log.d("RoomRep SR", entity.toRoutine().getName() + " inserted routine id" + entity.id);
-        var num = routineDao.findAllRoutines().size();
-        var siz = routineDao.countRoutines();
-        android.util.Log.d("RoomRep SR", "routines  " + num + " size " + siz);
-
-         */
-
-
         if (entity.id == null) {
             long id = routineDao.insertRoutine(entity);
             routine.setId((int) id);
-            android.util.Log.d("RoomRep SR", "same routine " + routine.getId());
+            android.util.Log.d("RoomRep SR", "new routine " + routine.getId());
 
         } else {
             int result = routineDao.updateRoutine(entity);
-            // Add this log to debug update operations
             android.util.Log.d("RoomRep SR", "Updated routine " + routine.getId() + ", result: " + result);
         }
-        var r = findRoutine(routine.getId());
-        android.util.Log.d("RoomRep SR", "find routine " + r.getValue());
-        //android.util.Log.d("RoomRep SR", "find routine " + r.getValue().getName());
 
+         */
     }
 
     @Override
     public void saveRoutines(List<Routine> routines) {
+
         if (routines == null || routines.isEmpty()) return;
         var entities = routines.stream()
                 .map(RoutineEntity::fromRoutine)
                 .collect(Collectors.toList());
+        routineDao.insertRoutines(entities);
+        /*
         List<Long> insertedIds = routineDao.insertRoutines(entities);
         for (int i = 0; i < routines.size(); i++) {
             if (routines.get(i).getId() == null) {
                 routines.get(i).setId(insertedIds.get(i).intValue());
             }
         }
+
+         */
     }
 
     @Override

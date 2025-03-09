@@ -19,8 +19,8 @@ public class OriginalTask implements Task {
         this.taskName = taskName;
         this.checkedOff = false;
         this.isMorningTask = isMorningTask;
-        if(isMorningTask) this.routineId = 0;
-        else this.routineId = 1;
+        if(isMorningTask) this.routineId = 1;
+        else this.routineId = 2;
 
         this.checkedOffTime = 0;
     }
