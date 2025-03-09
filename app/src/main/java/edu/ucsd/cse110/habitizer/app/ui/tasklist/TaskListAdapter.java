@@ -65,6 +65,7 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
         }
 
         boolean hasStarted = Boolean.TRUE.equals(mainViewModel.getHasStarted().getValue());
+        //boolean hasStarted = mainViewModel.getHasStarted().getValue();
         binding.checkBox.setEnabled(hasStarted && !task.getCheckedOffStatus());
 
         binding.checkBox.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {

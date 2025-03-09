@@ -21,8 +21,10 @@ public class SimpleSubject<T> implements MutableSubject<T> {
 
     @Override
     public void setValue(T value){
-        this.value = value;
-        notifyObservers();
+        if(value != this.value){
+            this.value = value;
+            notifyObservers();
+        }
     }
 
     @Override

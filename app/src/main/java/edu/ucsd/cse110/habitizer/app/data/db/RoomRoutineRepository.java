@@ -23,6 +23,12 @@ public class RoomRoutineRepository implements Repository {
     }
 
     @Override
+    public Task getTask(int id) {
+        //var entityLiveData = routineDao.findTaskAsLiveData(id);
+        //var taskLiveData = Transformations.map(entityLiveData, TaskEntity::toTask);
+        return routineDao.findTask(id).toTask();
+    }
+    @Override
     public Subject<Task> findTask(int id) {
         var entityLiveData = routineDao.findTaskAsLiveData(id);
         var taskLiveData = Transformations.map(entityLiveData, TaskEntity::toTask);
@@ -83,6 +89,12 @@ public class RoomRoutineRepository implements Repository {
         return routineDao.countRoutines();
     }
 
+    @Override
+    public Routine getRoutine(int id) {
+        var routine = routineDao.findRoutine(id).toRoutine();
+        //var routineLiveData = Transformations.map(entityLiveData, RoutineEntity::toRoutine);
+        return routineDao.findRoutine(id).toRoutine();
+    }
     @Override
     public Subject<Routine> findRoutine(int id) {
         var entityLiveData = routineDao.findRoutineAsLiveData(id);

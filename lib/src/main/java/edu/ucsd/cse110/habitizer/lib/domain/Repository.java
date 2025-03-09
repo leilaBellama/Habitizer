@@ -7,6 +7,7 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public interface Repository {
     Integer countTasks();
 
+    Task getTask(int id);
     Subject<Task> findTask(int id);
 
     Subject<List<Task>> findAllTasks();
@@ -19,6 +20,7 @@ public interface Repository {
 
     Integer countRoutines();
 
+    Routine getRoutine(int id);
     Subject<Routine> findRoutine(int id);
 
     Subject<List<Routine>> findAllRoutines();

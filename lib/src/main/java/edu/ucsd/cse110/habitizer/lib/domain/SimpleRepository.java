@@ -29,6 +29,10 @@ public class SimpleRepository implements Repository {
     }
 
     @Override
+    public Task getTask(int id){
+        return dataSource.getTaskSubject(id).getValue();
+    }
+    @Override
     public Subject<Task> findTask(int id){
         return dataSource.getTaskSubject(id);
     }
@@ -53,6 +57,8 @@ public class SimpleRepository implements Repository {
     @Override
     public Integer countRoutines() {return dataSource.getRoutines().size();}
 
+    @Override
+    public Routine getRoutine(int id) {return dataSource.getRoutineSubject(id).getValue();}
     @Override
     public Subject<Routine> findRoutine(int id) {return dataSource.getRoutineSubject(id);}
     @Override

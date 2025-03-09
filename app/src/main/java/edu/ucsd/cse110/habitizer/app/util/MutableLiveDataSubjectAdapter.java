@@ -17,6 +17,8 @@ public class MutableLiveDataSubjectAdapter<T>
 
     @Override
     public void setValue(T value){
-        mutableAdaptee.setValue(value);
+        if(mutableAdaptee.getValue() != null && mutableAdaptee.getValue() != value){
+            mutableAdaptee.setValue(value);
+        }
     }
 }
