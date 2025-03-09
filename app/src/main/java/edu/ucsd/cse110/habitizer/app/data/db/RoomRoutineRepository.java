@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
 import java.util.List;
@@ -85,7 +86,6 @@ public class RoomRoutineRepository implements Repository {
                 routines.get(i).setId(insertedIds.get(i).intValue());
             }
         }
-
          */
     }
 
@@ -112,6 +112,11 @@ public class RoomRoutineRepository implements Repository {
         return new LiveDataSubjectAdapter<>(routineLiveData);
     }
 
+    public LiveData<Routine> findRoutineAsLiveData(int id) {
+        var entityLiveData = routineDao.findRoutineAsLiveData(id);
+        return Transformations.map(entityLiveData, RoutineEntity::toRoutine);
+    }
+
     @Override
     public Subject<List<Routine>> findAllRoutines() {
         var entitiesLiveData = routineDao.findAllRoutinesAsLiveData();
@@ -126,7 +131,8 @@ public class RoomRoutineRepository implements Repository {
     @Override
     public void saveRoutine(Routine routine) {
         RoutineEntity entity = RoutineEntity.fromRoutine(routine);
-        routineDao.insertRoutine(entity);
+        long result = routineDao.insertRoutine(entity);
+        android.util.Log.d("RoomRep SR", "inserted routine " + routine.getId() + ", result: " +(int) result);
 
         /*
         if (entity.id == null) {

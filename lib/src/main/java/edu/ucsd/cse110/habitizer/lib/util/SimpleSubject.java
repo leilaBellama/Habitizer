@@ -43,4 +43,10 @@ public class SimpleSubject<T> implements MutableSubject<T> {
         observers.clear();
     }
 
+    @Override
+    public Boolean hasObservers(){
+        if(observers.size() > 0) return true;
+        else return false;
+    }
+
 }

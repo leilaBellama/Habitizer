@@ -13,4 +13,6 @@ public interface Subject<T> {
 
     void removeAllObservers();
 
+    Boolean hasObservers();
+
 }

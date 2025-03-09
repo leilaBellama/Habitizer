@@ -75,7 +75,10 @@ public class TaskListFragment extends Fragment{
     @Override
     public void onDestroyView(){
         super.onDestroyView();
+        /*
         activityModel.getOrderedTasks().removeAllObservers();
         activityModel.getHasStarted().removeAllObservers();
+
+         */
     }
 }

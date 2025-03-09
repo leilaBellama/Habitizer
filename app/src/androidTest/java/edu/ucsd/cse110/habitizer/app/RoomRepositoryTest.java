@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNull;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -14,15 +16,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.ucsd.cse110.habitizer.app.data.db.HabitizerDatabase;
 import edu.ucsd.cse110.habitizer.app.data.db.RoomRoutineRepository;
 import edu.ucsd.cse110.habitizer.app.data.db.RoutineDAO;
+import edu.ucsd.cse110.habitizer.app.data.db.RoutineEntity;
 import edu.ucsd.cse110.habitizer.lib.domain.OriginalTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.SimpleTaskBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import edu.ucsd.cse110.habitizer.lib.util.Subject;
 
 public class RoomRepositoryTest {
     private HabitizerDatabase database;
@@ -218,5 +225,57 @@ public class RoomRepositoryTest {
 
     }
 
+    @Test
+    public void testLiveData() throws InterruptedException {
+        // Create and insert multiple routines
+        var routine1 = new RoutineBuilder()
+                .setId(1)
+                .setName("routine1")
+                .buildRoutine();
+        var routine2 = new RoutineBuilder()
+                .setId(2)
+                .setName("routine2")
+                .buildRoutine();
+
+        repository.saveRoutine(routine1);
+        repository.saveRoutine(routine2);
+        // Observe routine1
+        Routine observedRoutine1 = LiveDataTestUtil.getOrAwaitValue(repository.findRoutineAsLiveData(1));
+        Routine observedRoutine2 = LiveDataTestUtil.getOrAwaitValue(repository.findRoutineAsLiveData(2));
+
+        // Modify routine1
+        Routine updatedRoutine1 = new RoutineBuilder()
+                .setId(1)
+                .setName("updated routine1")
+                .buildRoutine();
+        repository.saveRoutine(updatedRoutine1);
+
+        // Get updated values
+        Routine newObservedRoutine1 = LiveDataTestUtil.getOrAwaitValue(repository.findRoutineAsLiveData(1));
+        Routine newObservedRoutine2 = LiveDataTestUtil.getOrAwaitValue(repository.findRoutineAsLiveData(2));
+        assertEquals("Updated Morning Routine", newObservedRoutine1.getName());
+        assertEquals("Night Routine", newObservedRoutine2.getName()); // Should remain unchanged
+
+    }
+
+    public class LiveDataTestUtil {
+        public static <T> T getOrAwaitValue(final LiveData<T> liveData) throws InterruptedException {
+            final Object[] data = new Object[1];
+            CountDownLatch latch = new CountDownLatch(1);
+            Observer<T> observer = new Observer<T>() {
+                @Override
+                public void onChanged(T t) {
+                    data[0] = t;
+                    latch.countDown();
+                    liveData.removeObserver(this);
+                }
+            };
+            liveData.observeForever(observer);
+            if (!latch.await(2, TimeUnit.SECONDS)) {
+                throw new InterruptedException("LiveData value was never set.");
+            }
+            return (T) data[0];
+        }
+    }
 
 }

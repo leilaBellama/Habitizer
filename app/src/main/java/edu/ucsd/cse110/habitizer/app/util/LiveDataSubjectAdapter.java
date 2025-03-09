@@ -35,6 +35,11 @@ public class LiveDataSubjectAdapter<T> implements Subject<T> {
     }
 
     @Override
+    public Boolean hasObservers(){
+        return adaptee.hasObservers();
+    }
+
+    @Override
     public void removeAllObservers(){
         observers.clear();
     }

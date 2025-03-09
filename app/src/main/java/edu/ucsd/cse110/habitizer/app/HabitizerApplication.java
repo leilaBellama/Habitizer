@@ -20,7 +20,6 @@ public class HabitizerApplication extends Application {
 
         //this.dataSource = InMemoryDataSource.DEFAULT();
         //this.repository = new SimpleRepository(dataSource);
-
         var database = Room.databaseBuilder(
                 getApplicationContext(),
                 HabitizerDatabase.class,
@@ -42,7 +41,6 @@ public class HabitizerApplication extends Application {
                     .putBoolean("isFirstRun", false)
                     .apply();
         }
-
     }
 
     public Repository getTaskRepository() {

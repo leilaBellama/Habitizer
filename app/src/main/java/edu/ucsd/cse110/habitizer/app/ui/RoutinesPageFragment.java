@@ -52,12 +52,15 @@ public class RoutinesPageFragment extends Fragment {
     @Override
     public void onDestroyView(){
         super.onDestroyView();
+        /*
         model.getRoutineTitle().removeAllObservers();
         model.getHasStarted().removeAllObservers();
         model.getGoalTime().removeAllObservers();
         model.getElapsedTime().removeObservers(getViewLifecycleOwner());
         model.stopTimer();
         Log.d("R frag", "destroyed");
+
+         */
     }
 
 
@@ -102,7 +105,10 @@ public class RoutinesPageFragment extends Fragment {
                 //Log.d("MA obs timer","obs null time ");
             }
         });
-        view.homeButton.setOnClickListener(v -> swapFragments());
+        view.homeButton.setOnClickListener(v -> {
+            swapFragments();
+            model.removeObservers();
+        });
         view.startButton.setOnClickListener(v -> {
             Log.d("MA ","start button ");
 
