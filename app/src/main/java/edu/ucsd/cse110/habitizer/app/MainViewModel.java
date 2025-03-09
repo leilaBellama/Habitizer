@@ -94,7 +94,8 @@ public class MainViewModel extends ViewModel{
             //Log.d("MVM obs id","obs id " + id);
             repository.findRoutine(id).observe(curRoutine -> {
                 if(curRoutine == null)return;
-                //Log.d("MVM obs CR","obs curRoutine " + curRoutine.getId() + curRoutine.getName());
+                currentRoutine.setValue(curRoutine);
+                Log.d("MVM obs CR","obs curRoutine " + curRoutine.getId() + curRoutine.getName());
                 routineTitle.setValue(curRoutine.getName());
                 hasStarted.setValue(curRoutine.getHasStarted());
                 elapsedTime.setValue(curRoutine.getElapsedMinutes());
@@ -137,13 +138,16 @@ public class MainViewModel extends ViewModel{
         repository.saveRoutine(newRoutine);
     }
 
-
     public void reset(){
         if(routineId.getValue() == null || hasStarted.getValue() == null) return;
         var resetList = TaskList.resetAll(orderedTasks.getValue());
         repository.saveTasks(resetList);
-        var routine = repository.findRoutine(routineId.getValue()).getValue();
+        //var routine = repository.findRoutine(routineId.getValue()).getValue();
+        var routine = currentRoutine.getValue();
         if(routine == null) return;
+        //hasStarted.setValue(null);
+        //elapsedTime.setValue(null);
+
         routine.setHasStarted(null);
         routine.setElapsedMinutes(null);
         routine.setElapsedSeconds(null);
@@ -155,9 +159,11 @@ public class MainViewModel extends ViewModel{
     public void startRoutine(){
         if (timer.getValue() == null) return;
         if(hasStarted.getValue() != null) return;
-        var routine = repository.findRoutine(routineId.getValue()).getValue();
+        //var routine = repository.findRoutine(routineId.getValue()).getValue();
+        var routine = currentRoutine.getValue();
         if(routine == null) return;
         Log.d("MVM start", "cur routine id " + routineId.getValue());
+        routine.setElapsedMinutes(0);
         routine.setHasStarted(true);
         repository.saveRoutine(routine);
         timer.getValue().start();
@@ -168,7 +174,8 @@ public class MainViewModel extends ViewModel{
         if (timer.getValue() == null) return;
         timer.getValue().end();
         Log.d("MVM end","ending");
-        var routine = repository.findRoutine(routineId.getValue()).getValue();
+        //var routine = repository.findRoutine(routineId.getValue()).getValue();
+        var routine = currentRoutine.getValue();
         if(routine == null) return;
         routine.setHasStarted(false);
         routine.setElapsedMinutes(timer.getValue().getElapsedMinutes().getValue());
@@ -199,7 +206,8 @@ public class MainViewModel extends ViewModel{
         repository.saveTask(task);
     }
     public void setGoalTime(String goalTime){
-        var routine = repository.findRoutine(routineId.getValue()).getValue();
+        //var routine = repository.findRoutine(routineId.getValue()).getValue();
+        var routine = currentRoutine.getValue();
         if(routine == null) return;
         routine.setGoalTime(goalTime);
         repository.saveRoutine(routine);
@@ -207,10 +215,12 @@ public class MainViewModel extends ViewModel{
 
     public void setRoutineId(Integer id){
         routineId.setValue(id);
+        Log.d("MVM","set id " + id);
     }
 
     public void setRoutineName(String name){
-        var routine = repository.findRoutine(routineId.getValue()).getValue();
+        //var routine = repository.findRoutine(routineId.getValue()).getValue();
+        var routine = currentRoutine.getValue();
         if(routine == null) return;
         routine.setName(name);
         repository.saveRoutine(routine);

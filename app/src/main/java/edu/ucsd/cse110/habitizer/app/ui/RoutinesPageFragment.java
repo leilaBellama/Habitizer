@@ -94,13 +94,11 @@ public class RoutinesPageFragment extends Fragment {
         });
         model.getElapsedTime().observe(getViewLifecycleOwner(),time -> {
             if (time != null) {
-
                 Log.d("MA obs timer","obs time " + time);
                 view.time.setText(time + " min");
             } else {
                 view.time.setText(R.string.dashes);
                 Log.d("MA obs timer","obs null time ");
-
             }
         });
         view.homeButton.setOnClickListener(v -> swapFragments());
