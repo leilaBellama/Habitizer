@@ -11,43 +11,6 @@ public class Repository {
         this.dataSource = dataSource;
     }
 
-    /*
-
-    public Integer countTasksWithRoutineId(Integer routineId) {
-        return dataSource.getTasksWithRoutineId(routineId).size();
-    }
-
-    public Subject<List<Task>> findAllTasksWithRoutineID(Integer routineID){
-        return dataSource.getAllTasksSubjectWithRoutineId(routineID);
-    }
-
-
-    public Integer countTasks() {
-        return dataSource.getTasks().size();
-    }
-
-    public Subject<Task> findTask(int id){
-        return dataSource.getTaskSubject(id);
-    }
-
-    public Subject<List<Task>> findAllTasks(){
-        return dataSource.getAllTasksSubject();
-    }
-
-    public void saveTask(Task task) {dataSource.putTask(task);}
-    public void saveTasks(List<Task> tasks) {
-        for(var task : tasks){
-            dataSource.putTask(task);
-        }
-    }
-    //
-
-    public void removeTask(int id) {dataSource.removeTask(id);}
-
-    //public void editTaskName(int id, String name) {dataSource.editTask(id, name);}
-
-     */
-
     public Integer count() {return dataSource.getRoutines().size();}
 
     //public Subject<Integer> count() {return dataSource.getCountSubject();}

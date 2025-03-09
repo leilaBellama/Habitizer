@@ -11,8 +11,6 @@ import java.util.List;
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 
 public class InMemoryDataSourceTest {
-    //InMemoryDataSource dataSource = new InMemoryDataSource();
-    //TaskRepository repository = new TaskRepository(dataSource);
 
     public final static List<Task> tasks = List.of(
             new OriginalTask(0, "Morning Task 1",true),

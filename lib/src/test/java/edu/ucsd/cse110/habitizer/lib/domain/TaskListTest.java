@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskListTest {
-    // Test to force set, expected to not work
-
     public final static List<Task> simpleTasks = List.of(
             new SimpleTask(0, "Morning Task 1"),
             new SimpleTask(1, "Morning Task 2"),
@@ -24,30 +22,6 @@ public class TaskListTest {
         new OriginalTask(3, "Task 3",true)
     );
 
-    /*
-    @Test
-    public void testResetAll() {
-        simpleTasks.get(0).setCheckedOff(true,1);
-        simpleTasks.get(2).setCheckedOff(true,1);
-        assertTrue(simpleTasks.get(0).getCheckedOffStatus());
-
-        var list = TaskList.resetAll(simpleTasks);
-        assertFalse(list.get(0).getCheckedOffStatus());
-        assertFalse(list.get(1).getCheckedOffStatus());
-        assertFalse(list.get(2).getCheckedOffStatus());
-
-        tasks.get(0).setCheckedOff(true,1);
-        tasks.get(3).setCheckedOff(true,1);
-        assertTrue(tasks.get(0).getCheckedOffStatus());
-
-        var list2 = TaskList.resetAll(tasks);
-        assertFalse(list2.get(0).getCheckedOffStatus());
-        assertFalse(list2.get(1).getCheckedOffStatus());
-        assertFalse(list2.get(2).getCheckedOffStatus());
-        assertFalse(list2.get(3).getCheckedOffStatus());
-    }
-
-     */
 
     @Test
     public void testForceSet() {
