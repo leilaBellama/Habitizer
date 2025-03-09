@@ -65,7 +65,10 @@ public class MainViewModel extends ViewModel{
                         assert app != null;
                         return new MainViewModel(app.getTaskRepository());
                     });
-    public void resetSubjects(){
+    private MutableSubject<Integer> routie;
+
+    public MainViewModel(Repository repository){
+        this.repository = repository;
         this.orderedTasks = new SimpleSubject<>();
         this.taskOrdering = new SimpleSubject<>();
         this.routineId = new SimpleSubject<>();
@@ -80,39 +83,35 @@ public class MainViewModel extends ViewModel{
         this.routines = new SimpleSubject<>();
         this.routineName = new SimpleSubject<>();
         this.timer.setValue(new RoutineTimer(60));
-    }
-
-    public MainViewModel(Repository repository){
-        this.repository = repository;
-        resetSubjects();
-
-
 
         repository.findAllRoutines().observe(routines::setValue);
 
         routineId.observe(id -> {
             if(id == null)return;
-            //Log.d("MVM obs id","obs id " + id);
+            Log.d("MVM obs id","obs id " + id);
+            currentRoutine.setValue(repository.getRoutine(id));
             repository.findRoutine(id).observe(curRoutine -> {
+                //repository.findRoutine(id).observe(curRoutine -> {
                 if(curRoutine == null)return;
-                //currentRoutine.setValue(curRoutine);
-                routineTitle.setValue(curRoutine.getName());
-                hasStarted.setValue(curRoutine.getHasStarted());
-                Log.d("MVM obs CR","obs curRoutine " + curRoutine.getId() + hasStarted.getValue());
-
-                elapsedTime.setValue(curRoutine.getElapsedMinutes());
-                goalTime.setValue(String.valueOf(curRoutine.getGoalTime()));
+                currentRoutine.setValue(curRoutine);
                 repository.findAllTasks().observe(tasks -> {
                     //Log.d("MVM obs CR","obs findTasks ");
                     if(tasks == null) return;
                     var newOrderedTasks = tasks.stream()
                             .filter(task -> Objects.equals(task.getRoutineId(), curRoutine.getId()))
                             .toList();
-                    if(orderedTasks.getValue() == newOrderedTasks) return;
+                    if(Objects.equals(orderedTasks.getValue(), newOrderedTasks)) return;
                     Log.d("MVM obs tasks",curRoutine.getId() + " obs findTasks " + newOrderedTasks.size());
                     orderedTasks.setValue(newOrderedTasks);
                     //Log.d("MVM obs tasks","new ordered tasks size " + newOrderedTasks.size());
                 });
+                routineTitle.setValue(curRoutine.getName());
+                Log.d("MVM obs CR","obs curRoutine " + curRoutine.getId() + hasStarted.getValue());
+                hasStarted.setValue(curRoutine.getHasStarted());
+
+                elapsedTime.setValue(curRoutine.getElapsedMinutes());
+                goalTime.setValue(String.valueOf(curRoutine.getGoalTime()));
+
             });
         });
 
@@ -200,7 +199,7 @@ public class MainViewModel extends ViewModel{
         //Log.d("MVM ended","has started " + hasStarted.getValue());
 
         //Log.d("MVM end","ending");
-        repository.saveTasks(orderedTasks.getValue());
+        //repository.saveTasks(orderedTasks.getValue());
         if(orderedTasks.getValue() == null)return;
         for(int i = 0; i < orderedTasks.getValue().size(); i++){
             Log.d("MVM end tasks", orderedTasks.getValue().get(i).getName());
@@ -239,8 +238,13 @@ public class MainViewModel extends ViewModel{
     }
 
     public void setRoutineId(Integer id){
+        if(routineId.getValue() != null) {
+            Log.d("MVM set id", "before routine " + routineId.getValue());
+            var routine = repository.findRoutine(routineId.getValue());
+            repository.findRoutine(routineId.getValue()).removeAllObservers();
+        }
+        Log.d("MVM set id","after routine " + id);
         routineId.setValue(id);
-        Log.d("MVM set id","routine " + id);
     }
 
     public void setRoutineName(String name){

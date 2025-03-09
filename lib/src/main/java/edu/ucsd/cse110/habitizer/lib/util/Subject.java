@@ -11,6 +11,6 @@ public interface Subject<T> {
 
     void removeObserver(Observer<T> observer);
 
-    //void removeAllObservers(LifecycleOwner owner);
+    void removeAllObservers();
 
 }

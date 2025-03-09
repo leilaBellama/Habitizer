@@ -38,4 +38,9 @@ public class SimpleSubject<T> implements MutableSubject<T> {
         observers.remove(observer);
     }
 
+    @Override
+    public void removeAllObservers(){
+        observers.clear();
+    }
+
 }

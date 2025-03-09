@@ -28,11 +28,6 @@ import edu.ucsd.cse110.habitizer.lib.util.Observer;
 public class RoutinesPageFragment extends Fragment {
     private FragmentRoutinesPageBinding view;
     private MainViewModel model;
-    Observer<Boolean> observer = hasStarted -> {
-        if(hasStarted == null) reset();
-        else if(hasStarted) start();
-        else end();
-    };
 
     public RoutinesPageFragment() {
     }
@@ -57,7 +52,10 @@ public class RoutinesPageFragment extends Fragment {
     @Override
     public void onDestroyView(){
         super.onDestroyView();
-        model.getHasStarted().removeObserver(observer);
+        model.getRoutineTitle().removeAllObservers();
+        model.getHasStarted().removeAllObservers();
+        model.getGoalTime().removeAllObservers();
+        model.getElapsedTime().removeObservers(getViewLifecycleOwner());
         model.stopTimer();
         Log.d("R frag", "destroyed");
     }
@@ -80,8 +78,11 @@ public class RoutinesPageFragment extends Fragment {
 
     private void setupMVP() {
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
-
-        model.getHasStarted().observe(observer);
+        model.getHasStarted().observe(hasStarted -> {
+            if(hasStarted == null) reset();
+            else if(hasStarted) start();
+            else end();
+        });
         model.getGoalTime().observe(goalTime -> {
             if(goalTime == null)return;
             if(!goalTime.equals("null")){
@@ -103,12 +104,16 @@ public class RoutinesPageFragment extends Fragment {
         });
         view.homeButton.setOnClickListener(v -> swapFragments());
         view.startButton.setOnClickListener(v -> {
+            Log.d("MA ","start button ");
+
             model.startRoutine();
         });
         view.endButton.setOnClickListener(v -> {
+            Log.d("MA ","end button ");
             model.endRoutine();
         });
         view.resetButton.setOnClickListener(v -> {
+            Log.d("MA ","reset button ");
             model.reset();
         });
         view.stopTime.setOnClickListener(v -> {

@@ -71,4 +71,11 @@ public class TaskListFragment extends Fragment{
         view.taskList.setAdapter(adapter);
         return view.getRoot();
     }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        activityModel.getOrderedTasks().removeAllObservers();
+        activityModel.getHasStarted().removeAllObservers();
+    }
 }

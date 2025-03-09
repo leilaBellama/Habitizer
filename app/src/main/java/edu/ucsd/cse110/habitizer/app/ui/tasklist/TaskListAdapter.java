@@ -77,6 +77,7 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
             //Log.d("TaskListAdapter", "Task: " + task.getTaskName() + " Before: " + task.getCheckedOffStatus());
 
             if (isChecked) {
+                if(mainViewModel.getElapsedTime() == null || mainViewModel.getElapsedTime().getValue() == null) return;
                 int currentTime = mainViewModel.getElapsedTime().getValue();
                 int timeTaken = 0;
                 //task.setCheckedOff(true, (int)currentTime);
