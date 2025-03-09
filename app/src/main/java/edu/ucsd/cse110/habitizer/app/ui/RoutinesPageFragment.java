@@ -27,7 +27,6 @@ import edu.ucsd.cse110.habitizer.app.ui.dialog.EditRoutineDialogFragment;
 public class RoutinesPageFragment extends Fragment {
     private FragmentRoutinesPageBinding view;
     private MainViewModel model;
-    private MenuProvider menuProvider;
 
     private boolean started = false;
 
@@ -77,34 +76,38 @@ public class RoutinesPageFragment extends Fragment {
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
         model.getHasStarted().observe(hasStarted -> {
             if(hasStarted == null) reset();
-            else if(hasStarted) startRoutine();
-            else endRoutine();
-
+            else if(hasStarted) start();
+            else end();
         });
         model.getGoalTime().observe(goalTime -> {
-            if(goalTime != null){
-                if(!goalTime.equals("null")){
-                    view.goalTime.setText(goalTime + " min");
-                    Log.d("MA","obs goal time " + goalTime);
-                }else {
-                    Log.d("MA","obs goal time is null");
-                    view.goalTime.setText(R.string.dashes);
-                }
+            if(goalTime == null)return;
+            if(!goalTime.equals("null")){
+                view.goalTime.setText(goalTime + " min");
+                //Log.d("MA","obs goal time " + goalTime);
+            }else {
+                //Log.d("MA","obs goal time is null");
+                view.goalTime.setText(R.string.dashes);
             }
         });
         model.getElapsedTime().observe(getViewLifecycleOwner(),time -> {
             if (time != null) {
-                Log.d("MA obs timer","obs time " + time);
+                //Log.d("MA obs timer","obs time " + time);
                 view.time.setText(time + " min");
             } else {
                 view.time.setText(R.string.dashes);
-                Log.d("MA obs timer","obs null time ");
+                //Log.d("MA obs timer","obs null time ");
             }
         });
         view.homeButton.setOnClickListener(v -> swapFragments());
-        view.startButton.setOnClickListener(v -> startRoutine());
-        view.endButton.setOnClickListener(v -> endRoutine());
-        view.resetButton.setOnClickListener(v -> reset());
+        view.startButton.setOnClickListener(v -> {
+            model.startRoutine();
+        });
+        view.endButton.setOnClickListener(v -> {
+            model.endRoutine();
+        });
+        view.resetButton.setOnClickListener(v -> {
+            model.reset();
+        });
         view.stopTime.setOnClickListener(v -> {
             model.stopTimer();
             view.stopTime.setVisibility(View.GONE);
@@ -126,19 +129,22 @@ public class RoutinesPageFragment extends Fragment {
             dialogFragment.show(getParentFragmentManager(), "EditRoutineDialogFragment");
         });
     }
-    private void endRoutine() {
+    private void end() {
+        Log.d("MA end","end");
         view.advanceTimeButton.setVisibility(View.INVISIBLE);
         view.startButton.setVisibility(View.INVISIBLE);
         view.stopTime.setVisibility(View.INVISIBLE);
+        //view.addTaskButton.setVisibility(View.VISIBLE);
         view.endButton.setText("Routine Ended");
         view.endButton.setEnabled(false);
         view.endButton.requestLayout();
         view.resetButton.setVisibility(View.VISIBLE);
         view.homeButton.setVisibility(View.VISIBLE);
-        model.endRoutine();
+        //model.endRoutine();
     }
 
-    private void startRoutine() {
+    private void start() {
+        Log.d("MA start","start");
         view.startButton.setVisibility(View.INVISIBLE);
         view.endButton.setText("End");
         view.endButton.setVisibility(View.VISIBLE);
@@ -147,9 +153,10 @@ public class RoutinesPageFragment extends Fragment {
         view.stopTime.setVisibility(View.VISIBLE);
         view.advanceTimeButton.setVisibility(View.VISIBLE);
         view.homeButton.setVisibility(View.INVISIBLE);
-        model.startRoutine();
+        //model.startRoutine();
     }
     private void reset() {
+        Log.d("MA reset","reset");
         view.startButton.setVisibility(View.VISIBLE);
         //view.startButton.setEnabled(true);
         view.endButton.setVisibility(View.INVISIBLE);
@@ -159,6 +166,6 @@ public class RoutinesPageFragment extends Fragment {
         view.advanceTimeButton.setVisibility(View.INVISIBLE);
         view.homeButton.setVisibility(View.VISIBLE);
         view.resetButton.setVisibility(View.INVISIBLE);
-        model.reset();
+        //model.reset();
     }
 }

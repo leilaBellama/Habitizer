@@ -73,10 +73,20 @@ public class RoomRoutineRepository implements Repository {
 
     @Override
     public void saveTasks(List<Task> tasks) {
-        if (tasks == null) return;
-        for (int i = 0; i < tasks.size(); i++) {
-            saveTask(tasks.get(i));
+        if (tasks == null || tasks.isEmpty()) return;
+        var entities = tasks.stream()
+                .map(TaskEntity::fromTask)
+                .collect(Collectors.toList());
+        routineDao.insertTasks(entities);
+        /*
+        List<Long> insertedIds = routineDao.insertRoutines(entities);
+        for (int i = 0; i < routines.size(); i++) {
+            if (routines.get(i).getId() == null) {
+                routines.get(i).setId(insertedIds.get(i).intValue());
+            }
         }
+
+         */
     }
 
     @Override
