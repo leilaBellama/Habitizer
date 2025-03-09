@@ -23,10 +23,16 @@ import edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutinesPageBinding;
 import edu.ucsd.cse110.habitizer.app.ui.dialog.CreateTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.dialog.EditGoalTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.dialog.EditRoutineDialogFragment;
+import edu.ucsd.cse110.habitizer.lib.util.Observer;
 
 public class RoutinesPageFragment extends Fragment {
     private FragmentRoutinesPageBinding view;
     private MainViewModel model;
+    Observer<Boolean> observer = hasStarted -> {
+        if(hasStarted == null) reset();
+        else if(hasStarted) start();
+        else end();
+    };
 
     public RoutinesPageFragment() {
     }
@@ -51,6 +57,7 @@ public class RoutinesPageFragment extends Fragment {
     @Override
     public void onDestroyView(){
         super.onDestroyView();
+        model.getHasStarted().removeObserver(observer);
         model.stopTimer();
         Log.d("R frag", "destroyed");
     }
@@ -73,11 +80,8 @@ public class RoutinesPageFragment extends Fragment {
 
     private void setupMVP() {
         model.getRoutineTitle().observe(text -> view.routine.setText(text));
-        model.getHasStarted().observe(hasStarted -> {
-            if(hasStarted == null) reset();
-            else if(hasStarted) start();
-            else end();
-        });
+
+        model.getHasStarted().observe(observer);
         model.getGoalTime().observe(goalTime -> {
             if(goalTime == null)return;
             if(!goalTime.equals("null")){
