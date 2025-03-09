@@ -29,6 +29,7 @@ public class MainViewModel extends ViewModel{
     private static final String LOG_TAG = "MainViewModel";
     private static final Integer ONE_MINUTE = 60;
     private final Repository repository;
+    /*
     private final MutableSubject<List<Task>> orderedTasks;
     private final MutableSubject<List<Integer>> taskOrdering;
     private final MutableSubject<String> routineTitle;
@@ -41,7 +42,20 @@ public class MainViewModel extends ViewModel{
     private final MutableSubject<List<Routine>> routines;
     private final MutableSubject<Routine> currentRoutine;
 
-    private final MutableSubject<String> routineName;
+     */
+
+    private MutableSubject<List<Task>> orderedTasks;
+    private MutableSubject<List<Integer>> taskOrdering;
+    private MutableSubject<String> routineTitle;
+    private MutableSubject<Boolean> hasStarted;
+    private MutableSubject<RoutineTimer> timer;
+    private MutableLiveData<Integer> elapsedTime;
+    private MutableSubject<Integer> routineId;
+    private MutableSubject<String> taskName;
+    private MutableSubject<String> goalTime;
+    private MutableSubject<List<Routine>> routines;
+    private MutableSubject<Routine> currentRoutine;
+    private MutableSubject<String> routineName;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -51,10 +65,7 @@ public class MainViewModel extends ViewModel{
                         assert app != null;
                         return new MainViewModel(app.getTaskRepository());
                     });
-
-    public MainViewModel(Repository repository){
-        this.repository = repository;
-
+    public void resetSubjects(){
         this.orderedTasks = new SimpleSubject<>();
         this.taskOrdering = new SimpleSubject<>();
         this.routineId = new SimpleSubject<>();
@@ -69,6 +80,13 @@ public class MainViewModel extends ViewModel{
         this.routines = new SimpleSubject<>();
         this.routineName = new SimpleSubject<>();
         this.timer.setValue(new RoutineTimer(60));
+    }
+
+    public MainViewModel(Repository repository){
+        this.repository = repository;
+        resetSubjects();
+
+
 
         repository.findAllRoutines().observe(routines::setValue);
 

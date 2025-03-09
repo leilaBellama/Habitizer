@@ -37,6 +37,8 @@ android {
 
 dependencies {
     implementation(project(":lib"))
+    //implementation(libs.androidx.lifecycle.runtime)
+    //implementation(libs.androidx.lifecycle.livedata)
     implementation(libs.android.material)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
@@ -45,6 +47,7 @@ dependencies {
 
     implementation("androidx.fragment:fragment:1.6.2")
     implementation(project(":observables"))
+
 
     // Unit Testing
     testImplementation("junit:junit:4.13.2")

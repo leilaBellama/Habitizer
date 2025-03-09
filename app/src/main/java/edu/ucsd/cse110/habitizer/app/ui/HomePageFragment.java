@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,7 @@ public class HomePageFragment extends Fragment {
     public void onDestroyView(){
         super.onDestroyView();
         model.getRoutines().removeObserver(routineObserver);
+        Log.d("home frag", "destroyed");
     }
 
     private void setupMVP(){
@@ -91,7 +93,7 @@ public class HomePageFragment extends Fragment {
     private void switchFragment() {
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.Home_page_fragment_container, new RoutinesPageFragment())
+                .replace(R.id.Home_page_fragment_container, RoutinesPageFragment.newInstance())
                 .commit();
     }
 }

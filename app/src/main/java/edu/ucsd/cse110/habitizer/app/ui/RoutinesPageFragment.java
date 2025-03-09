@@ -28,8 +28,6 @@ public class RoutinesPageFragment extends Fragment {
     private FragmentRoutinesPageBinding view;
     private MainViewModel model;
 
-    private boolean started = false;
-
     public RoutinesPageFragment() {
     }
 
@@ -54,6 +52,7 @@ public class RoutinesPageFragment extends Fragment {
     public void onDestroyView(){
         super.onDestroyView();
         model.stopTimer();
+        Log.d("R frag", "destroyed");
     }
 
 
