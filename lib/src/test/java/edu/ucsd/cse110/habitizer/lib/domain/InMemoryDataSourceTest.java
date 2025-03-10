@@ -43,18 +43,18 @@ public class InMemoryDataSourceTest {
             data.putRoutine(routine);
         }
         assertEquals(data.getRoutines().size(),2);
-        assertEquals(data.getRoutine(0).getName(),"Morning");
+        assertEquals(data.getRoutine(1).getName(),"Morning");
         data.putRoutine(new RoutineBuilder()
                 .setId(null)
                 .setName("Monday")
                 .setHasStarted(false)
                 .buildRoutine());
         assertEquals(data.getRoutines().size(),3);
-        assertEquals(data.getRoutine(2).getName(),"Monday");
+        assertEquals(data.getRoutine(3).getName(),"Monday");
 
-        data.removeRoutine(0);
+        data.removeRoutine(1);
         assertEquals(data.getRoutines().size(),2);
-        assertNull(data.getRoutine(0));
+        assertNull(data.getRoutine(1));
 
     }
 

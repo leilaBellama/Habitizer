@@ -79,23 +79,23 @@ public class RepositoryTest {
                 .setHasStarted(false)
                 .buildRoutine());
         assertEquals(4,(int) repository.countRoutines());
-        repository.removeRoutine(1);
+        repository.removeRoutine(2);
         assertEquals(3,(int) repository.countRoutines());
 
-        assertEquals(repository.findRoutine(0).getValue().getName(), "Morning");
-        assertEquals(repository.findRoutine(2).getValue().getName(), "Monday");
-        assertEquals(repository.findRoutine(3).getValue().getName(), "Tuesday");
+        assertEquals(repository.findRoutine(1).getValue().getName(), "Morning");
+        assertEquals(repository.findRoutine(3).getValue().getName(), "Monday");
+        assertEquals(repository.findRoutine(4).getValue().getName(), "Tuesday");
 
-        var routine = repository.findRoutine(0).getValue();
+        var routine = repository.findRoutine(1).getValue();
 
-        assertNotNull(repository.findRoutine(0).getValue().getHasStarted());
+        assertNotNull(repository.findRoutine(1).getValue().getHasStarted());
         assertNotNull(routine);
         routine.setHasStarted(null);
         routine.setElapsedMinutes(null);
         routine.setElapsedSeconds(null);
 
         repository.saveRoutine(routine);
-        assertNull(repository.findRoutine(0).getValue().getHasStarted());
+        assertNull(repository.findRoutine(1).getValue().getHasStarted());
 
     }
 
