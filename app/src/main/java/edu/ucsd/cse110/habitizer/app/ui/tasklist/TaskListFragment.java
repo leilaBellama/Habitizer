@@ -16,12 +16,24 @@ import java.util.List;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.habitizer.app.ui.dialog.EditTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import edu.ucsd.cse110.habitizer.lib.util.Observer;
 //import edu.ucsd.cse110.habitizer.app.ui.dialog.CreateTaskDialogFragment;
 
 public class TaskListFragment extends Fragment{
     private MainViewModel activityModel;
     private FragmentTaskListBinding view;
     private TaskListAdapter adapter;
+    Observer<List<Task>> orderedTaskObserver = tasks -> {
+        if(tasks == null) return;
+        adapter.clear();
+        adapter.addAll(new ArrayList<>(tasks));
+        adapter.notifyDataSetChanged();
+    };
+    Observer<Boolean> hasStartedObserver = started -> {
+        if (started == null) return;
+        adapter.notifyDataSetChanged();
+    };
 
     public TaskListFragment() {
 
@@ -47,17 +59,9 @@ public class TaskListFragment extends Fragment{
             var dialogFragment = EditTaskDialogFragment.newInstance(id);
             dialogFragment.show(getParentFragmentManager(), "EditTaskDialogFragment");
         });
-        activityModel.getOrderedTasks().observe(tasks -> {
-            if(tasks == null) return;
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(tasks));
-            adapter.notifyDataSetChanged();
-        });
 
-        activityModel.getHasStarted().observe(started -> {
-            if (started == null) return;
-            adapter.notifyDataSetChanged();
-        });
+        activityModel.getOrderedTasks().observe(orderedTaskObserver);
+        activityModel.getHasStarted().observe(hasStartedObserver);
     }
 
     @Nullable
@@ -75,10 +79,7 @@ public class TaskListFragment extends Fragment{
     @Override
     public void onDestroyView(){
         super.onDestroyView();
-        /*
-        activityModel.getOrderedTasks().removeAllObservers();
-        activityModel.getHasStarted().removeAllObservers();
-
-         */
+        activityModel.getOrderedTasks().removeObserver(orderedTaskObserver);
+        activityModel.getHasStarted().removeObserver(hasStartedObserver);
     }
 }

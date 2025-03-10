@@ -29,6 +29,25 @@ public class RoutinesPageFragment extends Fragment {
     private FragmentRoutinesPageBinding view;
     private MainViewModel model;
 
+    private Boolean started;
+    Observer<String> titleObserver = text -> view.routine.setText(text);
+    Observer<Boolean> hasStartedObserver = hasStarted -> {
+        if(hasStarted == started) return;
+        if(hasStarted == null) reset();
+        else if(hasStarted) start();
+        else end();
+    };
+    Observer<String> goalTimeObserver = goalTime -> {
+        if(goalTime == null)return;
+        if(!goalTime.equals("null")){
+            view.goalTime.setText(goalTime + " min");
+            //Log.d("MA","obs goal time " + goalTime);
+        }else {
+            //Log.d("MA","obs goal time is null");
+            view.goalTime.setText(R.string.dashes);
+        }
+    };
+
     public RoutinesPageFragment() {
     }
 
@@ -52,15 +71,15 @@ public class RoutinesPageFragment extends Fragment {
     @Override
     public void onDestroyView(){
         super.onDestroyView();
-        /*
-        model.getRoutineTitle().removeAllObservers();
-        model.getHasStarted().removeAllObservers();
-        model.getGoalTime().removeAllObservers();
+        model.save();
+
+        model.getRoutineTitle().removeObserver(titleObserver);
+        model.getHasStarted().removeObserver(hasStartedObserver);
+        model.getGoalTime().removeObserver(goalTimeObserver);
         model.getElapsedTime().removeObservers(getViewLifecycleOwner());
         model.stopTimer();
         Log.d("R frag", "destroyed");
 
-         */
     }
 
 
@@ -80,22 +99,10 @@ public class RoutinesPageFragment extends Fragment {
     }
 
     private void setupMVP() {
-        model.getRoutineTitle().observe(text -> view.routine.setText(text));
-        model.getHasStarted().observe(hasStarted -> {
-            if(hasStarted == null) reset();
-            else if(hasStarted) start();
-            else end();
-        });
-        model.getGoalTime().observe(goalTime -> {
-            if(goalTime == null)return;
-            if(!goalTime.equals("null")){
-                view.goalTime.setText(goalTime + " min");
-                //Log.d("MA","obs goal time " + goalTime);
-            }else {
-                //Log.d("MA","obs goal time is null");
-                view.goalTime.setText(R.string.dashes);
-            }
-        });
+
+        model.getRoutineTitle().observe(titleObserver);
+        model.getHasStarted().observe(hasStartedObserver);
+        model.getGoalTime().observe(goalTimeObserver);
         model.getElapsedTime().observe(getViewLifecycleOwner(),time -> {
             if (time != null) {
                 //Log.d("MA obs timer","obs time " + time);
@@ -107,7 +114,7 @@ public class RoutinesPageFragment extends Fragment {
         });
         view.homeButton.setOnClickListener(v -> {
             swapFragments();
-            model.save();
+            //model.save();
         });
         view.startButton.setOnClickListener(v -> {
             Log.d("MA ","start button ");
@@ -145,6 +152,7 @@ public class RoutinesPageFragment extends Fragment {
     }
     private void end() {
         Log.d("MA end","end");
+        started = false;
         view.advanceTimeButton.setVisibility(View.INVISIBLE);
         view.startButton.setVisibility(View.INVISIBLE);
         view.stopTime.setVisibility(View.INVISIBLE);
@@ -159,6 +167,7 @@ public class RoutinesPageFragment extends Fragment {
 
     private void start() {
         Log.d("MA start","start");
+        started = true;
         view.startButton.setVisibility(View.INVISIBLE);
         view.endButton.setText("End");
         view.endButton.setVisibility(View.VISIBLE);
@@ -171,6 +180,7 @@ public class RoutinesPageFragment extends Fragment {
     }
     private void reset() {
         Log.d("MA reset","reset");
+        started = null;
         view.startButton.setVisibility(View.VISIBLE);
         //view.startButton.setEnabled(true);
         view.endButton.setVisibility(View.INVISIBLE);

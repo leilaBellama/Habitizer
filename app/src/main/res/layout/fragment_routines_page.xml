@@ -136,6 +136,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/reset"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="invisible" />
@@ -161,6 +162,7 @@
         android:layout_marginBottom="16dp"
         android:text="@string/stop_time"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/start_button"
         app:layout_constraintHorizontal_bias="0.0"
@@ -176,6 +178,7 @@
         android:layout_marginBottom="8dp"
         android:text="@string/advance_time"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/stop_time"
         app:layout_constraintEnd_toStartOf="@+id/start_button"
         app:layout_constraintHorizontal_bias="0.0"
