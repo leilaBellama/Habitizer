@@ -2,29 +2,32 @@ package edu.ucsd.cse110.habitizer.lib.domain;
 
 import java.util.List;
 
-import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
-public class Repository {
-    private final InMemoryDataSource dataSource;
 
-    public Repository(InMemoryDataSource dataSource){
-        this.dataSource = dataSource;
-    }
+public interface Repository {
+    Integer countTasks();
 
-    public Integer count() {return dataSource.getRoutines().size();}
+    Task getTask(int id);
+    Subject<Task> findTask(int id);
 
-    //public Subject<Integer> count() {return dataSource.getCountSubject();}
+    Subject<List<Task>> findAllTasks();
 
-    public Subject<Routine> find(int id) {return dataSource.getRoutineSubject(id);}
-    public Subject<List<Routine>> findAll() {return dataSource.getAllRoutinesSubject();}
+    void saveTask(Task task);
 
-    public void save(Routine routine) {dataSource.putRoutine(routine);}
-    public void save(List<Routine> routines) {
-        for(var routine : routines){
-            dataSource.putRoutine(routine);
-        }
-    }
+    void saveTasks(List<Task> tasks);
 
-    public void remove(int id) {dataSource.removeRoutine(id);}
+    void removeTask(int id);
 
+    Integer countRoutines();
+
+    Routine getRoutine(int id);
+    Subject<Routine> findRoutine(int id);
+
+    Subject<List<Routine>> findAllRoutines();
+
+    void saveRoutine(Routine routine);
+
+    void saveRoutines(List<Routine> routines);
+
+    void removeRoutine(int id);
 }

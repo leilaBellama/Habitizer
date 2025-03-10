@@ -1,5 +1,8 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+import static androidx.core.content.ContextCompat.getString;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +19,11 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
+import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.TaskItemBinding;
 import edu.ucsd.cse110.habitizer.app.ui.dialog.EditTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.lib.domain.SimpleTask;
+import edu.ucsd.cse110.habitizer.lib.domain.SimpleTaskBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class TaskListAdapter extends ArrayAdapter<Task>{
@@ -47,47 +53,43 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
             binding = TaskItemBinding.inflate(layoutInflater, parent, false);
         }
 
-        binding.taskName.setText(task.getTaskName());
+        binding.taskName.setText(task.getName());
         binding.checkBox.setChecked(task.getCheckedOffStatus());
         binding.checkBox.setEnabled(!task.getCheckedOffStatus());   //enable checkbox after set
 
         if (!task.getCheckedOffStatus()) {
             binding.taskTime.setText("--");
+        } else {
+            binding.taskTime.setText(task.getCheckedOffTime() + " mins");
+            //Log.d("tasklist ADAPTER", task.getCheckedOffTime());
         }
 
         boolean hasStarted = Boolean.TRUE.equals(mainViewModel.getHasStarted().getValue());
+        //boolean hasStarted = mainViewModel.getHasStarted().getValue();
         binding.checkBox.setEnabled(hasStarted && !task.getCheckedOffStatus());
 
         binding.checkBox.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             if (!hasStarted) {
-                buttonView.setChecked(false); // Prevent checking if not started
+                //buttonView.setChecked(false); // Prevent checking if not started
                 return;
             }
 
             //Log.d("TaskListAdapter", "Task: " + task.getTaskName() + " Before: " + task.getCheckedOffStatus());
 
             if (isChecked) {
+                if(mainViewModel.getElapsedTime() == null || mainViewModel.getElapsedTime().getValue() == null) return;
                 int currentTime = mainViewModel.getElapsedTime().getValue();
                 int timeTaken = 0;
-                task.setCheckedOff(true, (int)currentTime);
+                //task.setCheckedOff(true, (int)currentTime);
                 binding.checkBox.setEnabled(false); //disable it so we cannot check it off
 
-                /*
-                if (lastCheckedOffTime != null) {
-                    double timeTaken = currentTime - lastCheckedOffTime;
-                    //Log.d("TaskListAdapter", "Task: " + task.getTaskName() + "Time taken since last task: " + timeTaken + " mins");
-                }
-                if (lastCheckedOffTime == null) {
-                    timeTaken = (int) currentTime;
-                } else {
-                    timeTaken = (int) currentTime - lastCheckedOffTime.intValue();
-                }
-
-                 */
                 timeTaken = currentTime - (int)lastCheckedOffTime + 1;
+                //task = new SimpleTaskBuilder(task).setCheckedOff(true).setCheckedOffTime(timeTaken).buildSimpleTask();
+                //task.setCheckedOff(true, (int)timeTaken);
+                task.setCheckedOff(true);
+                task.setCheckedOffTime((int)timeTaken);
 
-                Log.d("TaskListAdapter", "Task: " + task.getTaskName() + "cur time: " + currentTime + " mins" + "last time" + lastCheckedOffTime);
-
+                Log.d("TaskListAdapter", "Task: " + task.getName() + " time: " + task.getCheckedOffTime());
 
                 binding.taskTime.setText(timeTaken + " mins");
                 lastCheckedOffTime = currentTime;
@@ -134,6 +136,7 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
         return true;
     }
 
+    /*
     @Override
     public long getItemId(int position){
         var task = getItem(position);
@@ -144,4 +147,6 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
 
         return id;
     }
+
+     */
 }

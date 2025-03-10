@@ -26,13 +26,11 @@ public class RoutineTest {
                 .setName("new routine")
                 .setHasStarted(false)
                 .setGoalTime("30")
-                .setTasks(tasks)
                 .buildRoutine();
 
         assertEquals(Optional.ofNullable(r.getId()), Optional.of(1));
         assertEquals(r.getName(),"new routine");
         assertEquals(r.getHasStarted(),false);
-        assertEquals(r.getTasks().size(),8);
         assertEquals(r.getGoalTime(),"30");
 
     }

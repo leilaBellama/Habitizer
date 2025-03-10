@@ -8,16 +8,26 @@ public interface Task {
     Integer getId();
 
     void setId(int id);
+    Integer getRoutineId();
+
+    void setRoutineId(int id);
 
     @NonNull
-    String getTaskName();
-
-    boolean getCheckedOffStatus();
-
-    Integer getCheckedOffTime();
+    String getName();
 
     void setName(String taskName);
 
+
+    boolean getCheckedOffStatus();
+
+    void setCheckedOff(boolean isChecked);
+
+    Integer getCheckedOffTime();
+
+    void setCheckedOffTime(Integer time);
+
+
+    /*
     // Does not support unchecking, adds another if statement
     // to prevent checkoff
     void setCheckedOff(boolean isChecked, Integer checkedOffTime);
@@ -28,5 +38,6 @@ public interface Task {
     //for testing purpose
     Task withId(int id);
 
+     */
 
 }

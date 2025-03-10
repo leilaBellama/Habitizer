@@ -9,8 +9,17 @@ public class SimpleTask implements Task {
     private @NonNull String taskName;
     private boolean checkedOff;
     private Integer checkedOffTime;
+    private Integer routineId;
 
+    public SimpleTask(@Nullable Integer id, @NonNull String taskName,Boolean checkedOff, Integer checkedOffTime, Integer routineId){
+        this.id = id;
+        this.taskName = taskName;
+        this.checkedOff = checkedOff;
+        this.checkedOffTime = checkedOffTime;
+        this.routineId = routineId;
+    }
 
+    //for existing tests
     public SimpleTask(@Nullable Integer id, @NonNull String taskName){
         this.id = id;
         this.taskName = taskName;
@@ -26,22 +35,39 @@ public class SimpleTask implements Task {
     @Override
     public void setId(int id){this.id = id;}
 
+    @Override
+    public Integer getRoutineId(){return routineId;}
+
+    @Override
+    public void setRoutineId(int id){this.routineId = id;}
+
     @NonNull
     @Override
-    public String getTaskName(){return taskName;}
+    public String getName(){return taskName;}
 
+    @Override
+    public void setName(@NonNull String taskName){
+        this.taskName = taskName;
+    }
     @Override
     public boolean getCheckedOffStatus() {return checkedOff;}
 
+    @Override
+    public void setCheckedOff(boolean isChecked){
+        this.checkedOff = isChecked;
+    }
 
     @Override
     public Integer getCheckedOffTime() { return checkedOffTime; }
 
     @Override
-    public void setName(String taskName){
-        this.taskName = taskName;
+    public void setCheckedOffTime(Integer time){
+        this.checkedOffTime = time;
     }
 
+
+
+    /*
     // Does not support unchecking, adds another if statement
     // to prevent checkoff
     @Override
@@ -58,7 +84,13 @@ public class SimpleTask implements Task {
 
     //for testing purpose
     @Override
-    public Task withId(int id){ return new SimpleTask(id, this.taskName); }
+    public Task setId(int id){
+        return new SimpleTaskBuilder(this)
+                .setId(id)
+                .buildSimpleTask();
+    }
+
+     */
 
 
 }
