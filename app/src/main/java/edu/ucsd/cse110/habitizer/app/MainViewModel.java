@@ -183,7 +183,7 @@ public class MainViewModel extends ViewModel{
         Log.d("MVM addTask", "task id " + task.getId() + " task routineId " + task.getRoutineId());
         var tasks =TaskList.addTask(orderedTasks.getValue(),task);
         orderedTasks.setValue(tasks);
-        repository.saveTask(task);
+        repository.saveTasks(tasks);
     }
 
     public void setTaskName(int taskId, String taskName){
@@ -192,7 +192,7 @@ public class MainViewModel extends ViewModel{
         if(task == null) return;
         var tasks = TaskList.editTaskName(orderedTasks.getValue(),taskId,taskName);
         orderedTasks.setValue(tasks);
-        repository.saveTask(task);
+        repository.saveTasks(tasks);
     }
     public void setGoalTime(String goalTime){
         var routine = repository.getRoutine(routineId.getValue());
