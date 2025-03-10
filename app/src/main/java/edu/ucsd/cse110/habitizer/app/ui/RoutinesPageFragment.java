@@ -82,7 +82,6 @@ public class RoutinesPageFragment extends Fragment {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,7 +98,6 @@ public class RoutinesPageFragment extends Fragment {
     }
 
     private void setupMVP() {
-
         model.getRoutineTitle().observe(titleObserver);
         model.getHasStarted().observe(hasStartedObserver);
         model.getGoalTime().observe(goalTimeObserver);
@@ -114,11 +112,9 @@ public class RoutinesPageFragment extends Fragment {
         });
         view.homeButton.setOnClickListener(v -> {
             swapFragments();
-            //model.save();
         });
         view.startButton.setOnClickListener(v -> {
             Log.d("MA ","start button ");
-
             model.startRoutine();
         });
         view.endButton.setOnClickListener(v -> {
@@ -143,7 +139,6 @@ public class RoutinesPageFragment extends Fragment {
             var dialogFragment = EditGoalTimeDialogFragment.newInstance();
             dialogFragment.show(getParentFragmentManager(), "EditGoalTimeDialogFragment");
         });
-
         //For changing routine name at the routine page
         view.routine.setOnClickListener(v -> {
             var dialogFragment = EditRoutineDialogFragment.newInstance();

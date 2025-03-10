@@ -22,7 +22,6 @@ public class OriginalTask implements Task {
         if(isMorningTask) this.routineId = 1;
         else this.routineId = 2;
 
-        this.checkedOffTime = 0;
     }
 
     @Nullable
