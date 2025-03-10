@@ -27,6 +27,8 @@ public class RoomRoutineRepository implements Repository {
     public Task getTask(int id) {
         //var entityLiveData = routineDao.findTaskAsLiveData(id);
         //var taskLiveData = Transformations.map(entityLiveData, TaskEntity::toTask);
+        var task = routineDao.findTask(id);
+        if(task == null) return null;
         return routineDao.findTask(id).toTask();
     }
     @Override
@@ -55,10 +57,10 @@ public class RoomRoutineRepository implements Repository {
         if(containsRoutine(task.getRoutineId())){
             android.util.Log.d("RoomRep ST", task.getId() + task.getName()+  " contains routine id " + task.getRoutineId() + containsRoutine(task.getRoutineId()));
             TaskEntity entity = TaskEntity.fromTask(task);
-            long id = routineDao.insertTask(entity);
+            //long id = routineDao.insertTask(entity);
 //            task.setId((int) id);
-            android.util.Log.d("RoomRep ST", "new task id: " + id);
-            /*
+           // android.util.Log.d("RoomRep ST", "new task id: " + id);
+
             if (entity.id == null) {
                 long id = routineDao.insertTask(entity);
                 task.setId((int) id);
@@ -68,7 +70,7 @@ public class RoomRoutineRepository implements Repository {
                     android.util.Log.d("RoomRep ST","added new task old id");
             }
 
-             */
+
         }
     }
 
@@ -101,7 +103,8 @@ public class RoomRoutineRepository implements Repository {
 
     @Override
     public Routine getRoutine(int id) {
-        var routine = routineDao.findRoutine(id).toRoutine();
+        var routine = routineDao.findRoutine(id);
+        if(routine == null) return null;
         //var routineLiveData = Transformations.map(entityLiveData, RoutineEntity::toRoutine);
         return routineDao.findRoutine(id).toRoutine();
     }
@@ -131,10 +134,9 @@ public class RoomRoutineRepository implements Repository {
     @Override
     public void saveRoutine(Routine routine) {
         RoutineEntity entity = RoutineEntity.fromRoutine(routine);
-        long result = routineDao.insertRoutine(entity);
-        android.util.Log.d("RoomRep SR", "inserted routine " + routine.getId() + ", result: " +(int) result);
+        //long result = routineDao.insertRoutine(entity);
+        //android.util.Log.d("RoomRep SR", "inserted routine " + routine.getId() + ", result: " +(int) result);
 
-        /*
         if (entity.id == null) {
             long id = routineDao.insertRoutine(entity);
             routine.setId((int) id);
@@ -145,7 +147,6 @@ public class RoomRoutineRepository implements Repository {
             android.util.Log.d("RoomRep SR", "Updated routine " + routine.getId() + ", result: " + result);
         }
 
-         */
     }
 
     @Override

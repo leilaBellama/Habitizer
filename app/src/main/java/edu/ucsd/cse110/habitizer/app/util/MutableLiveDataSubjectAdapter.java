@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.util;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import edu.ucsd.cse110.habitizer.lib.util.MutableSubject;
@@ -17,8 +19,6 @@ public class MutableLiveDataSubjectAdapter<T>
 
     @Override
     public void setValue(T value){
-        if(mutableAdaptee.getValue() != null && mutableAdaptee.getValue() != value){
-            mutableAdaptee.setValue(value);
-        }
+        mutableAdaptee.setValue(value);
     }
 }

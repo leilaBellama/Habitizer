@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.habitizer.lib.util;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LifecycleOwner;
 
 import java.util.List;
 public class SimpleSubject<T> implements MutableSubject<T> {
@@ -21,10 +22,8 @@ public class SimpleSubject<T> implements MutableSubject<T> {
 
     @Override
     public void setValue(T value){
-        if(value != this.value){
-            this.value = value;
-            notifyObservers();
-        }
+        this.value = value;
+        notifyObservers();
     }
 
     @Override
@@ -39,14 +38,8 @@ public class SimpleSubject<T> implements MutableSubject<T> {
     }
 
     @Override
-    public void removeAllObservers(){
-        observers.clear();
-    }
-
-    @Override
     public Boolean hasObservers(){
-        if(observers.size() > 0) return true;
-        else return false;
+        return !observers.isEmpty();
     }
 
 }

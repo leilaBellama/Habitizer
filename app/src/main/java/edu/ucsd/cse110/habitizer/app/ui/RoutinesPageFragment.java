@@ -107,7 +107,7 @@ public class RoutinesPageFragment extends Fragment {
         });
         view.homeButton.setOnClickListener(v -> {
             swapFragments();
-            model.removeObservers();
+            model.save();
         });
         view.startButton.setOnClickListener(v -> {
             Log.d("MA ","start button ");

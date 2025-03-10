@@ -70,7 +70,7 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
 
         binding.checkBox.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             if (!hasStarted) {
-                buttonView.setChecked(false); // Prevent checking if not started
+                //buttonView.setChecked(false); // Prevent checking if not started
                 return;
             }
 
@@ -136,6 +136,7 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
         return true;
     }
 
+    /*
     @Override
     public long getItemId(int position){
         var task = getItem(position);
@@ -146,4 +147,6 @@ public class TaskListAdapter extends ArrayAdapter<Task>{
 
         return id;
     }
+
+     */
 }

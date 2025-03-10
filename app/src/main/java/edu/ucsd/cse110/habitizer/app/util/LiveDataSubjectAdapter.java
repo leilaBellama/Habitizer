@@ -1,6 +1,10 @@
 package edu.ucsd.cse110.habitizer.app.util;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
@@ -37,11 +41,6 @@ public class LiveDataSubjectAdapter<T> implements Subject<T> {
     @Override
     public Boolean hasObservers(){
         return adaptee.hasObservers();
-    }
-
-    @Override
-    public void removeAllObservers(){
-        observers.clear();
     }
 
 }

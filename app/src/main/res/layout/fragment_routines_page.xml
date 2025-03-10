@@ -116,7 +116,8 @@
         android:contentDescription="@string/add_task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        tools:visibility="invisible" />
 
     <Button
         android:id="@+id/start_button"
@@ -135,9 +136,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/reset"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="invisible" />
 
     <Button
         android:id="@+id/end_button"
@@ -160,12 +161,11 @@
         android:layout_marginBottom="16dp"
         android:text="@string/stop_time"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/start_button"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
+        tools:visibility="invisible" />
 
     <Button
         android:id="@+id/advance_time_button"
@@ -173,15 +173,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/advance_time"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/stop_time"
         app:layout_constraintEnd_toStartOf="@+id/start_button"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
+        tools:visibility="invisible" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
