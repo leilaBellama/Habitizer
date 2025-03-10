@@ -179,7 +179,7 @@ public class MainViewModel extends ViewModel{
     public void addTask(Task task){
         if(task == null || orderedTasks.getValue() == null || routineId.getValue() == null) return;
         task.setRoutineId(routineId.getValue());
-        task.setId(tasks.getValue().size());
+        task.setId(tasks.getValue().size() + 1);
         Log.d("MVM addTask", "task id " + task.getId() + " task routineId " + task.getRoutineId());
         var tasks =TaskList.addTask(orderedTasks.getValue(),task);
         orderedTasks.setValue(tasks);
