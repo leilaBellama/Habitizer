@@ -43,10 +43,12 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation("androidx.room:room-runtime:2.6.1")
+    implementation(libs.androidx.room.runtime)
 
-    implementation("androidx.fragment:fragment:1.6.2")
+
+    implementation(libs.androidx.fragment.v162)
     implementation(project(":observables"))
+    //implementation(libs.androidx.room.common)
 
 
     // Unit Testing
@@ -64,6 +66,8 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext.espresso.core)
     androidTestImplementation(libs.androidx.core)
     androidTestImplementation("androidx.room:room-testing:2.6.1")
+    androidTestImplementation("androidx.arch.core:core-testing:2.0.0")
+
 
     // Room Annotation Processor
     annotationProcessor("androidx.room:room-compiler:2.6.1")

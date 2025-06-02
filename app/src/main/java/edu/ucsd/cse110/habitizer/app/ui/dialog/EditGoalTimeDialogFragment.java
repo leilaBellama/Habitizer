@@ -14,6 +14,9 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentEditGoalTimeDialogBinding;
 
+/**
+ * Fragment to edit Routine's goal time
+ */
 public class EditGoalTimeDialogFragment extends DialogFragment{
     private FragmentEditGoalTimeDialogBinding view;
     private MainViewModel activityModel;
@@ -42,21 +45,6 @@ public class EditGoalTimeDialogFragment extends DialogFragment{
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentEditGoalTimeDialogBinding.inflate(getLayoutInflater());
-
-        /*
-        if (activityModel.getHasStarted().getValue()) {
-            AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                    .setTitle("Warning")
-                    .setMessage("Editing is disabled because the routine has started.")
-                    .create();
-
-            dialog.show();
-            dialog.getWindow().getDecorView().postDelayed(dialog::dismiss, 1500);
-            return dialog;
-        }
-
-         */
-
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Edit Goal Time")

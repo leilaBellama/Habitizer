@@ -25,24 +25,23 @@ public class TimerTest {
 
     @Test
     public void testAdvanceTimeCrossesInterval() {
-        routineTimer.advanceTime(61); // Advance by 60 seconds
+        routineTimer.advanceTime(61);
 
-        // Since 60 seconds = 1 minute, elapsedTime should increase by 1
         assertEquals(1, (int) routineTimer.getElapsedMinutes().getValue());
     }
 
     @Test
     public void testAdvanceTimeAccumulatesProperly() {
-        routineTimer.advanceTime(30); // Advance by 30 seconds
+        routineTimer.advanceTime(30);
         assertEquals(0, (int) routineTimer.getElapsedMinutes().getValue());
         assertEquals(30, (int) routineTimer.getElapsedSeconds());
 
-        routineTimer.advanceTime(30); // Advance another 30 seconds (total = 60)
+        routineTimer.advanceTime(30);
         assertEquals(1, (int) routineTimer.getElapsedMinutes().getValue());
         assertEquals(0, (int) routineTimer.getElapsedSeconds());
 
-        routineTimer.advanceTime(90); // Advance by 90 seconds (should add 1.5 minutes)
-        assertEquals(2, (int) routineTimer.getElapsedMinutes().getValue()); // 1 full minute added
+        routineTimer.advanceTime(90);
+        assertEquals(2, (int) routineTimer.getElapsedMinutes().getValue());
         assertEquals(30, (int) routineTimer.getElapsedSeconds());
 
     }

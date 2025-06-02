@@ -14,10 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentDialogEditRoutineBinding;
 
-
-
+/**
+ * Fragment to edit Routine's title
+ */
 public class EditRoutineDialogFragment extends DialogFragment{
-
 
     private FragmentDialogEditRoutineBinding view;
     private MainViewModel activityModel;

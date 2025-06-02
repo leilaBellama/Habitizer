@@ -3,20 +3,24 @@ package edu.ucsd.cse110.habitizer.lib.domain;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+/**
+ * Original implementation of Task before refractoring
+ */
 public class SimpleTask implements Task {
-    //Added Id here, might not be useful now, but good for later when we need to insert our task
     private @Nullable Integer id;
     private @NonNull String taskName;
     private boolean checkedOff;
-    private Integer checkedOffTime;
+    private String checkedOffTime;
     private Integer routineId;
+    private Integer position;
 
-    public SimpleTask(@Nullable Integer id, @NonNull String taskName,Boolean checkedOff, Integer checkedOffTime, Integer routineId){
+    public SimpleTask(@Nullable Integer id, @NonNull String taskName,Boolean checkedOff, String checkedOffTime, Integer routineId, Integer position){
         this.id = id;
         this.taskName = taskName;
         this.checkedOff = checkedOff;
         this.checkedOffTime = checkedOffTime;
         this.routineId = routineId;
+        this.position = position;
     }
 
     //for existing tests
@@ -25,7 +29,7 @@ public class SimpleTask implements Task {
         this.taskName = taskName;
         this.checkedOff = false;
 
-        this.checkedOffTime = 0;
+        this.checkedOffTime = "0 secs";
     }
 
     @Nullable
@@ -58,39 +62,16 @@ public class SimpleTask implements Task {
     }
 
     @Override
-    public Integer getCheckedOffTime() { return checkedOffTime; }
+    public String getCheckedOffTime() { return checkedOffTime; }
 
     @Override
-    public void setCheckedOffTime(Integer time){
+    public void setCheckedOffTime(String time){
         this.checkedOffTime = time;
     }
 
-
-
-    /*
-    // Does not support unchecking, adds another if statement
-    // to prevent checkoff
     @Override
-    public void setCheckedOff(boolean isChecked, Integer checkedOffTime){
-        if (!this.checkedOff) {
-            this.checkedOff = isChecked;
-            this.checkedOffTime = checkedOffTime;
-        }
-    }
+    public Integer getPosition() { return position;}
 
-    // Use this function for resetting after end routine
     @Override
-    public void reset() { this.checkedOff = false; this.checkedOffTime = 0;}
-
-    //for testing purpose
-    @Override
-    public Task setId(int id){
-        return new SimpleTaskBuilder(this)
-                .setId(id)
-                .buildSimpleTask();
-    }
-
-     */
-
-
+    public void setPosition(Integer position) { this.position = position;}
 }

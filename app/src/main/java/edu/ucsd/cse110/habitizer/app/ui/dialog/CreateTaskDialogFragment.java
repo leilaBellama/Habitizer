@@ -14,12 +14,15 @@ import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentDialogCreateTaskBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.OriginalTask;
 
+/**
+ * Fragment to create new task
+ */
 public class CreateTaskDialogFragment extends DialogFragment{
     private FragmentDialogCreateTaskBinding view;
     private MainViewModel activityModel;
-    CreateTaskDialogFragment(){
 
-    }
+    //need empty constructor
+    CreateTaskDialogFragment(){}
 
     public static CreateTaskDialogFragment newInstance(){
         var fragment = new CreateTaskDialogFragment();
@@ -45,7 +48,7 @@ public class CreateTaskDialogFragment extends DialogFragment{
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var taskName = view.createTaskNameText.getText().toString();
 
-        var task = new OriginalTask(null, taskName, true);
+        var task = new OriginalTask(null, taskName, true, activityModel.getOrderedTasks().getValue().size() + 1);
 
         activityModel.addTask(task);
         dialog.dismiss();

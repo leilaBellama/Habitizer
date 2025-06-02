@@ -4,24 +4,16 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
+
+/**
+ * Original implementation of repository
+ */
 public class SimpleRepository implements Repository {
     private final InMemoryDataSource dataSource;
 
     public SimpleRepository(InMemoryDataSource dataSource){
         this.dataSource = dataSource;
     }
-
-    /*
-
-    public Integer countTasksWithRoutineId(Integer routineId) {
-        return dataSource.getTasksWithRoutineId(routineId).size();
-    }
-
-    public Subject<List<Task>> findAllTasksWithRoutineID(Integer routineID){
-        return dataSource.getAllTasksSubjectWithRoutineId(routineID);
-    }
-
-     */
 
     @Override
     public Integer countTasks() {
@@ -46,9 +38,7 @@ public class SimpleRepository implements Repository {
     public void saveTask(Task task) {dataSource.putTask(task);}
     @Override
     public void saveTasks(List<Task> tasks) {
-        for(var task : tasks){
-            dataSource.putTask(task);
-        }
+        dataSource.updateTasks(tasks);
     }
 
     @Override

@@ -16,11 +16,10 @@ public class SimpleTaskBuilderTest {
 
     @Test
     public void testSimpleTaskBuilder() {
-        // Set the values using the builder's setters
         Integer expectedId = 1;
         String expectedTaskName = "Task 1";
         Boolean expectedCheckedOff = true;
-        Integer expectedCheckedOffTime = 10;
+        String expectedCheckedOffTime = "10 mins";
         Integer expectedRoutineId = 101;
 
         SimpleTask task = builder.setId(expectedId)
@@ -55,7 +54,7 @@ public class SimpleTaskBuilderTest {
 
     @Test
     public void testCheckedOffTimeSetter() {
-        Integer checkedOffTime = 2;
+        String checkedOffTime = "2 mins";
         SimpleTask task = builder.setCheckedOffTime(checkedOffTime).buildSimpleTask();
         assertEquals(checkedOffTime, task.getCheckedOffTime());
     }

@@ -12,6 +12,7 @@ dependencies {
     // safe to use even in a non-Android library module.
     implementation(libs.androidx.annotations)
     implementation(libs.androidx.lifecycle.common.jvm)
+    implementation(project(":observables"))
 
     testImplementation(libs.junit4)
     testImplementation(libs.hamcrest)

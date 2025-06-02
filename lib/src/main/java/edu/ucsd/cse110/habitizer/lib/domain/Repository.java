@@ -4,6 +4,9 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 
+/**
+ * Interface for accessing and storing in database
+ */
 public interface Repository {
     Integer countTasks();
 

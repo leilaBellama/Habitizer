@@ -5,20 +5,25 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
+/**
+ * Builder class for Task objects
+ */
 public class SimpleTaskBuilder {
 
     private @Nullable Integer id;
     private @NonNull String taskName;
     private boolean checkedOff;
-    private Integer checkedOffTime;
+    private String checkedOffTime;
     private Integer routineId;
+
+    private Integer position;
 
     public SimpleTaskBuilder(){
 
     }
 
     public SimpleTask buildSimpleTask() {
-        return new SimpleTask(this.id,this.taskName,this.checkedOff, this.checkedOffTime,this.routineId);
+        return new SimpleTask(this.id,this.taskName,this.checkedOff, this.checkedOffTime,this.routineId,this.position);
     }
 
     public SimpleTaskBuilder setId(Integer id) {
@@ -35,13 +40,18 @@ public class SimpleTaskBuilder {
         this.checkedOff = checkedOff;
         return this;
     }
-    public SimpleTaskBuilder setCheckedOffTime(Integer checkedOffTime) {
+    public SimpleTaskBuilder setCheckedOffTime(String checkedOffTime) {
         this.checkedOffTime = checkedOffTime;
         return this;
     }
 
     public SimpleTaskBuilder setRoutineId(Integer id) {
         this.routineId = id;
+        return this;
+    }
+
+    public SimpleTaskBuilder setPosition(Integer position){
+        this.position = position;
         return this;
     }
 

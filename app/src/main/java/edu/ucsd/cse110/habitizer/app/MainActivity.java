@@ -12,7 +12,7 @@ import edu.ucsd.cse110.habitizer.app.ui.HomePageFragment;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
-    private boolean onHomePage = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

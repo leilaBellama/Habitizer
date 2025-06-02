@@ -37,33 +37,13 @@ public class RoomRepositoryTest {
     private RoutineDAO routineDao;
 
     public final static List<Task> tasks = List.of(
-            new OriginalTask(null, "Morning Task 1",true),
-            new OriginalTask(null, "Morning Task 2",true),
-            new OriginalTask(null, "Morning Task 3",true),
-            new OriginalTask(null, "Evening Task 1",false),
-            new OriginalTask(null, "Evening Task 2",false),
-            new OriginalTask(null, "Evening Task 3",false),
-            new OriginalTask(null, "Evening Task 4",false)
-
-    );
-
-
-    public final static List<Routine> routines = List.of(
-            new RoutineBuilder()
-                    .setId(null)
-                    .setName("Morning")
-                    .setHasStarted(false)
-                    .buildRoutine(),
-            new RoutineBuilder()
-                    .setId(null)
-                    .setName("Evening")
-                    .setHasStarted(false)
-                    .buildRoutine(),
-            new RoutineBuilder()
-                    .setId(null)
-                    .setName("Monday")
-                    .setHasStarted(false)
-                    .buildRoutine()
+            new OriginalTask(null, "Morning Task 1",true,1),
+            new OriginalTask(null, "Morning Task 2",true,2),
+            new OriginalTask(null, "Morning Task 3",true,3),
+            new OriginalTask(null, "Evening Task 1",false,1),
+            new OriginalTask(null, "Evening Task 2",false,2),
+            new OriginalTask(null, "Evening Task 3",false,3),
+            new OriginalTask(null, "Evening Task 4",false,4)
 
     );
 
@@ -71,7 +51,7 @@ public class RoomRepositoryTest {
     public void setUp(){
         Context context = ApplicationProvider.getApplicationContext();
         database = Room.inMemoryDatabaseBuilder(context, HabitizerDatabase.class)
-                .allowMainThreadQueries() // Only for testing
+                .allowMainThreadQueries()
                 .build();
         routineDao = database.routineDao();
         repository = new RoomRoutineRepository(routineDao);
@@ -90,17 +70,7 @@ public class RoomRepositoryTest {
                 .setName("routine0")
                 .buildRoutine();
         repository.saveRoutine(routine0);
-        //var newRoutineId = routine0.getId();
         assertEquals("routine0",routineDao.findRoutine(0).name);
-        //assertEquals(1,(int)newRoutineId);
-        /*
-        routineDao.findRoutineAsLiveData(newRoutineId).observe(getLifecycleOwner(),routine -> {
-            assertNotNull(routine);
-            assertEquals("routine0", routine.name);
-        });
-
-         */
-        //assertEquals("routine0",routineDao.findRoutineAsLiveData(newRoutineId).getValue().name);
         assertNull(routineDao.findTask(0));
         assertNull(routineDao.findTask(1));
 

@@ -13,6 +13,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentEditTaskDialogBinding;
+
+/**
+ * Fragment to edit task name
+ */
 public class EditTaskDialogFragment extends DialogFragment {
 
     private static final String ARG_TASK_ID = "task_id";
@@ -53,6 +57,7 @@ public class EditTaskDialogFragment extends DialogFragment {
                 .setView(view.getRoot())
                 .setPositiveButton("Confirm", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
+                .setNeutralButton("Delete", this::onDeleteButtonClick)
                 .create();
     }
 
@@ -70,5 +75,11 @@ public class EditTaskDialogFragment extends DialogFragment {
 
     private void onNegativeButtonClick(DialogInterface dialog, int which){
         dialog.cancel();
+    }
+
+    //New neutral button on the left bottom corner of the dialog
+    private void onDeleteButtonClick(DialogInterface dialog, int which){
+        activityModel.removeTask(taskId);
+        dialog.dismiss();
     }
 }

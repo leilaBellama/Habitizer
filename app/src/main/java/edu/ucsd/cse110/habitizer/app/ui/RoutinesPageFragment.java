@@ -25,10 +25,12 @@ import edu.ucsd.cse110.habitizer.app.ui.dialog.EditGoalTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.dialog.EditRoutineDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.util.Observer;
 
+/**
+ * Fragment for a Routine's page
+ */
 public class RoutinesPageFragment extends Fragment {
     private FragmentRoutinesPageBinding view;
     private MainViewModel model;
-
     private Boolean started;
     Observer<String> titleObserver = text -> view.routine.setText(text);
     Observer<Boolean> hasStartedObserver = hasStarted -> {
@@ -37,13 +39,12 @@ public class RoutinesPageFragment extends Fragment {
         else if(hasStarted) start();
         else end();
     };
+
     Observer<String> goalTimeObserver = goalTime -> {
         if(goalTime == null)return;
         if(!goalTime.equals("null")){
             view.goalTime.setText(goalTime + " min");
-            //Log.d("MA","obs goal time " + goalTime);
         }else {
-            //Log.d("MA","obs goal time is null");
             view.goalTime.setText(R.string.dashes);
         }
     };
@@ -77,9 +78,8 @@ public class RoutinesPageFragment extends Fragment {
         model.getHasStarted().removeObserver(hasStartedObserver);
         model.getGoalTime().removeObserver(goalTimeObserver);
         model.getElapsedTime().removeObservers(getViewLifecycleOwner());
+        model.getTaskElapsedTime().removeObservers(getViewLifecycleOwner());
         model.stopTimer();
-        Log.d("R frag", "destroyed");
-
     }
 
     @Override
@@ -103,34 +103,30 @@ public class RoutinesPageFragment extends Fragment {
         model.getGoalTime().observe(goalTimeObserver);
         model.getElapsedTime().observe(getViewLifecycleOwner(),time -> {
             if (time != null) {
-                //Log.d("MA obs timer","obs time " + time);
-                view.time.setText(time + " min");
+                view.routineTime.setText(time + " out of");
             } else {
-                view.time.setText(R.string.dashes);
-                //Log.d("MA obs timer","obs null time ");
+                view.routineTime.setText(R.string.dashes);
+            }
+        });
+        model.getTaskElapsedTime().observe(getViewLifecycleOwner(),time -> {
+            if (time != null) {
+                view.taskTime.setText(time + " min");
+            } else {
+                view.taskTime.setText("---");
             }
         });
         view.homeButton.setOnClickListener(v -> {
             swapFragments();
         });
         view.startButton.setOnClickListener(v -> {
-            Log.d("MA ","start button ");
             model.startRoutine();
         });
         view.endButton.setOnClickListener(v -> {
-            Log.d("MA ","end button ");
             model.endRoutine();
         });
         view.resetButton.setOnClickListener(v -> {
-            Log.d("MA ","reset button ");
             model.reset();
         });
-        view.stopTime.setOnClickListener(v -> {
-            model.stopTimer();
-            view.stopTime.setVisibility(View.GONE);
-            view.advanceTimeButton.setVisibility(View.VISIBLE);
-        });
-        view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());
         view.addTaskButton.setOnClickListener(v -> {
             var dialogFragment = CreateTaskDialogFragment.newInstance();
             dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
@@ -139,52 +135,66 @@ public class RoutinesPageFragment extends Fragment {
             var dialogFragment = EditGoalTimeDialogFragment.newInstance();
             dialogFragment.show(getParentFragmentManager(), "EditGoalTimeDialogFragment");
         });
-        //For changing routine name at the routine page
         view.routine.setOnClickListener(v -> {
             var dialogFragment = EditRoutineDialogFragment.newInstance();
             dialogFragment.show(getParentFragmentManager(), "EditRoutineDialogFragment");
         });
+        //test buttons
+        /*
+        view.stopTime.setOnClickListener(v -> {
+            model.stopTimer();
+            view.stopTime.setVisibility(View.GONE);
+            view.advanceTimeButton.setVisibility(View.VISIBLE);
+        });
+        view.advanceTimeButton.setOnClickListener(v -> model.advanceTime());
+         */
     }
     private void end() {
-        Log.d("MA end","end");
         started = false;
-        view.advanceTimeButton.setVisibility(View.INVISIBLE);
+        //view.advanceTimeButton.setVisibility(View.INVISIBLE);
+        //view.stopTime.setVisibility(View.INVISIBLE);
         view.startButton.setVisibility(View.INVISIBLE);
-        view.stopTime.setVisibility(View.INVISIBLE);
-        //view.addTaskButton.setVisibility(View.VISIBLE);
+        view.addTaskButton.setVisibility(View.VISIBLE);
         view.endButton.setText("Routine Ended");
         view.endButton.setEnabled(false);
         view.endButton.requestLayout();
         view.resetButton.setVisibility(View.VISIBLE);
         view.homeButton.setVisibility(View.VISIBLE);
-        //model.endRoutine();
+        view.goalTime.setOnClickListener(v -> {
+            var dialogFragment = EditGoalTimeDialogFragment.newInstance();
+            dialogFragment.show(getParentFragmentManager(), "EditGoalTimeDialogFragment");
+        });
+        model.endRoutine();
     }
 
     private void start() {
-        Log.d("MA start","start");
         started = true;
         view.startButton.setVisibility(View.INVISIBLE);
         view.endButton.setText("End");
         view.endButton.setVisibility(View.VISIBLE);
         view.endButton.setEnabled(true);
         view.addTaskButton.setVisibility(View.INVISIBLE);
-        view.stopTime.setVisibility(View.VISIBLE);
-        view.advanceTimeButton.setVisibility(View.VISIBLE);
+        //view.stopTime.setVisibility(View.VISIBLE);
+        //view.advanceTimeButton.setVisibility(View.VISIBLE);
         view.homeButton.setVisibility(View.INVISIBLE);
-        //model.startRoutine();
+        view.goalTime.setOnClickListener(null);
+        model.startRoutine();
     }
     private void reset() {
-        Log.d("MA reset","reset");
         started = null;
         view.startButton.setVisibility(View.VISIBLE);
-        //view.startButton.setEnabled(true);
+        view.startButton.setEnabled(true);
         view.endButton.setVisibility(View.INVISIBLE);
         view.addTaskButton.setVisibility(View.VISIBLE);
-        //view.addTaskButton.setEnabled(true);
-        view.stopTime.setVisibility(View.INVISIBLE);
-        view.advanceTimeButton.setVisibility(View.INVISIBLE);
+        view.addTaskButton.setEnabled(true);
+        //view.stopTime.setVisibility(View.INVISIBLE);
+        //view.advanceTimeButton.setVisibility(View.INVISIBLE);
         view.homeButton.setVisibility(View.VISIBLE);
         view.resetButton.setVisibility(View.INVISIBLE);
-        //model.reset();
+        view.goalTime.setOnClickListener(v -> {
+            var dialogFragment = EditGoalTimeDialogFragment.newInstance();
+            dialogFragment.show(getParentFragmentManager(), "EditGoalTimeDialogFragment");
+        });
+        model.reset();
     }
 }

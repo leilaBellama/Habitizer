@@ -3,6 +3,11 @@ package edu.ucsd.cse110.habitizer.lib.domain;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.List;
+
+/**
+ * Buuilder class for Routine objects
+ */
 public class RoutineBuilder {
 
     private Integer id;
@@ -10,23 +15,13 @@ public class RoutineBuilder {
     private Boolean hasStarted;
     private Integer elapsedMinutes;
     private Integer elapsedSeconds;
+    private Integer currentTaskTime;
     private String goalTime;
 
+    private List<Task> tasks;
     public RoutineBuilder(){
 
     }
-
-    /*
-    public RoutineBuilder(@NonNull Routine routine){
-        this.id = routine.id();
-        this.elapsedMinutes = routine.elapsedMinutes();
-        this.elapsedSeconds = routine.elapsedSeconds();
-        this.name = routine.name();
-        this.hasStarted = routine.hasStarted();
-        this.goalTime = routine.goalTime();
-    }
-
-     */
 
     public RoutineBuilder setElapsedMinutes(@Nullable Integer elapsedMinutes) {
         this.elapsedMinutes = elapsedMinutes;
@@ -57,13 +52,22 @@ public class RoutineBuilder {
         return this;
     }
 
+    public RoutineBuilder setCurrentTaskTime(@Nullable Integer time) {
+        this.currentTaskTime = time;
+        return this;
+    }
+
+    public RoutineBuilder setTasks(@Nullable List<Task> tasks){
+        this.tasks = tasks;
+        return this;
+    }
     public RoutineBuilder makeNewRoutine(){
         this.setName("New Routine");
         return  this;
     }
 
     public Routine buildRoutine() {
-        return new Routine(this.id,this.name,this.hasStarted, this.elapsedMinutes,this.elapsedSeconds, this.goalTime);
+        return new Routine(this.id,this.name,this.hasStarted, this.elapsedMinutes,this.elapsedSeconds, this.goalTime, this.currentTaskTime, this.tasks);
     }
 
 

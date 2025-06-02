@@ -9,6 +9,9 @@ import androidx.room.Update;
 
 import java.util.List;
 
+/**
+ * Implementation of data accessing object to get and store data in persistent database
+ */
 @Dao
 public interface RoutineDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -60,7 +63,7 @@ public interface RoutineDAO {
     @Query("SELECT * FROM tasks_table WHERE id = :id")
     LiveData<TaskEntity> findTaskAsLiveData(int id);
 
-    @Query("SELECT * FROM tasks_table")
+    @Query("SELECT * FROM tasks_table ORDER BY position ASC")
     LiveData<List<TaskEntity>> findAllTasksAsLiveData();
 
     @Query("DELETE FROM tasks_table WHERE id = :id")

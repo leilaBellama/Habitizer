@@ -3,6 +3,9 @@ package edu.ucsd.cse110.habitizer.lib.domain;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+/**
+ * Interface for Task object, getters and setters for fields
+ */
 public interface Task {
     @Nullable
     Integer getId();
@@ -17,27 +20,15 @@ public interface Task {
 
     void setName(String taskName);
 
+    void setPosition(Integer position);
 
     boolean getCheckedOffStatus();
 
     void setCheckedOff(boolean isChecked);
 
-    Integer getCheckedOffTime();
+    String getCheckedOffTime();
 
-    void setCheckedOffTime(Integer time);
+    void setCheckedOffTime(String time);
 
-
-    /*
-    // Does not support unchecking, adds another if statement
-    // to prevent checkoff
-    void setCheckedOff(boolean isChecked, Integer checkedOffTime);
-
-    // Use this function for resetting after end routine
-    void reset();
-
-    //for testing purpose
-    Task withId(int id);
-
-     */
-
+    Integer getPosition();
 }

@@ -1,9 +1,12 @@
 package edu.ucsd.cse110.habitizer.lib.data;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.OriginalTask;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -13,6 +16,7 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.util.MutableSubject;
 import edu.ucsd.cse110.habitizer.lib.util.SimpleSubject;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
+
 public class InMemoryDataSource {
 
     private final Map<Integer, Routine> routines
@@ -34,36 +38,20 @@ public class InMemoryDataSource {
             = new HashMap<>();
     private final MutableSubject<List<Task>> allTasksSubject
             = new SimpleSubject<>();
-
+    private final Map<Integer, Task> routine = new HashMap<>();
     public InMemoryDataSource() {
 
     }
 
-    public final static List<Task> Morning = List.of(
-            new OriginalTask(1, "Morning Task 1",true),
-            new OriginalTask(2, "Morning Task 2",true),
-            new OriginalTask(3, "Morning Task 3",true),
-            new OriginalTask(4, "Morning Task 4",true),
-            new OriginalTask(5, "Morning Task 5",true)
-    );
-
-    public final static List<Task> Evening = List.of(
-            new OriginalTask(0, "Evening Task 1",false),
-            new OriginalTask(1, "Evening Task 2",false),
-            new OriginalTask(2, "Evening Task 3",false),
-            new OriginalTask(3, "Evening Task 4",false)
-    );
-
     public final static List<Task> DEFAULT_TASKS = List.of(
-            new OriginalTask(null, "Morning Task 1",true),
-            new OriginalTask(null, "Morning Task 2",true),
-            new OriginalTask(null, "Morning Task 3",true),
-            new OriginalTask(null, "Evening Task 1",false),
-            new OriginalTask(null, "Evening Task 2",false),
-            new OriginalTask(null, "Evening Task 3",false),
-            new OriginalTask(null, "Evening Task 4",false)
+            new OriginalTask(null, "Morning Task 1",true,1),
+            new OriginalTask(null, "Morning Task 2",true,2),
+            new OriginalTask(null, "Morning Task 3",true,3),
+            new OriginalTask(null, "Evening Task 1",false,1),
+            new OriginalTask(null, "Evening Task 2",false,2),
+            new OriginalTask(null, "Evening Task 3",false,3),
+            new OriginalTask(null, "Evening Task 4",false,4)
     );
-
 
     public final static List<Routine> DEFAULT_ROUTINES = List.of(
             new RoutineBuilder()
@@ -79,6 +67,7 @@ public class InMemoryDataSource {
                     .buildRoutine()
     );
 
+    //default data used for testing
     public static InMemoryDataSource DEFAULT(){
         var data = new InMemoryDataSource();
         for(Routine routine : DEFAULT_ROUTINES){
@@ -118,7 +107,16 @@ public class InMemoryDataSource {
     }
 
     public List<Task> getTasks(){
-        return List.copyOf(tasks.values());
+        return tasks.values().stream()
+                .sorted((t1, t2) -> {
+                    Integer pos1 = t1.getPosition();
+                    Integer pos2 = t2.getPosition();
+                    if (pos1 == null && pos2 == null) return 0;
+                    if (pos1 == null) return 1;   // place tasks with null positions at the end
+                    if (pos2 == null) return -1;
+                    return pos1.compareTo(pos2);
+                })
+                .collect(Collectors.toList());
     }
 
     public Task getTask(int id){
@@ -137,7 +135,6 @@ public class InMemoryDataSource {
     public Subject<List<Task>> getAllTasksSubject() {
         return allTasksSubject;
     }
-
 
     public void putRoutine(Routine routine) {
         var fixedRoutine = preInsertRoutine(routine);
@@ -182,6 +179,12 @@ public class InMemoryDataSource {
         return routineSubjects.get(id);
     }
 
+    public void updateTasks(@NonNull List<Task> tasks){
+        for(Task task:tasks){
+            this.tasks.put(task.getId(), task);
+        }
+        allTasksSubject.setValue(new ArrayList<>(getTasks()));
+    }
     public Subject<List<Routine>> getAllRoutinesSubject() {
         return allRoutinesSubject;
     }

@@ -20,7 +20,9 @@ import edu.ucsd.cse110.habitizer.app.databinding.FragmentHomePageBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.util.Observer;
 
-
+/**
+ * Fragment for list of Routines page
+ */
 public class HomePageFragment extends Fragment {
     private FragmentHomePageBinding view;
     private MainViewModel model;
@@ -63,7 +65,6 @@ public class HomePageFragment extends Fragment {
     public void onDestroyView(){
         super.onDestroyView();
         model.getRoutines().removeObserver(routineObserver);
-        Log.d("home frag", "destroyed");
     }
 
     private void setupMVP(){

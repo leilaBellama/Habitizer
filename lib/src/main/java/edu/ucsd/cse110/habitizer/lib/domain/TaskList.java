@@ -3,6 +3,10 @@ package edu.ucsd.cse110.habitizer.lib.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+/**
+ * Class for ordered list of tasks
+ */
 public class TaskList {
     private final List<Task> tasks;
 
@@ -46,4 +50,25 @@ public class TaskList {
         return copy;
     }
 
+    public static List<Task> editCheckedOff(List<Task> list, int id, boolean checkedOff) {
+        if(list == null) return null;
+        var copy = new ArrayList<Task>(list);
+        for (var task : copy) {
+            if(task.getId() == id){
+                task.setCheckedOff(checkedOff);
+            }
+        }
+        return copy;
+    }
+
+    public static List<Task> editCheckedOffTime(List<Task> list, int id, String checkOffTime) {
+        if(list == null) return null;
+        var copy = new ArrayList<Task>(list);
+        for (var task : copy) {
+            if(task.getId() == id){
+                task.setCheckedOffTime(checkOffTime);
+            }
+        }
+        return copy;
+    }
 }

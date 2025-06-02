@@ -12,6 +12,9 @@ import edu.ucsd.cse110.habitizer.lib.domain.SimpleTask;
 import edu.ucsd.cse110.habitizer.lib.domain.SimpleTaskBuilder;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
+/**
+ * Task object to put in database, child of Routine object
+ */
 @Entity(tableName = "tasks_table",
 foreignKeys = @ForeignKey(
         entity = RoutineEntity.class,
@@ -31,13 +34,16 @@ public class TaskEntity {
     @ColumnInfo(name = "routineId")
     public Integer routineId;
     @ColumnInfo(name = "checkedOffTime")
-    public Integer checkedOffTime;
+    public String checkedOffTime;
+    @ColumnInfo(name = "position")
+    public Integer position;
 
-    public TaskEntity(@NonNull String name, Boolean checkedOff, Integer checkedOffTime, Integer routineId){
+    public TaskEntity(@NonNull String name, Boolean checkedOff, String checkedOffTime, Integer routineId, Integer position){
         this.name = name;
         this.checkedOff = checkedOff;
         this.checkedOffTime = checkedOffTime;
         this.routineId = routineId;
+        this.position = position;
     }
 
     public static TaskEntity fromTask(@NonNull Task task) {
@@ -45,7 +51,8 @@ public class TaskEntity {
                 task.getName(),
                 task.getCheckedOffStatus(),
                 task.getCheckedOffTime(),
-                task.getRoutineId()
+                task.getRoutineId(),
+                task.getPosition()
         );
         taskEntity.id = task.getId();
         return taskEntity;
@@ -58,6 +65,7 @@ public class TaskEntity {
                 .setCheckedOff(checkedOff)
                 .setCheckedOffTime(checkedOffTime)
                 .setRoutineId(routineId)
+                .setPosition(position)
                 .buildSimpleTask();
     }
 

@@ -4,24 +4,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class OriginalTask implements Task {
-    //Added Id here, might not be useful now, but good for later when we need to insert our task
     private @Nullable Integer id;
     private @NonNull String taskName;
     private boolean checkedOff;
-    private Integer checkedOffTime;
+    private String checkedOffTime;
     private Integer routineId;
 
     private boolean isMorningTask;
 
+    private Integer position;
 
-    public OriginalTask(@Nullable Integer id, @NonNull String taskName, @NonNull Boolean isMorningTask){
+    public OriginalTask(@Nullable Integer id, @NonNull String taskName, @NonNull Boolean isMorningTask, @NonNull Integer position){
         this.id = id;
         this.taskName = taskName;
         this.checkedOff = false;
         this.isMorningTask = isMorningTask;
         if(isMorningTask) this.routineId = 1;
         else this.routineId = 2;
-
+        this.position = position;
     }
 
     @Nullable
@@ -62,7 +62,7 @@ public class OriginalTask implements Task {
 
     // Does not support unchecking, adds another if statement
     // to prevent checkoff
-    public void setCheckedOff(boolean isChecked, Integer checkedOffTime){
+    public void setCheckedOff(boolean isChecked, String checkedOffTime){
         if (!this.checkedOff) {
             this.checkedOff = isChecked;
             this.checkedOffTime = checkedOffTime;
@@ -70,22 +70,17 @@ public class OriginalTask implements Task {
     }
 
     @Override
-    public Integer getCheckedOffTime() { return checkedOffTime; }
+    public String getCheckedOffTime() { return checkedOffTime; }
 
     @Override
-    public void setCheckedOffTime(Integer time){
+    public void setCheckedOffTime(String time){
         this.checkedOffTime = time;
     }
 
-    /*
-    // Use this function for resetting after end routine
     @Override
-    public void reset() { this.checkedOff = false; this.checkedOffTime = 0;}
+    public Integer getPosition() { return position;}
 
-    //for testing purpose
     @Override
-    public Task withId(int id){ return new OriginalTask(id, this.taskName, this.isMorningTask); }
+    public void setPosition(Integer position){ this.position = position;}
 
-
-     */
 }

@@ -19,17 +19,17 @@ public class TaskListTest {
             new SimpleTaskBuilder().setCheckedOff(true).buildSimpleTask()
     );
     public List<Task> tasks = List.of(
-            new OriginalTask(0, "Task 0",true),
-        new OriginalTask(1, "Task 1",true),
-        new OriginalTask(2, "Task 2",true),
-        new OriginalTask(3, "Task 3",true)
+            new OriginalTask(0, "Task 0",true,1),
+        new OriginalTask(1, "Task 1",true,2),
+        new OriginalTask(2, "Task 2",true,3),
+        new OriginalTask(3, "Task 3",true,4)
     );
 
     @Test
     public void testEditTaskName() {
         List<Task> originalList = new ArrayList<>();
-        originalList.add(new OriginalTask(1, "Task One",true));
-        originalList.add(new OriginalTask(2, "Task Two",true));
+        originalList.add(new OriginalTask(1, "Task One",true,1));
+        originalList.add(new OriginalTask(2, "Task Two",true,2));
 
         List<Task> result = TaskList.editTaskName(originalList, 1, "Updated Task One");
 
@@ -40,9 +40,9 @@ public class TaskListTest {
     @Test
     public void testAddTask_TaskAddedSuccessfully() {
         List<Task> originalList = new ArrayList<>();
-        originalList.add(new OriginalTask(1, "Task One",true));
+        originalList.add(new OriginalTask(1, "Task One",true,1));
 
-        Task newTask = new OriginalTask(2, "Task Two",true);
+        Task newTask = new OriginalTask(2, "Task Two",true,2);
         List<Task> result = TaskList.addTask(originalList, newTask);
 
         assertEquals(2, result.size()); // Ensure new task is added
@@ -62,10 +62,10 @@ public class TaskListTest {
 
     @Test
     public void testForceSet() {
-        var task1 = new OriginalTask(1, "Task1",true);
-        task1.setCheckedOff(true, 0);
+        var task1 = new OriginalTask(1, "Task1",true,1);
+        task1.setCheckedOff(true, "0");
         assertTrue(task1.getCheckedOffStatus());
-        task1.setCheckedOff(false, 0);
+        task1.setCheckedOff(false, "0");
         assertTrue(task1.getCheckedOffStatus());
     }
 

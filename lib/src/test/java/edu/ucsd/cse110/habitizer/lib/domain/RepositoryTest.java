@@ -32,23 +32,6 @@ public class RepositoryTest {
 
     );
 
-    public final static List<Task> tasksWithRoutineIds = List.of(
-            new SimpleTask(0, "Morning Task 1"),
-            new SimpleTask(1, "Morning Task 2"),
-            new SimpleTask(2, "Morning Task 3"),
-            new SimpleTask(null, "Morning Task 4"),
-            new SimpleTask(null, "Morning Task 5"),
-            new SimpleTask(null, "Evening Task 1"),
-            new SimpleTask(null, "Evening Task 2"),
-            new SimpleTask(null, "Evening Task 3"),
-            new SimpleTask(null, "Evening Task 4"),
-            new SimpleTask(null, "Monday Task 1"),
-            new SimpleTask(null, "Monday Task 2"),
-            new SimpleTask(null, "Tuesday Task 1"),
-            new SimpleTask(null, "Tuesday Task 2"),
-            new SimpleTask(null, "Tuesday Task 3")
-
-    );
     public final static List<Routine> routines = List.of(
             new RoutineBuilder()
                     .setId(null)
@@ -110,22 +93,5 @@ public class RepositoryTest {
         assertEquals(13,(int) repository.countTasks());
 
     }
-
-/*
-    @Test
-    public void testGetRoutinesTasks(){
-        for(Task task : tasks){
-            repository.saveTask(task);
-        }
-        assertEquals(5,(int) repository.countTasksWithRoutineId(0));
-        assertEquals(4,(int) repository.countTasksWithRoutineId(1));
-        assertEquals(2,(int) repository.countTasksWithRoutineId(2));
-        assertEquals(3,(int) repository.countTasksWithRoutineId(3));
-        repository.saveTask(new SimpleTask(0, "Morning Task first"));
-        assertEquals("Morning Task first",repository.findTask(0).getValue().getTaskName());
-    }
-
-     */
-
 
 }
