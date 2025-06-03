@@ -10,3 +10,10 @@ This app helps users manage their daily routines and habits effectively. It allo
 - **View all tasks** in an organized list and drag to reorder.
 - **Edit or delete** existing tasks.
 
+# Team Members
+Leila Bellama
+Eric Kok
+Brian Liu
+Andrew Khov
+Jeremy Lin
+
